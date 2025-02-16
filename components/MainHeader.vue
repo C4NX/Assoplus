@@ -6,8 +6,8 @@
         class="flex items-center space-x-3 rtl:space-x-reverse"
       >
         <img
-          src="https://flowbite.com/docs/images/logo.svg"
-          class="h-8"
+          src="/logo.svg"
+          class="h-3"
           alt="Flowbite Logo"
         >
         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Asso+</span>
@@ -20,27 +20,18 @@
         aria-expanded="false"
       >
         <span class="sr-only">Open main menu</span>
-        <svg
+        <Icon
+          name="mdi-menu"
           class="w-5 h-5"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 17 14"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M1 1h15M1 7h15M1 13h15"
-          />
-        </svg>
+        />
       </button>
       <div
         id="navbar-default"
         class="hidden w-full md:block md:w-auto"
       >
-        <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+        <ul
+          class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
+        >
           <li>
             <a
               href="#"
@@ -79,9 +70,6 @@
 </template>
 
 <script lang="ts" setup>
-
 </script>
 
-<style>
-
-</style>
+<style></style>
