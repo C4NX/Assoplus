@@ -1,9 +1,19 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/icon", "@nuxt/eslint"],
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/icon'],
+  compatibilityDate: "2024-11-01",
+  eslint: {
+    config: {
+      stylistic: {
+        indent: 2,
+        quotes: "double",
+        semi: false,
+        jsx: false,
+      },
+    },
+  },
   icon: {
-    provider: 'server',
+    provider: "server",
   },
 })
