@@ -8,11 +8,11 @@ COPY . ./
 
 # Install dependencies
 RUN pnpm i \
-    && pnpm run build
+    && yes | pnpm run build 
 
 # Build Stage 2
 
-FROM node:22-alpine
+FROM node:22-alpine AS production
 WORKDIR /app
 
 # Only `.output` folder is needed from the build stage
