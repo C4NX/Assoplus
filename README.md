@@ -7,13 +7,9 @@
 
 ## 📄 Description
 
-TODO
+Asso+ is a tool for easy association management.
 
 ## ✨ Getting Started
-
-TODO
-
-## 🚀 Usage 
 
 To start using Asso+, run the following command:
 ```sh
