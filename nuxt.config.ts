@@ -8,6 +8,9 @@ export default defineNuxtConfig({
     "@prisma/nuxt",
   ],
   devtools: { enabled: true },
+  runtimeConfig: {
+    jwtSecret: "",
+  },
   compatibilityDate: "2024-11-01",
   nitro: {
     experimental: {
