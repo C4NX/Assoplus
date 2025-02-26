@@ -9,6 +9,6 @@ const SignupRequestDto = z.object({
 
 export default defineEventHandler(async (event) => {
   const tokenRequestData = await readValidatedBody(event, SignupRequestDto.parse)
-  const user = await handleCreateUser(tokenRequestData.email, tokenRequestData.password, event)
+  const user = await handleCreateUser(tokenRequestData.email, tokenRequestData.password)
   return authenticateUser(user, event)
 })

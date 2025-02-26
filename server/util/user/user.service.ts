@@ -48,17 +48,21 @@ export async function handleCreateUser(email: string, password: string) {
 }
 
 export async function verifyPasswordAndReturnUser(email: string, password: string) {
-  const user = await prisma.user.findFirst({
-    where: {
-      email: email,
-    },
-  })
+  try {
+    const user = await prisma.user.findFirstOrThrow({
+      where: {
+        email: email,
+      },
+    })
 
-  if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
+    if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
+      throw new Error("Password does not match");
+    }
+
+    return user
+  } catch {
     throw createError({ statusCode: 401, statusMessage: "Invalid username or password" })
   }
-
-  return user
 }
 
 export async function signTokenForUser(user: User, event: H3Event) {
