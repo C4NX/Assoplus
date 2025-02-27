@@ -10,6 +10,7 @@ services:
       - /app/node_modules
     ports:
       - "3000:3000"
+      - "5555:5555"
     depends_on:
       assoplus-db:
         condition: service_healthy
@@ -22,7 +23,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
       interval: 5s
       timeout: 2s
       retries: 20

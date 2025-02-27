@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "db:migrate": "prisma migrate dev",
-    "db:deploy": "prisma migrate deploy && prisma generate"
+    "db:deploy": "prisma migrate deploy && prisma generate",
+    "db:seed": "tsx ./prisma/seed.ts"
   },
   "dependencies": {
     "@nuxt/eslint": "1.0.1",
@@ -19,22 +20,37 @@
     "@nuxtjs/i18n": "9.2.1",
     "@prisma/client": "^6.4.0",
     "@prisma/nuxt": "0.3.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
+    "bcrypt": "^5.1.1",
     "eslint": "^9.20.1",
     "flowbite": "^3.1.2",
+    "jsonwebtoken": "^9.0.2",
     "nuxt": "^3.15.4",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "vue3-toastify": "^0.2.8",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.5.0",
     "@nuxtjs/tailwindcss": "6.13.1",
     "prisma": "^6.4.0",
+    "tsx": "^4.19.3",
     "typescript": "^5.7.3"
   },
   "packageManager": "pnpm@10.4.0",
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@parcel/watcher",
       "@prisma/client",
-      "esbuild"
+      "@prisma/engines",
+      "bcrypt",
+      "esbuild",
+      "prisma"
+    ],
+    "ignoredBuiltDependencies": [
+      "bcrypt"
     ]
   }
 }

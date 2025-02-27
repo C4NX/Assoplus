@@ -24,5 +24,5 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
     throw createError({ statusCode: 404, statusMessage: "Association not found" })
   }
 
-  return association 
+  return association
 })
