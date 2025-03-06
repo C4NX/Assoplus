@@ -11,12 +11,14 @@ async function cleanup() {
 
 async function createUser(n: number) {
     for (let i = 0; i < n; i++) {
+        const email = faker.internet.email()
+        console.log(`> ${email}`)
         await prisma.user.create({
             data: {
-                email: faker.internet.email(),
+                email,
                 firstName: faker.person.firstName(),
                 lastName: faker.person.lastName(),
-                passwordHash: bcrypt.hashSync("password", 10),
+                passwordHash: bcrypt.hashSync(email, 10),
             },
         })
     }

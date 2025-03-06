@@ -1,7 +1,7 @@
-import { defineEventHandler, type H3Event, type EventHandlerRequest } from "h3"
+import { defineEventHandler } from "h3"
 import prisma from "~/lib/prisma"
 
-export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) => {
+export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, "id")
 
   if (!id) {

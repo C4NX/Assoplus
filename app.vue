@@ -5,21 +5,13 @@
 </template>
 
 <script setup lang="ts">
-import { initFlowbite } from "flowbite"
-import { onMounted } from "vue"
-import { useFlowbite } from "~/composables/useFlowbite"
-
 useHead({
   titleTemplate: (titleChunk) => {
     return titleChunk ? `${titleChunk} - Asso+` : "Asso+"
   },
-})
-
-// initialize components based on data attribute selectors
-onMounted(() => {
-  useFlowbite(() => {
-    initFlowbite()
-  })
+  htmlAttrs: {
+    "data-theme": "emerald"
+  }
 })
 </script>
 

@@ -6,8 +6,9 @@ export default defineNuxtConfig({
     "@nuxt/eslint",
     "@nuxtjs/i18n",
     "@prisma/nuxt",
+    "@pinia/nuxt",
   ],
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   runtimeConfig: {
     jwtSecret: "",
   },
@@ -16,6 +17,19 @@ export default defineNuxtConfig({
     experimental: {
       // https://www.prisma.io/docs/orm/overview/databases/database-drivers#nuxt
       wasm: true,
+    },
+    devProxy: {
+      host: 'localhost',
+    },
+  },
+  devServer: {
+    host: '0',
+  },
+  vite: {
+    resolve: {
+      alias: {
+        '.prisma/client/index-browser': './node_modules/.prisma/client/index-browser',
+      },
     },
   },
   eslint: {
@@ -27,6 +41,10 @@ export default defineNuxtConfig({
         jsx: false,
       },
     },
+  },
+  prisma: {
+    skipPrompts: true,
+    generateClient: true,
   },
   icon: {
     provider: "server",

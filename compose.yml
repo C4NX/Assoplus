@@ -7,7 +7,6 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@assoplus-db:5432/assoplus
     volumes:
       - .:/app
-      - /app/node_modules
     ports:
       - "3000:3000"
       - "5555:5555"

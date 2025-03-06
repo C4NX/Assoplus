@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 import type { H3Event } from "h3"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 import { z } from "zod"
-import prisma from "~/lib/prisma"
+import prisma from "@/lib/prisma"
 
 const JWT_ISSUER = "assoplus"
 
@@ -14,7 +14,7 @@ const JwtPayload = z.object({
 })
 
 const JwtRefreshPayload = z.object({
-  sub: z.number(),
+  sub: z.string(),
 })
 
 export function getJwtSecret(event: H3Event) {

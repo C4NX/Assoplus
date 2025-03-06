@@ -1,10 +1,8 @@
-import flowbite from "flowbite/plugin"
+import daisyui from "daisyui"
 
 export default {
-  config: {
-    content: [
-      "./node_modules/flowbite/**/*.{js,ts}",
-    ],
-    plugins: [flowbite],
+  daisyui: {
+    themes: ["emerald"],
   },
+  plugins: [daisyui],
 }
