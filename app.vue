@@ -10,8 +10,8 @@ useHead({
     return titleChunk ? `${titleChunk} - Asso+` : "Asso+"
   },
   htmlAttrs: {
-    "data-theme": "emerald"
-  }
+    "data-theme": "emerald",
+  },
 })
 </script>
 

@@ -1,13 +1,13 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia"
 
 interface UserInterface {
-  id: string,
+  id: string
   email: string
   firstName: string
   lastName: string
 }
 
-export const useAuthStore = defineStore('authStore', {
+export const useAuthStore = defineStore("authStore", {
   state: (): {
     user: UserInterface | null
     token: string | null
@@ -20,23 +20,24 @@ export const useAuthStore = defineStore('authStore', {
   actions: {
     async login(email: string, password: string): Promise<boolean> {
       try {
-        const result = await $fetch('/api/auth/token', {
-          method: 'POST',
+        const result = await $fetch("/api/auth/token", {
+          method: "POST",
           body: { email, password },
           headers: {
-            'Content-Type': 'application/json'
-          }
-        });
+            "Content-Type": "application/json",
+          },
+        })
 
-        this.user = result.user;
-        this.token = result.token;
-        this.refreshToken = result.refreshToken;
+        this.user = result.user
+        this.token = result.token
+        this.refreshToken = result.refreshToken
 
-        console.log(result);
-        return true;
-      } catch (e) {
-        console.error(e);
-        return false;
+        console.log(result)
+        return true
+      }
+      catch (e) {
+        console.error(e)
+        return false
       }
     },
     logout() {
@@ -44,5 +45,5 @@ export const useAuthStore = defineStore('authStore', {
       this.token = null
       this.refreshToken = null
     },
-  }
+  },
 })

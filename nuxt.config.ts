@@ -18,17 +18,11 @@ export default defineNuxtConfig({
       // https://www.prisma.io/docs/orm/overview/databases/database-drivers#nuxt
       wasm: true,
     },
-    devProxy: {
-      host: 'localhost',
-    },
-  },
-  devServer: {
-    host: '0',
   },
   vite: {
     resolve: {
       alias: {
-        '.prisma/client/index-browser': './node_modules/.prisma/client/index-browser',
+        ".prisma/client/index-browser": "node_modules/.prisma/client/index-browser.js",
       },
     },
   },
@@ -42,14 +36,11 @@ export default defineNuxtConfig({
       },
     },
   },
-  prisma: {
-    skipPrompts: true,
-    generateClient: true,
-  },
   icon: {
     provider: "server",
   },
-  i18n: {
-    vueI18n: "./i18n.config.ts",
+  prisma: {
+    skipPrompts: true,
+    generateClient: true,
   },
 })

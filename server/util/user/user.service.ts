@@ -56,11 +56,12 @@ export async function verifyPasswordAndReturnUser(email: string, password: strin
     })
 
     if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
-      throw new Error("Password does not match");
+      throw new Error("Password does not match")
     }
 
     return user
-  } catch {
+  }
+  catch {
     throw createError({ statusCode: 401, statusMessage: "Invalid username or password" })
   }
 }

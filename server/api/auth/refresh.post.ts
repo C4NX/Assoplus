@@ -3,6 +3,7 @@ import { defineEventHandler } from "h3"
 import { z } from "zod"
 import prisma from "~/lib/prisma"
 import { authenticateUser, verifyRefreshToken } from "~/server/util/user/user.service"
+
 const RefreshRequestDto = z.object({
   refresh: z.string().jwt(),
 })

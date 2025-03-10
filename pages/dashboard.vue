@@ -1,15 +1,11 @@
 <template>
-  <div>
-
-  </div>
+  <div>TODO</div>
 </template>
 
 <script lang="ts" setup>
-
 definePageMeta({
-  layout: 'dashboard',
+  layout: "dashboard",
 })
-
 </script>
 
 <style></style>
