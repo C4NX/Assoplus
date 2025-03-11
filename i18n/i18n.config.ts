@@ -15,6 +15,7 @@ export default defineI18nConfig(() => ({
         login: "Connexion",
         register: "Inscription",
         home: "Accueil",
+        associations: "Associations",
       },
     },
     en: {
@@ -31,6 +32,7 @@ export default defineI18nConfig(() => ({
         login: "Login",
         signup: "Signup",
         home: "Home",
+        associations: "Associations",
       },
     },
   },
