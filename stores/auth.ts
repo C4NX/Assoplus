@@ -1,4 +1,5 @@
 import { defineStore } from "pinia"
+import type { FetchContext } from "ofetch"
 
 interface UserInterface {
   id: string
@@ -18,6 +19,12 @@ export const useAuthStore = defineStore("authStore", {
     refreshToken: null,
   }),
   actions: {
+    /**
+     * Send an async request to the server to login
+     * @param email user's email
+     * @param password user's password
+     * @returns true if the login was successful, false otherwise
+     */
     async login(email: string, password: string): Promise<boolean> {
       try {
         const result = await $fetch("/api/auth/token", {
@@ -31,13 +38,38 @@ export const useAuthStore = defineStore("authStore", {
         this.user = result.user
         this.token = result.token
         this.refreshToken = result.refreshToken
-
-        console.log(result)
         return true
       }
       catch (e) {
         console.error(e)
         return false
+      }
+    },
+    /**
+     * Try to refresh the jwt token using the refresh token
+     * @returns the new jwt token if the refresh was successful, null otherwise
+     */
+    async refresh(): Promise<string|null> {
+      try {
+        const refreshResult = await $fetch("/api/auth/refresh", {
+          method: "POST",
+          body: { refreshToken: this.refreshToken },
+          headers: {
+            "Content-Type": "application/json",
+          },
+          onResponseError: async ({ response }: FetchContext) => {
+            if (response?.status === 401) {
+              this.logout()
+            }
+          }
+        })
+        this.user = refreshResult.user
+        this.token = refreshResult.token
+        this.refreshToken = refreshResult.refreshToken
+        return this.refreshToken
+      } catch (e) {
+        console.error(e)
+        return null;
       }
     },
     logout() {

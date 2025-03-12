@@ -5,12 +5,12 @@ import prisma from "~/lib/prisma"
 import { authenticateUser, verifyRefreshToken } from "~/server/util/user/user.service"
 
 const RefreshRequestDto = z.object({
-  refresh: z.string().jwt(),
+  refreshToken: z.string().jwt(),
 })
 
 export default defineEventHandler(async (event) => {
   const tokenRequestData = await readValidatedBody(event, RefreshRequestDto.parse)
-  const refreshTokenPayload = await verifyRefreshToken(tokenRequestData.refresh, event)
+  const refreshTokenPayload = await verifyRefreshToken(tokenRequestData.refreshToken, event)
 
   try {
     const user = await prisma.user.findUniqueOrThrow({

@@ -6,10 +6,10 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 import { z } from "zod"
 import prisma from "@/lib/prisma"
 
-const JWT_ISSUER = "assoplus"
+const JWT_ISSUER = "ASSOPLUS"
 
 const JwtPayload = z.object({
-  sub: z.number(),
+  sub: z.string(),
   email: z.string(),
 })
 
