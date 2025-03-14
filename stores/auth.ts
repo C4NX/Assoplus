@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
 import type { FetchContext } from "ofetch"
+import { toast } from "vue3-toastify"
 
 interface UserInterface {
   id: string
@@ -49,7 +50,7 @@ export const useAuthStore = defineStore("authStore", {
      * Try to refresh the jwt token using the refresh token
      * @returns the new jwt token if the refresh was successful, null otherwise
      */
-    async refresh(): Promise<string|null> {
+    async refresh(): Promise<string | null> {
       try {
         const refreshResult = await $fetch("/api/auth/refresh", {
           method: "POST",
@@ -61,16 +62,30 @@ export const useAuthStore = defineStore("authStore", {
             if (response?.status === 401) {
               this.logout()
             }
-          }
+          },
         })
         this.user = refreshResult.user
         this.token = refreshResult.token
         this.refreshToken = refreshResult.refreshToken
         return this.refreshToken
-      } catch (e) {
-        console.error(e)
-        return null;
       }
+      catch (e) {
+        console.error(e)
+        return null
+      }
+    },
+    async register(registerData: { email: string, password: string, firstName: string, lastName: string }) {
+      const result = await $fetch("/api/auth/register", {
+        method: "POST",
+        body: registerData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        onResponseError: function () {
+          toast.error("Error while registering")
+        },
+      })
+      console.log(result)
     },
     logout() {
       this.user = null

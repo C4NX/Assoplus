@@ -1,7 +1,12 @@
 import { PrismaClient } from "@prisma/client"
+import { createLogger } from "~/server/util/logger/logger.service"
+
+const logger = createLogger("prisma")
 
 const prismaClientSingleton = () => {
-  return new PrismaClient()
+  const prismaClient = new PrismaClient()
+  logger.info("Created singleton prisma client")
+  return prismaClient
 }
 
 declare const globalThis: {

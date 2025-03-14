@@ -1,14 +1,17 @@
 import { defineEventHandler } from "h3"
 import { z } from "zod"
-import { authenticateUser, handleCreateUser } from "~/server/util/user/user.service"
+import { authenticateUser } from "~/server/util/user/auth.service"
+import { handleCreateUser } from "~/server/util/user/user.service"
 
 const SignupRequestDto = z.object({
   email: z.string().email(),
   password: z.string().min(8),
+  firstName: z.string(),
+  lastName: z.string(),
 })
 
 export default defineEventHandler(async (event) => {
   const tokenRequestData = await readValidatedBody(event, SignupRequestDto.parse)
-  const user = await handleCreateUser(tokenRequestData.email, tokenRequestData.password)
+  const user = await handleCreateUser(tokenRequestData)
   return authenticateUser(user, event)
 })

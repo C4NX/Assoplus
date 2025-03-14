@@ -1,6 +1,6 @@
 import { defineEventHandler } from "h3"
 import { z } from "zod"
-import { authenticateUser, verifyPasswordAndReturnUser } from "~/server/util/user/user.service"
+import { authenticateUser, verifyPasswordAndReturnUser } from "~/server/util/user/auth.service"
 
 const TokenRequestDto = z.object({
   email: z.string(),

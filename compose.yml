@@ -13,6 +13,8 @@ services:
     depends_on:
       assoplus-db:
         condition: service_healthy
+      assoplus-mailpit:
+        condition: service_healthy
   assoplus-db:
     image: postgres:12
     environment:
@@ -26,3 +28,12 @@ services:
       interval: 5s
       timeout: 2s
       retries: 20
+  assoplus-mailpit:
+    image: axllent/mailpit
+    ports:
+      - 8025:8025
+      - 1025:1025
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1

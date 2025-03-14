@@ -1,5 +1,5 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
-import { verifyAccessToken } from "../util/user/user.service"
+import { verifyAccessToken } from "../util/user/auth.service"
 import prisma from "~/lib/prisma"
 
 export default defineEventHandler(async (event) => {

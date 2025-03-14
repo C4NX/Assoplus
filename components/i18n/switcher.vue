@@ -38,7 +38,7 @@
         <li
           v-for="locale in availableLocales"
           :key="locale"
-          @click="setLocale(locale)"
+          @click="setLocaleAndSave(locale)"
         >
           <button :disabled="locale === currentLocale">
             <span class="badge badge-sm badge-outline px-2 py-1 text-xs font-semibold rounded-full">
@@ -54,6 +54,11 @@
 
 <script lang="ts" setup>
 const { locale: currentLocale, setLocale, availableLocales, getLocaleMessage } = useI18n()
+
+const setLocaleAndSave = (locale: string) => {
+  setLocale(locale)
+  localStorage.setItem("locale", locale)
+}
 
 const getLocaleName = (locale: string) => {
   const localMessage = getLocaleMessage(locale)

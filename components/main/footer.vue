@@ -33,11 +33,16 @@
     </nav>
     <nav>
       <h6 class="footer-title">
-        Legal
+        {{ $t("footer.legal") }}
       </h6>
-      <a class="link link-hover">Terms of use</a>
-      <a class="link link-hover">Privacy policy</a>
-      <a class="link link-hover">Cookie policy</a>
+      <NuxtLink
+        class="link link-hover"
+        to="/terms"
+      >{{ $t("footer.terms") }}</NuxtLink>
+      <NuxtLink
+        class="link link-hover"
+        to="/privacy"
+      >{{ $t("footer.privacy") }}</NuxtLink>
     </nav>
   </footer>
 </template>
@@ -49,4 +54,5 @@ const copyrightYear = computed(() => {
 })
 </script>
 
-<style></style>
+<style>
+</style>

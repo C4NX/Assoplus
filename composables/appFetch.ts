@@ -1,4 +1,4 @@
-import type { FetchContext } from 'ofetch'
+import type { FetchContext } from "ofetch"
 
 /**
  * ofetch that supports authentication.
@@ -6,26 +6,26 @@ import type { FetchContext } from 'ofetch'
 export const useAppFetch = () => {
   return $fetch.create({
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     onRequest: authOnRequest,
     onResponseError: authOnResponseError,
   })
 }
 
-function authOnRequest ({ options }: FetchContext) {
+function authOnRequest({ options }: FetchContext) {
   const { token } = useAuthStore()
-  
+
   if (token) { // inject token into headers
-    options.headers = new Headers(options.headers);
-    options.headers.set('Authorization', `Bearer ${token}`)
+    options.headers = new Headers(options.headers)
+    options.headers.set("Authorization", `Bearer ${token}`)
   }
 }
 
-async function authOnResponseError (context: FetchContext) {
+async function authOnResponseError(context: FetchContext) {
   if (context.response?.status === 401) {
     const { refreshToken, refresh } = useAuthStore()
-    if(refreshToken) {
+    if (refreshToken) {
       const newToken = await refresh()
       if (refreshToken && newToken) {
         // retry the request with the new token

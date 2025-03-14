@@ -2,7 +2,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 import { defineEventHandler } from "h3"
 import { z } from "zod"
 import prisma from "~/lib/prisma"
-import { authenticateUser, verifyRefreshToken } from "~/server/util/user/user.service"
+import { authenticateUser, verifyRefreshToken } from "~/server/util/user/auth.service"
 
 const RefreshRequestDto = z.object({
   refreshToken: z.string().jwt(),

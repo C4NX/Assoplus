@@ -7,10 +7,17 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
     "@prisma/nuxt",
     "@pinia/nuxt",
+    "nuxt-seo-utils",
   ],
   devtools: { enabled: false },
   runtimeConfig: {
     jwtSecret: "",
+    smtpHost: "",
+    smtpPort: 587,
+    smtpUser: "",
+    smtpPass: "",
+    smtpSecure: "false",
+    smtpDefaultFrom: "",
   },
   compatibilityDate: "2024-11-01",
   nitro: {
@@ -42,5 +49,14 @@ export default defineNuxtConfig({
   prisma: {
     skipPrompts: true,
     generateClient: true,
+  },
+  seo: {
+    meta: {
+      title: "Asso+",
+      description: "Make your association visible and manage your members better with Asso+.",
+      applicationName: "Asso+",
+      google: "nositelinkssearchbox",
+      googlebot: "notranslate",
+    },
   },
 })

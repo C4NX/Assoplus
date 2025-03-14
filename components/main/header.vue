@@ -14,7 +14,7 @@
       </NuxtLink>
     </div>
     <div class="flex-none">
-      <ul class="menu menu-horizontal px-1 gap-2">
+      <ul class="menu menu-horizontal tracking-wide px-1 gap-2">
         <li>
           <NuxtLink to="/">{{ $t('header.home') }}</NuxtLink>
         </li>
@@ -22,7 +22,10 @@
           <NuxtLink to="/associations">{{ $t('header.associations') }}</NuxtLink>
         </li>
         <li v-if="!authStore.user">
-          <NuxtLink to="/Login">{{ $t('header.login') }}</NuxtLink>
+          <NuxtLink
+            to="/Login"
+            class="font-bold"
+          >{{ $t('header.login') }}</NuxtLink>
         </li>
       </ul>
       <I18nSwitcher />
