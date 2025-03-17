@@ -18,18 +18,19 @@
       <input
         v-model="loginForm.password"
         type="password"
+        autocomplete="current-password"
         class="grow"
         :placeholder="$t('login.placeholder.password')"
         required
       >
     </label>
     <p class="text-right">
-      <NuxtLink
+      <NuxtLinkLocale
         to="/login/reset"
         class="link link-secondary"
       >
         {{ $t("login.forgot_password") }}
-      </NuxtLink>
+      </NuxtLinkLocale>
     </p>
     <button
       class="btn btn-primary flex-1"
@@ -39,22 +40,19 @@
     </button>
     <p class="text-center font-bold">
       {{ $t("login.no_account") }}
-      <NuxtLink
+      <NuxtLinkLocale
         to="/register"
         class="text-secondary underline"
       >
         {{ $t("login.register") }}
-      </NuxtLink>
+      </NuxtLinkLocale>
     </p>
   </AuthFormBase>
 </template>
 
 <script lang="ts" setup>
-import { toast } from "vue3-toastify"
-
-const authStore = useAuthStore()
+const { login } = useAuthStore()
 const { t } = useI18n()
-const router = useRouter()
 
 const loginForm = reactive({
   email: "",
@@ -66,13 +64,7 @@ useHead({
 })
 
 const handleLogin = async () => {
-  if (await authStore.login(loginForm.email, loginForm.password)) {
-    toast.success(t("login.success"))
-    router.push("/")
-  }
-  else {
-    toast.error(t("login.error"))
-  }
+  await login(loginForm.email, loginForm.password)
 }
 </script>
 

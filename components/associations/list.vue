@@ -76,14 +76,13 @@
 <script lang="ts" setup>
 import { ref, computed } from "vue"
 import type { Association } from "@prisma/client"
-import { useAppFetch } from "~/composables/appFetch"
+import { authOnResponseError } from "~/stores/auth"
 
 const searchTerm = ref("")
 const currentPage = ref(1)
 const totalPages = ref(0)
 const data = ref<Association[]>()
 const isLoading = ref(false)
-const appFetch = useAppFetch()
 
 let searchTimeout: ReturnType<typeof setTimeout>
 const handleSearch = () => {
@@ -97,11 +96,12 @@ const handleSearch = () => {
 const fetchData = async () => {
   isLoading.value = true
   try {
-    const response = await appFetch("/api/association", {
+    const response = await $fetch("/api/association", {
       query: {
         page: currentPage.value,
         search: searchTerm.value,
       },
+      onResponseError: [authOnResponseError],
     })
     data.value = response.items
     totalPages.value = response.totalPages

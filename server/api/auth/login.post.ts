@@ -1,6 +1,6 @@
 import { defineEventHandler } from "h3"
 import { z } from "zod"
-import { authenticateUser, verifyPasswordAndReturnUser } from "~/server/util/user/auth.service"
+import { authorizeUserSession, authenticateUserByEmail } from "~/server/util/user/auth.service"
 
 const TokenRequestDto = z.object({
   email: z.string(),
@@ -9,6 +9,6 @@ const TokenRequestDto = z.object({
 
 export default defineEventHandler(async (event) => {
   const tokenRequestData = await readValidatedBody(event, TokenRequestDto.parse)
-  const user = await verifyPasswordAndReturnUser(tokenRequestData.email, tokenRequestData.password)
-  return authenticateUser(user, event)
+  const user = await authenticateUserByEmail(tokenRequestData.email, tokenRequestData.password)
+  return authorizeUserSession(user, event)
 })

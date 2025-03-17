@@ -2,11 +2,27 @@ import { PrismaClient } from "@prisma/client"
 import { faker } from "@faker-js/faker"
 import bcrypt from "bcrypt"
 
+const ADMIN_EMAIL = "admin@admin.admin"
+
 const prisma = new PrismaClient()
 
 async function cleanup() {
   await prisma.user.deleteMany()
   await prisma.association.deleteMany()
+}
+
+async function createUserAdmin() {
+  console.log(`> ${ADMIN_EMAIL} (admin)`)
+  await prisma.user.create({
+    data: {
+      email: ADMIN_EMAIL,
+      firstName: "Admin",
+      lastName: "Admin",
+      passwordHash: bcrypt.hashSync(ADMIN_EMAIL, 10),
+      isVerified: true,
+      roles: ["ROLE_USER", "ROLE_ADMIN"],
+    },
+  })
 }
 
 async function createUser(n: number) {
@@ -19,6 +35,7 @@ async function createUser(n: number) {
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
         passwordHash: bcrypt.hashSync(email, 10),
+        isVerified: true,
       },
     })
   }
@@ -38,6 +55,7 @@ async function createAssociation(n: number) {
 async function main() {
   await cleanup()
   await createUser(10)
+  await createUserAdmin()
   await createAssociation(10)
   console.log("Seed complete")
 }

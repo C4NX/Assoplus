@@ -8,5 +8,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       zIndex: 1000,
     },
     position: toast.POSITION.BOTTOM_RIGHT,
+    clearOnUrlChange: false,
   } as ToastContainerOptions)
 })

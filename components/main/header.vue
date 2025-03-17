@@ -1,7 +1,13 @@
 <template>
   <div class="navbar bg-base-100 fixed z-10">
+    <input
+      ref="fileInput"
+      type="file"
+      accept="image/*"
+      style="display: none"
+    >
     <div class="flex-1">
-      <NuxtLink
+      <NuxtLinkLocale
         class="btn btn-ghost text-xl"
         to="/"
       >
@@ -11,26 +17,32 @@
           class="w-10"
         >
         Asso+
-      </NuxtLink>
+      </NuxtLinkLocale>
     </div>
     <div class="flex-none">
+      <I18nSwitcher />
       <ul class="menu menu-horizontal tracking-wide px-1 gap-2">
         <li>
-          <NuxtLink to="/">{{ $t('header.home') }}</NuxtLink>
+          <NuxtLinkLocale to="/">
+            {{ $t('header.home') }}
+          </NuxtLinkLocale>
         </li>
         <li>
-          <NuxtLink to="/associations">{{ $t('header.associations') }}</NuxtLink>
+          <NuxtLinkLocale to="/associations">
+            {{ $t('header.associations') }}
+          </NuxtLinkLocale>
         </li>
-        <li v-if="!authStore.user">
-          <NuxtLink
+        <li v-if="!user">
+          <NuxtLinkLocale
             to="/Login"
             class="font-bold"
-          >{{ $t('header.login') }}</NuxtLink>
+          >
+            {{ $t('header.login') }}
+          </NuxtLinkLocale>
         </li>
       </ul>
-      <I18nSwitcher />
       <div
-        v-if="authStore.user"
+        v-if="user"
         class="dropdown dropdown-end"
       >
         <div
@@ -41,7 +53,7 @@
           <div class="w-10 rounded-full">
             <img
               alt="Tailwind CSS Navbar component"
-              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+              :src="`/api/me/avatar/${user.avatarUuid ?? 'default'}`"
             >
           </div>
         </div>
@@ -52,10 +64,14 @@
           <li>
             <a class="justify-between">
               Profile
-              <span class="badge">New</span>
+              <span
+                v-if="user?.roles?.includes('ROLE_ADMIN')"
+                class="badge badge-error badge-outline"
+              >Admin</span>
             </a>
           </li>
           <li><a>Settings</a></li>
+          <li><a @click.prevent="handleUploadAvatar()">Change PP</a></li>
           <li><a @click.prevent="handleLogout()">Logout</a></li>
         </ul>
       </div>
@@ -64,18 +80,44 @@
 </template>
 
 <script lang="ts" setup>
-import { toast } from "vue3-toastify"
-import { I18nSwitcher } from "#components"
+const auth = useAuthStore()
 
-const authStore = useAuthStore()
+const { user } = storeToRefs(useAuthStore())
+
 const router = useRouter()
+const fileInput = ref<HTMLInputElement | null>(null)
 
 const handleLogout = async () => {
-  authStore.logout()
-  router.push("/")
-  toast.success("Logout successful", {
-    delay: 200,
-  })
+  await auth.logout()
+  await router.push("/")
+}
+
+const handleUploadAvatar = async () => {
+  if (!fileInput.value) return
+
+  try {
+    // 1. Open file dialog
+    fileInput.value.click()
+
+    // 2. Wait for file selection
+    const file = await new Promise<File>((resolve) => {
+      fileInput.value?.addEventListener("change", (e) => {
+        resolve((e?.target as HTMLInputElement)?.files?.[0] as File)
+      }, { once: true })
+    })
+
+    if (!file) return
+
+    // 3. Validate image
+    if (!file.type.startsWith("image/")) {
+      throw new Error("Please select a valid image")
+    }
+
+    await auth.updateAvatar(file)
+  }
+  catch (error) {
+    console.error(error)
+  }
 }
 </script>
 

@@ -1,6 +1,5 @@
 export default defineI18nConfig(() => ({
   locales: ["fr", "en"],
-  defaultLocale: "en",
   messages: {
     fr: {
       localeName: "Français",
@@ -18,6 +17,7 @@ export default defineI18nConfig(() => ({
         privacy_policy: "Politique Relative aux Données Personnelles",
         and: "et nos",
         no_account: "Pas encore de compte ? ",
+        email_already_in_use: "Cette adresse e-mail est déjà utilisée.",
         placeholder: {
           email: "Adresse e-mail",
           password: "Mot de passe",
@@ -34,8 +34,8 @@ export default defineI18nConfig(() => ({
       register: {
         title: "S'inscrire",
         submit: "S'inscrire sur Asso+",
-        success: "Inscription réussie.",
-        error: "Erreur d'inscription, veuillez réessayer plus tard.",
+        success: "Inscription réussie",
+        error: "Erreur d'inscription, veuillez réessayer plus tard",
       },
       OR: "OU",
       and: "et",

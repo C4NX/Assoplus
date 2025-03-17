@@ -40,18 +40,18 @@
         </div>
         <p class="text-center">
           {{ $t("login.by_continuing_you_accept") }}
-          <NuxtLink
+          <NuxtLinkLocale
             to="/terms"
             class="link"
           >
             {{ $t("login.terms_of_service") }}
-          </NuxtLink> {{ $t("login.and") }}
-          <NuxtLink
+          </NuxtLinkLocale> {{ $t("login.and") }}
+          <NuxtLinkLocale
             to="/privacy"
             class="link"
           >
             {{ $t("login.privacy_policy") }}
-          </NuxtLink>.
+          </NuxtLinkLocale>.
         </p>
       </form>
     </div>

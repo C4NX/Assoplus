@@ -13,9 +13,10 @@ model User {
   firstName    String
   lastName     String
   passwordHash String
-  roles        String[]
-  isVerified   Boolean
+  roles        String[] @default(["ROLE_USER"])
+  isVerified   Boolean  @default(false)
   createdAt    DateTime @default(now())
+  avatarUuid   String?
 }
 
 model Association {

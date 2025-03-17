@@ -4,22 +4,30 @@ import { createLogger } from "~/server/util/logger/logger.service"
 const logger = createLogger("nodemailer")
 
 const nodemailerTransporterSingleton = () => {
-  const { smtpUser, smtpHost, smtpPass, smtpPort, smtpSecure } = useRuntimeConfig()
+  const {
+    smtp: {
+      host,
+      port,
+      user,
+      pass,
+      secure,
+    },
+  } = useRuntimeConfig()
 
   try {
     const transporter = createTransport({
-      host: smtpHost,
-      port: smtpPort ?? 587,
-      secure: Boolean(smtpSecure),
-      auth: (smtpUser || smtpPass)
+      host: host ?? "localhost",
+      port: port ?? 587,
+      secure: Boolean(secure),
+      auth: (user || pass)
         ? {
-            user: smtpUser,
-            pass: smtpPass,
+            user: user,
+            pass: pass,
           }
         : undefined,
     })
 
-    logger.info("Created singleton nodemailer transporter")
+    logger.info("Created Nodemailer transporter singleton")
 
     return transporter
   }

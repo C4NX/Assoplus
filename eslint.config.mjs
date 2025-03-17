@@ -5,6 +5,7 @@ export default withNuxt(
   {
     rules: {
       "@typescript-eslint/no-extraneous-class": ["error", { allowWithDecorator: true }],
+      "no-unsafe-optional-chaining": "off",
     },
   },
 )

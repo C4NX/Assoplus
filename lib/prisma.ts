@@ -5,7 +5,7 @@ const logger = createLogger("prisma")
 
 const prismaClientSingleton = () => {
   const prismaClient = new PrismaClient()
-  logger.info("Created singleton prisma client")
+  logger.info("Created prisma client singleton")
   return prismaClient
 }
 

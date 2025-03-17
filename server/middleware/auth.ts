@@ -1,25 +1,33 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
-import { verifyAccessToken } from "../util/user/auth.service"
+import type { User } from "@prisma/client"
+import { verifyAccessToken, COOKIE_TOKEN, logoutUser } from "~/server/util/user/auth.service"
 import prisma from "~/lib/prisma"
 
-export default defineEventHandler(async (event) => {
-  if (event.headers.has("Authorization")) {
-    const authorizationHeader = event.headers.get("Authorization")?.split(" ")
-    if (!authorizationHeader || authorizationHeader.length !== 2 || authorizationHeader[0] !== "Bearer") {
-      throw createError({ statusCode: 401, statusMessage: "Invalid Authorization header" })
+declare module "h3" {
+  interface H3EventContext {
+    auth?: {
+      user: User
     }
+  }
+}
 
-    const { sub } = await verifyAccessToken(authorizationHeader[1], event)
+export default defineEventHandler(async (event) => {
+  const token = getCookie(event, COOKIE_TOKEN)
+  if (token) {
+    const { sub } = await verifyAccessToken(token, event)
 
     try {
-      event.context.auth = await prisma.user.findUniqueOrThrow({
-        where: {
-          id: sub,
-        },
-      })
+      event.context.auth = {
+        user: await prisma.user.findUniqueOrThrow({
+          where: {
+            id: sub,
+          },
+        }),
+      }
     }
     catch (e) {
       if (e instanceof PrismaClientKnownRequestError && e.code === "P2025") {
+        logoutUser(event)
         throw createError({ statusCode: 401, statusMessage: "Invalid user" })
       }
       throw e

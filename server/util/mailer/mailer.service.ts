@@ -13,15 +13,14 @@ export interface SendMailOptions {
 
 export async function sendMail(options: SendMailOptions): Promise<void> {
   try {
-    const from = options.from || useRuntimeConfig().smtpDefaultFrom
+    const from = options.from || useRuntimeConfig().smtp?.from
 
     if (!from) {
       throw new Error("No default from address provided")
     }
 
     if (process.env.NODE_ENV !== "production") {
-      logger.info("Sending email to", options.to)
-      return
+      logger.trace("Sending email to", options.to)
     }
 
     await nodemailerTransport?.sendMail({

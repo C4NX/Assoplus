@@ -18,8 +18,9 @@
       <input
         v-model="loginForm.password"
         type="password"
+        autocomplete="current-password"
         class="grow"
-        :placeholder="$t('login.placeholder.email')"
+        :placeholder="$t('login.placeholder.password')"
         required
       >
     </label>
@@ -55,7 +56,7 @@
 </template>
 
 <script lang="ts" setup>
-const authStore = useAuthStore()
+const { register } = useAuthStore()
 const { t } = useI18n()
 
 const loginForm = reactive({
@@ -70,7 +71,7 @@ useHead({
 })
 
 const handleRegister = async () => {
-  await authStore.register(loginForm)
+  await register(loginForm)
 }
 </script>
 

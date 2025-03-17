@@ -35,14 +35,18 @@
       <h6 class="footer-title">
         {{ $t("footer.legal") }}
       </h6>
-      <NuxtLink
+      <NuxtLinkLocale
         class="link link-hover"
         to="/terms"
-      >{{ $t("footer.terms") }}</NuxtLink>
-      <NuxtLink
+      >
+        {{ $t("footer.terms") }}
+      </NuxtLinkLocale>
+      <NuxtLinkLocale
         class="link link-hover"
         to="/privacy"
-      >{{ $t("footer.privacy") }}</NuxtLink>
+      >
+        {{ $t("footer.privacy") }}
+      </NuxtLinkLocale>
     </nav>
   </footer>
 </template>

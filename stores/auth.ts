@@ -1,96 +1,137 @@
 import { defineStore } from "pinia"
-import type { FetchContext } from "ofetch"
 import { toast } from "vue3-toastify"
-
-interface UserInterface {
-  id: string
-  email: string
-  firstName: string
-  lastName: string
+import type { FetchContext } from "ofetch"
+import type { ClientUserInterface } from "~/shared/auth"
+/**
+ * Handle refresh token on 401 response.
+ * @param context Fetch context
+ */
+export async function authOnResponseError(context: FetchContext) {
+  console.log("authOnResponseError", context.response?.status)
+  if (context.response?.status === 401) {
+    const { refresh } = useAuthStore()
+    if (await refresh()) {
+      // retry the request with the new token
+      context.options.retry = 1
+      context.options.retryStatusCodes = [401]
+    }
+  }
 }
 
-export const useAuthStore = defineStore("authStore", {
+export const useAuthStore = defineStore("auth", {
   state: (): {
-    user: UserInterface | null
-    token: string | null
-    refreshToken: string | null
+    user: ClientUserInterface | null
+    isLoading: boolean
   } => ({
     user: null,
-    token: null,
-    refreshToken: null,
+    isLoading: true,
   }),
   actions: {
-    /**
-     * Send an async request to the server to login
-     * @param email user's email
-     * @param password user's password
-     * @returns true if the login was successful, false otherwise
-     */
-    async login(email: string, password: string): Promise<boolean> {
+    async init() {
       try {
-        const result = await $fetch("/api/auth/token", {
-          method: "POST",
-          body: { email, password },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        await this.fetchUser()
+      }
+      catch (error) {
+        console.error("Auth init error:", error)
+        this.user = null
+      }
+      finally {
+        this.isLoading = false
+      }
+    },
+    async fetchUser() {
+      const user = await $fetch("/api/me")
+      this.user = user
+    },
+    async login(email: string, password: string) {
+      const router = useRouter()
+      const localePath = useLocalePath()
 
-        this.user = result.user
-        this.token = result.token
-        this.refreshToken = result.refreshToken
+      const { user, message } = await $fetch("/api/auth/login", {
+        method: "POST",
+        body: { email, password },
+        onResponseError: [authOnResponseError],
+      })
+
+      console.log(this.user)
+      this.user = user
+      console.log(this.user)
+      toast.success(message, { toastId: "login" })
+      await router.push(localePath("/"))
+    },
+    async register(registerData: { email: string, password: string }) {
+      const router = useRouter()
+      const localePath = useLocalePath()
+
+      await $fetch("/api/auth/register", {
+        method: "POST",
+        body: registerData,
+        onResponseError: [
+          authOnResponseError,
+          async function ({ response }: FetchContext) {
+            if ("message" in response?._data) {
+              toast.error((response?._data.message))
+            }
+          },
+        ],
+      })
+
+      await router.push(localePath("/login"))
+    },
+    async refresh() {
+      try {
+        await $fetch("/api/auth/refresh", {
+          method: "POST",
+          credentials: "include",
+        })
         return true
       }
-      catch (e) {
-        console.error(e)
+      catch (error) {
+        console.error(error)
+        this.user = null
         return false
       }
     },
-    /**
-     * Try to refresh the jwt token using the refresh token
-     * @returns the new jwt token if the refresh was successful, null otherwise
-     */
-    async refresh(): Promise<string | null> {
-      try {
-        const refreshResult = await $fetch("/api/auth/refresh", {
-          method: "POST",
-          body: { refreshToken: this.refreshToken },
-          headers: {
-            "Content-Type": "application/json",
-          },
-          onResponseError: async ({ response }: FetchContext) => {
-            if (response?.status === 401) {
-              this.logout()
+    async logout() {
+      const router = useRouter()
+      const localePath = useLocalePath()
+
+      await $fetch("/api/auth/logout", {
+        method: "POST",
+        onResponseError: [
+          authOnResponseError,
+          async function ({ response }: FetchContext) {
+            if ("message" in response?._data) {
+              toast.error((response?._data.message))
             }
           },
-        })
-        this.user = refreshResult.user
-        this.token = refreshResult.token
-        this.refreshToken = refreshResult.refreshToken
-        return this.refreshToken
-      }
-      catch (e) {
-        console.error(e)
-        return null
-      }
-    },
-    async register(registerData: { email: string, password: string, firstName: string, lastName: string }) {
-      const result = await $fetch("/api/auth/register", {
-        method: "POST",
-        body: registerData,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        onResponseError: function () {
-          toast.error("Error while registering")
-        },
+        ],
       })
-      console.log(result)
-    },
-    logout() {
+
       this.user = null
-      this.token = null
-      this.refreshToken = null
+      console.log("after logout", this.user)
+      await router.push(localePath("/login"))
+    },
+
+    async updateAvatar(file: File) {
+      if (!this.user) {
+        return
+      }
+
+      const formData = new FormData()
+      formData.append("file", file)
+
+      try {
+        const data = await $fetch("/api/me/avatar", {
+          method: "POST",
+          body: formData,
+          onResponseError: [authOnResponseError],
+        })
+        this.user = { ...this.user, avatarUuid: data.uuid }
+      }
+      catch (error) {
+        console.error(error)
+      }
     },
   },
 })

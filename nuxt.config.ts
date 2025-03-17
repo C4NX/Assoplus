@@ -9,15 +9,28 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "nuxt-seo-utils",
   ],
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   runtimeConfig: {
     jwtSecret: "",
-    smtpHost: "",
-    smtpPort: 587,
-    smtpUser: "",
-    smtpPass: "",
-    smtpSecure: "false",
-    smtpDefaultFrom: "",
+    s3: {
+      endpoint: "",
+      accessKeyId: "",
+      secretAccessKey: "",
+      region: "",
+      bucket: "",
+    },
+    smtp: {
+      host: "",
+      port: 587,
+      user: "",
+      pass: "",
+      secure: "false",
+      from: "",
+    },
+    baseUrl: "",
+    public: {
+      version: "1.0.0",
+    },
   },
   compatibilityDate: "2024-11-01",
   nitro: {
@@ -41,6 +54,29 @@ export default defineNuxtConfig({
         semi: false,
         jsx: false,
       },
+    },
+  },
+  i18n: {
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: "i18n_redirected",
+      redirectOn: "root",
+    },
+    locales: [
+      {
+        code: "en",
+        iso: "en-US",
+        name: "English",
+      },
+      {
+        code: "fr",
+        iso: "fr-FR",
+        name: "Français",
+      },
+    ],
+    defaultLocale: "fr",
+    experimental: {
+      localeDetector: "./localeDetector.ts",
     },
   },
   icon: {

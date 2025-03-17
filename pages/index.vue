@@ -21,12 +21,12 @@
             </span>
           </p>
           <div class="flex gap-2 justify-center md:flex-row flex-col">
-            <NuxtLink
+            <NuxtLinkLocale
               class="btn btn-primary"
               to="/associations"
             >
               Rechercher une association
-            </NuxtLink>
+            </NuxtLinkLocale>
             <button class="btn btn-primary">
               Ajouter votre association
             </button>
