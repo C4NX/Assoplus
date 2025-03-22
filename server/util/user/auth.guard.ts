@@ -1,13 +1,22 @@
 import type { H3Event } from "h3"
+import type { PublicUserInterface } from "~/shared/auth"
 
-export function throwIfNotAuthenticated(event: H3Event) {
-  if (!event.context.auth) {
-    throw createError({ statusCode: 401, statusMessage: "Unauthorized" })
-  }
+export async function requireUserAuthenticated(event: H3Event) {
+  const { user } = await requireUserSession(event)
+  return user as PublicUserInterface
 }
 
-export function throwIfNotGranted(event: H3Event, permission: string) {
-  if (!event.context.auth?.user.roles.includes(permission)) {
+export async function requireUserGranted(event: H3Event, permissions: string | string[]) {
+  const userSession = await requireUserSession(event)
+  const userRoles = (userSession.user as PublicUserInterface)?.roles || []
+
+  const hasPermission = Array.isArray(permissions)
+    ? permissions.some(permission => userRoles.includes(permission))
+    : userRoles.includes(permissions)
+
+  if (!hasPermission) {
     throw createError({ statusCode: 403, statusMessage: "Forbidden" })
   }
+
+  return userSession.user as PublicUserInterface
 }

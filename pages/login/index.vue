@@ -51,9 +51,7 @@
 </template>
 
 <script lang="ts" setup>
-const { login } = useAuthStore()
 const { t } = useI18n()
-
 const loginForm = reactive({
   email: "",
   password: "",
@@ -63,8 +61,9 @@ useHead({
   title: t("login.title"),
 })
 
+const authStore = useAuthStore()
 const handleLogin = async () => {
-  await login(loginForm.email, loginForm.password)
+  await authStore.login(loginForm.email, loginForm.password)
 }
 </script>
 

@@ -8,7 +8,7 @@ import { signVerifyTokenForUser } from "./auth.service"
 import prisma from "@/lib/prisma"
 import { sendMail } from "~/server/util/mailer/mailer.service"
 import { createLogger } from "~/server/util/logger/logger.service"
-import type { ClientUserInterface } from "~/shared/auth"
+import type { PublicUserInterface } from "~/shared/auth"
 
 const logger = createLogger("user")
 
@@ -60,7 +60,7 @@ async function sendVerificationEmail(user: User, event: H3Event) {
   })
 }
 
-export function sanitizeUser(user: User): ClientUserInterface {
+export function sanitizeUser(user: User): PublicUserInterface {
   return {
     id: user.id,
     email: user.email,

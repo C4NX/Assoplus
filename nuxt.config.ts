@@ -8,10 +8,13 @@ export default defineNuxtConfig({
     "@prisma/nuxt",
     "@pinia/nuxt",
     "nuxt-seo-utils",
+    "nuxt-auth-utils",
   ],
   devtools: { enabled: true },
   runtimeConfig: {
-    jwtSecret: "",
+    auth: {
+      registerVerifySecret: "",
+    },
     s3: {
       endpoint: "",
       accessKeyId: "",

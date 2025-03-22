@@ -4,7 +4,7 @@
       ref="fileInput"
       type="file"
       accept="image/*"
-      style="display: none"
+      class="hidden"
     >
     <div class="flex-1">
       <NuxtLinkLocale
@@ -32,7 +32,7 @@
             {{ $t('header.associations') }}
           </NuxtLinkLocale>
         </li>
-        <li v-if="!user">
+        <li v-if="!loggedIn">
           <NuxtLinkLocale
             to="/Login"
             class="font-bold"
@@ -42,7 +42,7 @@
         </li>
       </ul>
       <div
-        v-if="user"
+        v-if="loggedIn"
         class="dropdown dropdown-end"
       >
         <div
@@ -53,7 +53,7 @@
           <div class="w-10 rounded-full">
             <img
               alt="Tailwind CSS Navbar component"
-              :src="`/api/me/avatar/${user.avatarUuid ?? 'default'}`"
+              :src="`/api/me/avatar/${user?.avatarUuid ?? 'default'}`"
             >
           </div>
         </div>
@@ -80,16 +80,17 @@
 </template>
 
 <script lang="ts" setup>
-const auth = useAuthStore()
+const { loggedIn, user } = useUserSession()
+const authStore = useAuthStore()
 
-const { user } = storeToRefs(useAuthStore())
+watch(() => user, async (newuser) => {
+  console.log("updated user", newuser)
+})
 
-const router = useRouter()
 const fileInput = ref<HTMLInputElement | null>(null)
 
 const handleLogout = async () => {
-  await auth.logout()
-  await router.push("/")
+  await authStore.logout()
 }
 
 const handleUploadAvatar = async () => {
@@ -113,7 +114,7 @@ const handleUploadAvatar = async () => {
       throw new Error("Please select a valid image")
     }
 
-    await auth.updateAvatar(file)
+    await authStore.updateAvatar(file)
   }
   catch (error) {
     console.error(error)

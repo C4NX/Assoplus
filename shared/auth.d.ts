@@ -1,7 +1,7 @@
 /**
  * A user object that is returned by the server, sanitized for client use.
  */
-export interface ClientUserInterface {
+export interface PublicUserInterface {
   id: string
   email: string
   firstName: string
@@ -9,4 +9,9 @@ export interface ClientUserInterface {
   roles: string[]
   avatarUuid: string | null
   isVerified: boolean
+}
+
+declare module "#auth-utils" {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface User extends PublicUserInterface {}
 }

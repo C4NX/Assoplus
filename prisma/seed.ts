@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client"
 import { faker } from "@faker-js/faker"
-import bcrypt from "bcrypt"
+import { Scrypt } from "@adonisjs/hash/drivers/scrypt"
 
 const ADMIN_EMAIL = "admin@admin.admin"
 
@@ -11,6 +11,11 @@ async function cleanup() {
   await prisma.association.deleteMany()
 }
 
+async function hashPassword(password: string) {
+  const scrypt = new Scrypt({})
+  return scrypt.make(password)
+}
+
 async function createUserAdmin() {
   console.log(`> ${ADMIN_EMAIL} (admin)`)
   await prisma.user.create({
@@ -18,7 +23,7 @@ async function createUserAdmin() {
       email: ADMIN_EMAIL,
       firstName: "Admin",
       lastName: "Admin",
-      passwordHash: bcrypt.hashSync(ADMIN_EMAIL, 10),
+      passwordHash: await hashPassword(ADMIN_EMAIL),
       isVerified: true,
       roles: ["ROLE_USER", "ROLE_ADMIN"],
     },
@@ -34,7 +39,7 @@ async function createUser(n: number) {
         email,
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
-        passwordHash: bcrypt.hashSync(email, 10),
+        passwordHash: await hashPassword(email),
         isVerified: true,
       },
     })

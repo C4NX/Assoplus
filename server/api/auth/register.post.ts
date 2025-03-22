@@ -2,7 +2,7 @@ import { defineEventHandler } from "h3"
 import { z } from "zod"
 import { handleCreateUser } from "~/server/util/user/user.service"
 
-const SignupRequestDto = z.object({
+const UserRegistrationRequestDto = z.object({
   email: z.string().email(),
   password: z.string().min(8),
   firstName: z.string(),
@@ -10,9 +10,9 @@ const SignupRequestDto = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  const tokenRequestData = await readValidatedBody(event, SignupRequestDto.parse)
+  const registrationPayload = await readValidatedBody(event, UserRegistrationRequestDto.parse)
   const t = await useTranslation(event)
 
-  await handleCreateUser(event, tokenRequestData)
+  await handleCreateUser(event, registrationPayload)
   return { message: t("register.success") }
 })

@@ -3,8 +3,11 @@ import sharp from "sharp"
 import { v4 as uuidv4 } from "uuid"
 import type { H3Event } from "h3"
 import s3Client from "~/lib/s3client"
-import { throwIfNotAuthenticated } from "~/server/util/user/auth.guard"
+import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
 import prisma from "~/lib/prisma"
+import { createLogger } from "~/server/util/logger/logger.service"
+
+const logger = createLogger("api/me/avatar")
 
 async function convertProfilePicture(buffer: Buffer) {
   return await sharp(buffer)
@@ -30,14 +33,14 @@ async function checkAndGetImageBuffer(event: H3Event, formName: string) {
 }
 
 export default defineEventHandler(async (event) => {
-  throwIfNotAuthenticated(event)
+  const user = await requireUserAuthenticated(event)
 
   const { s3: { bucket } } = useRuntimeConfig(event)
 
   const imageBuffer = await checkAndGetImageBuffer(event, "file")
 
   const newImageUuid = uuidv4()
-  const s3Key = `avatars/${event.context.auth?.user.id}/${newImageUuid}`
+  const s3Key = `avatars/${user.id}/${newImageUuid}`
   await s3Client?.send(new PutObjectCommand({
     Bucket: bucket,
     Key: s3Key,
@@ -45,11 +48,14 @@ export default defineEventHandler(async (event) => {
   }))
 
   await prisma.user.update({
-    where: { id: event.context.auth?.user.id },
+    where: { id: user.id },
     data: {
       avatarUuid: newImageUuid,
     },
   })
+  await replaceUserSession(event, { user: { ...user, avatarUuid: newImageUuid } })
 
-  return { uuid: newImageUuid }
+  logger.trace(`User ${user.id} uploaded a new avatar`)
+
+  await setResponseStatus(event, 204)
 })
