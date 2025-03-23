@@ -30,13 +30,24 @@
           <div class="divider">
             {{ $t("OR") }}
           </div>
-          <button
-            class="btn btn-secondary flex-1"
-            disabled
-          >
-            <Icon name="mdi:google" />
-            {{ $t("login.google") }}
-          </button>
+          <div class="flex gap-2 flex-col lg:flex-row">
+            <button
+              class="btn btn-secondary flex-1"
+              type="button"
+              disabled
+            >
+              <Icon name="mdi:google" />
+              {{ $t("login.google") }}
+            </button>
+            <button
+              class="btn btn-secondary flex-1"
+              type="button"
+              @click.prevent="openProvider('discord')"
+            >
+              <Icon name="mdi:discord" />
+              {{ $t("login.discord") }}
+            </button>
+          </div>
         </div>
         <p class="text-center">
           {{ $t("login.by_continuing_you_accept") }}
@@ -64,6 +75,10 @@ defineProps<{
   title: string
   hideOAuthLogin?: boolean
 }>()
+
+const openProvider = (provider: string) => {
+  window.location.href = `/api/auth/${provider}`
+}
 </script>
 
 <style></style>

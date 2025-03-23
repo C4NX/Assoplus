@@ -16,6 +16,7 @@ export default defineEventHandler(async (event) => {
   const loggedUser = await authenticateUserByEmail(loginRequestPayload.email, loginRequestPayload.password)
   await setUserSession(event, {
     user: sanitizeUser(loggedUser),
+    loggedInAt: Date.now(),
   })
 
   return {

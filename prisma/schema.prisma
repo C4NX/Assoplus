@@ -12,11 +12,13 @@ model User {
   email        String   @unique
   firstName    String
   lastName     String
-  passwordHash String
+  passwordHash String?
   roles        String[] @default(["ROLE_USER"])
   isVerified   Boolean  @default(false)
   createdAt    DateTime @default(now())
   avatarUuid   String?
+
+  discordId    String?
 }
 
 model Association {

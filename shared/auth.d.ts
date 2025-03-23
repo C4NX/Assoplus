@@ -9,6 +9,7 @@ export interface PublicUserInterface {
   roles: string[]
   avatarUuid: string | null
   isVerified: boolean
+  discordId: string | null
 }
 
 declare module "#auth-utils" {

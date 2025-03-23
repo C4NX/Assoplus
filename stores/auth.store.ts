@@ -71,7 +71,6 @@ export const useAuthStore = defineStore("auth", {
           body: formData,
         })
         await refreshSession()
-        console.log("Avatar updated", user.value)
       }
       catch (error) {
         console.error(error)

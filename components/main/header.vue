@@ -68,6 +68,10 @@
                 v-if="user?.roles?.includes('ROLE_ADMIN')"
                 class="badge badge-error badge-outline"
               >Admin</span>
+              <span
+                v-if="user?.discordId"
+                class="badge badge-info badge-outline"
+              >Discord</span>
             </a>
           </li>
           <li><a>Settings</a></li>
@@ -76,18 +80,60 @@
         </ul>
       </div>
     </div>
+    <ClientOnly>
+      <dialog
+        id="my_modal_2"
+        ref="modalDialog"
+        class="modal"
+      >
+        <div class="modal-box">
+          <h3 class="text-lg font-bold">
+            Change your profile picture
+          </h3>
+          <p class="py-4">
+            <VuePictureCropper
+              v-if="cropperUrl"
+              :img="cropperUrl"
+              :options="{
+                viewMode: 1,
+                dragMode: 'crop',
+                aspectRatio: 1,
+              }"
+            />
+          </p>
+          <div class="flex justify-end gap-2">
+            <button
+              class="btn"
+              @click.prevent="modalDialog?.close()"
+            >
+              close
+            </button>
+            <button
+              class="btn btn-primary"
+              @click="getResult"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </dialog>
+    </ClientOnly>
   </div>
 </template>
 
 <script lang="ts" setup>
+import VuePictureCropper, { cropper } from "vue-picture-cropper"
+
 const { loggedIn, user } = useUserSession()
 const authStore = useAuthStore()
 
-watch(() => user, async (newuser) => {
-  console.log("updated user", newuser)
+const cropperUrl = ref<string | null>(null)
+const avatarResult = reactive({
+  dataURL: "",
+  blobURL: "",
 })
-
 const fileInput = ref<HTMLInputElement | null>(null)
+const modalDialog = ref<HTMLDialogElement | null>(null)
 
 const handleLogout = async () => {
   await authStore.logout()
@@ -114,11 +160,50 @@ const handleUploadAvatar = async () => {
       throw new Error("Please select a valid image")
     }
 
-    await authStore.updateAvatar(file)
+    openCropper(file)
   }
   catch (error) {
     console.error(error)
   }
+}
+
+function openCropper(file: File) {
+  // Reset last selection and results
+  cropperUrl.value = ""
+  avatarResult.dataURL = ""
+  avatarResult.blobURL = ""
+
+  const reader = new FileReader()
+  reader.readAsDataURL(file)
+  reader.onload = () => {
+    // Update the picture source of the `img` prop
+    cropperUrl.value = String(reader.result)
+
+    // Show the modal
+    modalDialog.value?.showModal()
+
+    // Clear selected files of input element
+    if (!fileInput.value) return
+    fileInput.value.value = ""
+  }
+}
+
+async function getResult() {
+  if (!cropper) return
+  const base64 = cropper.getDataURL()
+  const blob: Blob | null = await cropper.getBlob()
+  if (!blob) return
+
+  const file = await cropper.getFile({
+    fileName: "avatar",
+  })
+  if (!file) return
+
+  console.log({ base64, blob, file })
+
+  await authStore.updateAvatar(file)
+
+  modalDialog?.value?.close()
 }
 </script>
 

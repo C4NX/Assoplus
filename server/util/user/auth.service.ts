@@ -19,7 +19,7 @@ export async function authenticateUserByEmail(email: string, password: string) {
   })
 
   // The user need to have the correct password to login
-  if (!user || !(await verifyPassword(user.passwordHash, password))) {
+  if (!user || !user.passwordHash || !(await verifyPassword(user.passwordHash, password))) {
     throw createError({ statusCode: 401, statusMessage: "Invalid username or password" })
   }
 
@@ -51,4 +51,27 @@ export async function verifyVerifyToken(token: string, event: H3Event) {
   catch {
     throw createError({ statusCode: 401, statusMessage: "Invalid token" })
   }
+}
+
+export async function authenticateUserByOauth2(provider: string, providerId: string, handleCreateUser: () => Promise<Omit<User, "id" | "discordId">>) {
+  let dbUser: User | null = null
+
+  dbUser = await prisma.user.findFirst({
+    where: {
+      [`${provider}Id`]: providerId,
+    },
+  })
+
+  if (!dbUser) {
+    const createdUser = await handleCreateUser()
+    const createdDbUser = await prisma.user.create({
+      data: {
+        ...createdUser,
+        [`${provider}Id`]: providerId,
+      },
+    })
+    dbUser = createdDbUser
+  }
+
+  return dbUser
 }

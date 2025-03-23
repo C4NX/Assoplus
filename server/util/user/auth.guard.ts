@@ -1,4 +1,5 @@
 import type { H3Event } from "h3"
+import type { Role } from "./role.enum"
 import type { PublicUserInterface } from "~/shared/auth"
 
 export async function requireUserAuthenticated(event: H3Event) {
@@ -6,7 +7,7 @@ export async function requireUserAuthenticated(event: H3Event) {
   return user as PublicUserInterface
 }
 
-export async function requireUserGranted(event: H3Event, permissions: string | string[]) {
+export async function requireUserGranted(event: H3Event, permissions: Role | Role[]) {
   const userSession = await requireUserSession(event)
   const userRoles = (userSession.user as PublicUserInterface)?.roles || []
 
