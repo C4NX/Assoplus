@@ -1,5 +1,5 @@
 import prisma from "~/lib/prisma"
-import { verifyVerifyToken } from "~/server/util/user/auth.service"
+import { validateVerifyToken } from "~/server/util/user/verify.service"
 
 export default defineEventHandler(async (event) => {
   const { token } = getQuery(event)
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, message: "Invalid token" })
   }
 
-  const verifyToken = await verifyVerifyToken(token, event)
+  const verifyToken = await validateVerifyToken(token, event)
 
   const verifyUser = await prisma.user.findUnique({
     where: {

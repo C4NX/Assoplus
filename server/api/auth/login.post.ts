@@ -9,9 +9,8 @@ const LoginRequestDto = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  const loginRequestPayload = await readValidatedBody(event, LoginRequestDto.parse)
-
   const t = await useTranslation(event)
+  const loginRequestPayload = await readValidatedBody(event, LoginRequestDto.parse)
 
   const loggedUser = await authenticateUserByEmail(loginRequestPayload.email, loginRequestPayload.password)
   await setUserSession(event, {

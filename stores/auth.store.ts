@@ -1,8 +1,9 @@
 import { defineStore } from "pinia"
 import { toast } from "vue3-toastify"
 import type { FetchContext } from "ofetch"
+import { toastifyResponse } from "~/utils/toastify"
 
-export const useAuthStore = defineStore("auth", {
+export const useAccountStore = defineStore("accounts", {
   state: (): object => ({
     // auth is managed by nuxt-auth-utils
   }),
@@ -15,13 +16,7 @@ export const useAuthStore = defineStore("auth", {
       const { message } = await $fetch("/api/auth/login", {
         method: "POST",
         body: { email, password },
-        onResponseError: [
-          async function ({ response }: FetchContext) {
-            if ("message" in response?._data) {
-              toast.error((response?._data.message))
-            }
-          },
-        ],
+        onResponseError: toastifyResponse,
       })
 
       await refreshSession()
@@ -36,13 +31,7 @@ export const useAuthStore = defineStore("auth", {
       await $fetch("/api/auth/register", {
         method: "POST",
         body: registerData,
-        onResponseError: [
-          async function ({ response }: FetchContext) {
-            if ("message" in response?._data) {
-              toast.error((response?._data.message))
-            }
-          },
-        ],
+        onResponseError: toastifyResponse,
       })
 
       await nuxtApp.runWithContext(async () => await router.push(localePath("/login")))
@@ -56,7 +45,7 @@ export const useAuthStore = defineStore("auth", {
     },
     async updateAvatar(file: File) {
       const nuxtApp = useNuxtApp()
-      const { loggedIn, fetch: refreshSession, user } = useUserSession()
+      const { loggedIn, fetch: refreshSession } = useUserSession()
       if (!loggedIn) {
         await nuxtApp.runWithContext(async () => await toast.error("You need to be logged to do this action"))
         return
@@ -72,8 +61,26 @@ export const useAuthStore = defineStore("auth", {
         })
         await refreshSession()
       }
-      catch (error) {
-        console.error(error)
+      catch {
+        toast.error("An error occured while updating your avatar")
+      }
+    },
+    async deleteAccount() {
+      const nuxtApp = useNuxtApp()
+      const { loggedIn, fetch: refreshSession } = useUserSession()
+      if (!loggedIn) {
+        await nuxtApp.runWithContext(async () => await toast.error("You need to be logged to do this action"))
+        return
+      }
+
+      try {
+        await $fetch("/api/me", {
+          method: "DELETE",
+        })
+        await refreshSession()
+      }
+      catch {
+        toast.error("An error occured while deleting your account")
       }
     },
   },

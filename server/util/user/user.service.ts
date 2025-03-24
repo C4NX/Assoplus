@@ -4,11 +4,13 @@ import type { H3Event } from "h3"
 import { createError } from "h3"
 import { useTranslation } from "@intlify/h3"
 import type { User } from "@prisma/client"
-import { signVerifyTokenForUser } from "./auth.service"
+import { signVerifyTokenForUser } from "./verify.service"
 import prisma from "@/lib/prisma"
 import { sendMail } from "~/server/util/mailer/mailer.service"
 import { createLogger } from "~/server/util/logger/logger.service"
 import type { PublicUserInterface } from "~/shared/auth"
+import { v4 as uuid } from "uuid"
+import { validateAndHashPassword } from "./auth.service"
 
 const logger = createLogger("user")
 
@@ -60,6 +62,28 @@ async function sendVerificationEmail(user: User, event: H3Event) {
   })
 }
 
+export async function sendPasswordResetEmail(user: User, event: H3Event) {
+  const { baseUrl } = useRuntimeConfig(event)
+  const uniqueToken = uuid()
+
+  await setUserSession(event, {
+    secure: {
+      passwordReset: {
+        userId: user.id,
+        token: uniqueToken,
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 3), // 3 hours
+      },
+    }
+  }) 
+
+  await sendMail({
+    to: user.email,
+    subject: "Reset your password",
+    text: "Please reset your password by clicking on the link below",
+    html: `<a href='${baseUrl}/login/reset?t=${uniqueToken}'>Reset password</a>`,
+  })
+}
+
 export function sanitizeUser(user: User): PublicUserInterface {
   return {
     id: user.id,
@@ -71,4 +95,25 @@ export function sanitizeUser(user: User): PublicUserInterface {
     avatarUuid: user.avatarUuid,
     discordId: user.discordId,
   }
+}
+
+export async function updatePassword(user: User, newPassword: string) {
+  if (!user.passwordHash) {
+    throw createError({ statusCode: 401, message: "Cannot update password for oauth users" })
+  }
+
+  if (!await verifyPassword(user.passwordHash, newPassword)) {
+    throw createError({ statusCode: 400, message: "New password cannot be the same as the old password" })
+  }
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { passwordHash: await validateAndHashPassword(newPassword) },
+  })
+}
+
+export async function deleteUser(userId: string) {
+  await prisma.user.delete({ where: { id: userId } })
+
+  // TODO: rgpd-ize this
 }

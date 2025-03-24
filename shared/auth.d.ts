@@ -15,4 +15,12 @@ export interface PublicUserInterface {
 declare module "#auth-utils" {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface User extends PublicUserInterface {}
+
+  interface SecureSessionData {
+    passwordReset?: {
+      userId: string
+      token: string
+      expiresAt: Date
+    }
+  }
 }

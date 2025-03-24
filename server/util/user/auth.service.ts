@@ -1,20 +1,19 @@
 import type { User } from "@prisma/client"
-import jwt from "jsonwebtoken"
-import type { H3Event } from "h3"
-import { z } from "zod"
 import prisma from "@/lib/prisma"
+import { z } from "zod"
 
-export const JWT_ISSUER = "ASSOPLUS"
+const PasswordSchema = z.string().min(8).max(100)
 
-const VerifyJwtPayloadSchema = z.object({
-  sub: z.string(),
-  email: z.string(),
-})
+export async function validateAndHashPassword(password: string) {
+  const validatedPassword = await PasswordSchema.parseAsync(password)
+  return await hashPassword(validatedPassword)
+}
 
 export async function authenticateUserByEmail(email: string, password: string) {
   const user = await prisma.user.findFirst({
     where: {
       email: email,
+      passwordHash: { not: null },
     },
   })
 
@@ -29,28 +28,6 @@ export async function authenticateUserByEmail(email: string, password: string) {
   }
 
   return user
-}
-
-export async function signVerifyTokenForUser(user: User, event: H3Event) {
-  const { auth: { registerVerifySecret } } = useRuntimeConfig(event)
-  return jwt.sign({ sub: user.id, email: user.email }, registerVerifySecret, {
-    expiresIn: "1d",
-    issuer: JWT_ISSUER,
-  })
-}
-
-export async function verifyVerifyToken(token: string, event: H3Event) {
-  const { auth: { registerVerifySecret } } = useRuntimeConfig(event)
-  try {
-    return await VerifyJwtPayloadSchema.parseAsync(
-      jwt.verify(token, registerVerifySecret, {
-        issuer: JWT_ISSUER,
-      }),
-    )
-  }
-  catch {
-    throw createError({ statusCode: 401, statusMessage: "Invalid token" })
-  }
 }
 
 export async function authenticateUserByOauth2(provider: string, providerId: string, handleCreateUser: () => Promise<Omit<User, "id" | "discordId">>) {

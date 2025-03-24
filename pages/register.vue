@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts" setup>
-const { register } = useAuthStore()
+const { register } = useAccountStore()
 const { t } = useI18n()
 
 const loginForm = reactive({

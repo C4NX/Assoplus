@@ -61,9 +61,9 @@ useHead({
   title: t("login.title"),
 })
 
-const authStore = useAuthStore()
+const accountStore = useAccountStore()
 const handleLogin = async () => {
-  await authStore.login(loginForm.email, loginForm.password)
+  await accountStore.login(loginForm.email, loginForm.password)
 }
 </script>
 

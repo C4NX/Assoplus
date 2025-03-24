@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     "nuxt-seo-utils",
     "nuxt-auth-utils",
   ],
+  ssr: false,
   devtools: { enabled: true },
   runtimeConfig: {
     oauth: {

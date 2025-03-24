@@ -23,6 +23,9 @@ export interface DiscordUser {
 
 const logger = createLogger("auth/discord")
 
+/**
+ * @see https://nuxt.com/modules/auth-utils#oauth-event-handlers
+ */
 export default defineOAuthDiscordEventHandler({
   config: {
     emailRequired: true,

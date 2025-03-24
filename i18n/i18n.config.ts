@@ -27,8 +27,12 @@ export default defineI18nConfig(() => ({
         reset: {
           title: "Réinitialisation du mot de passe",
           submit: "Envoyer",
-          success: "Un e-mail de réinitialisation de mot de passe a été envoyé.",
-          error: "Erreur lors de l'envoi de l'e-mail de réinitialisation de mot de passe.",
+          success_email: "Un e-mail de réinitialisation de mot de passe a été envoyé.",
+          success: "Mot de passe réinitialisé avec succès.",
+          error_email: "Erreur lors de l'envoi de l'e-mail de réinitialisation de mot de passe.",
+          error: "Erreur lors de la réinitialisation du mot de passe.",
+          expired: "Le lien de réinitialisation de mot de passe a expiré.",
+          retry: "Vous avez déjà fait une demande de réinitialisation de mot de passe récemment. Veuillez réessayer plus tard.",
         },
       },
       register: {
@@ -37,8 +41,25 @@ export default defineI18nConfig(() => ({
         success: "Inscription réussie",
         error: "Erreur d'inscription, veuillez réessayer plus tard",
       },
+      profile: {
+        security: "Sécurité",
+        informations: "Informations",
+        error: {
+          wrong_password: "Mot de passe incorrect",
+          oauth_account: "Vous ne pouvez pas changer le mot de passe d'un compte lié à un compte tiers.",
+          password_updated: "Mot de passe mis à jour",
+          password_does_not_match: "Les mots de passe ne correspondent pas",
+        },
+        picture: {
+          change: "Changer la photo de profil",
+          success: "Photo de profil mise à jour",
+          error: "Erreur lors de la mise à jour de la photo de profil",
+        },
+      },
       OR: "OU",
       and: "et",
+      save: "Enregistrer",
+      cancel: "Annuler",
       header: {
         login: "Se connecter / S'inscrire",
         home: "Accueil",
