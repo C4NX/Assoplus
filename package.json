@@ -20,6 +20,7 @@
     "@aws-sdk/client-s3": "^3.758.0",
     "@nuxt/eslint": "1.0.1",
     "@nuxt/icon": "1.10.3",
+    "@nuxt/image": "^1.10.0",
     "@nuxtjs/i18n": "^9.3.1",
     "@pinia/nuxt": "^0.10.1",
     "@prisma/client": "^6.4.1",

@@ -1,54 +1,43 @@
 <template>
-  <div class="mt-14 m-4 space-y-2">
-    <h1 class="py-4 text-xl font-bold flex items-center justify-center gap-2 bg-base-200 rounded-md">
-      <Icon
-        name="mdi:user"
-        size="24"
-      />
-      Mon compte
-    </h1>
-    <div class="flex flex-row gap-2">
-      <ul class="menu bg-base-200 rounded-box w-56">
-        <li>
-          <a
-            :class="{ active: activeTab === ProfileTab.INFO }"
-            @click="activeTab = ProfileTab.INFO"
-          >
-            <Icon
-              name="mdi:account"
-              size="24"
-            />
-            Informations
-          </a>
-        </li>
-        <li>
-          <a
-            :class="{ active: activeTab === ProfileTab.SECURITY }"
-            @click="activeTab = ProfileTab.SECURITY"
-          >
-            <Icon
-              name="mdi:lock"
-              size="24"
-            />
-            Sécurité
-          </a>
-        </li>
-        <li class="disabled">
-          <a :class="{ active: activeTab === ProfileTab.NOTIFICATIONS }">
-            <Icon
-              name="mdi:email"
-              size="24"
-            />
-            Notifications
-          </a>
-        </li>
-      </ul>
-      <div class="flex-1">
-        <ProfileTabInformations v-if="activeTab === ProfileTab.INFO" />
-        <ProfileTabSecurity v-if="activeTab === ProfileTab.SECURITY" />
+  <div class="container mx-auto max-w-10xl my-10 p-4">
+    <div class="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6">
+      <!-- Sidebar Navigation -->
+      <div class="bg-base-100 rounded-lg shadow-sm border border-gray-200">
+          <ul class="divide-y divide-gray-100">
+            <li>
+              <a href="#" :class="[
+              'flex items-center gap-4 p-4 transition-colors',
+              activeTab === ProfileTab.INFO ? 'bg-primary-50 text-primary' : 'hover:bg-gray-50'
+            ]" @click.prevent="activeTab = ProfileTab.INFO">
+                <Icon name="mdi:account" size="24" />
+                <span class="text-sm font-medium">Informations</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" :class="[
+              'flex items-center gap-4 p-4 transition-colors',
+              activeTab === ProfileTab.SECURITY ? 'bg-primary-50 text-primary' : 'hover:bg-gray-50'
+            ]" @click.prevent="activeTab = ProfileTab.SECURITY">
+                <Icon name="mdi:lock" size="24" />
+                <span class="text-sm font-medium">Sécurité</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="flex items-center gap-4 p-4 text-gray-400 cursor-not-allowed" @click.prevent>
+                <Icon name="mdi:email" size="24" />
+                <span class="text-sm font-medium">Notifications</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Content Area -->
+        <div class="rounded-lg shadow-xl">
+          <ProfileTabInformations v-if="activeTab === ProfileTab.INFO" />
+          <ProfileTabSecurity v-if="activeTab === ProfileTab.SECURITY" />
+        </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -60,7 +49,3 @@ enum ProfileTab {
 
 const activeTab = ref<ProfileTab>(ProfileTab.INFO)
 </script>
-
-<style>
-
-</style>

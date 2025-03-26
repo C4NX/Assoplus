@@ -1,6 +1,6 @@
 <template>
   <div
-    class="hero min-h-screen bg-[url('/images/background.webp')]"
+    class="hero min-h-screen bg-rainbow"
   >
     <div class="hero-overlay bg-opacity-60 backdrop-blur-lg">
       <div class="hero-content text-neutral-content text-center min-h-screen max-w-none">

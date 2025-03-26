@@ -1,8 +1,7 @@
 <template>
-  <div class="min-h-[calc(100vh-60px)] pt-[60px]">
+  <div class="min-h-[calc(100vh-60px)] pt-[60px] bg-grid">
     <ClientOnly>
       <dialog
-        id="my_modal_2"
         ref="modalDialog"
         class="modal"
       >
@@ -58,7 +57,7 @@
     </ClientOnly>
     <div
       v-if="loggedIn"
-      class="w-full h-40 bg-[url('/images/background.webp')] bg-cover bg-center shadow-md"
+      class="w-full h-40 bg-rainbow bg-cover bg-center border-b-8 border-gray-100"
     >
       <div class="avatar relative top-1/2 left-1/4">
         <div
@@ -71,10 +70,11 @@
             accept="image/*"
             class="hidden"
           >
-          <img
-            :src="`/api/me/avatar/${user?.avatarUuid ?? 'default'}`"
-            alt="logo"
-          >
+          <NuxtImg
+            :src="user?.avatarUuid ? `/api/me/avatar/${user?.avatarUuid}` : undefined"
+            placeholder="/image/avatar/default.jpg"
+            alt="Avatar de l'utilisateur"
+          />
         </div>
       </div>
     </div>

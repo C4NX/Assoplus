@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-[calc(100vh-60px)] pt-[60px] flex items-center justify-center bg-cover bg-center bg-[url('pexels-juan-pablo-guardia-137931772-18504011.jpg')]"
+    class="min-h-[calc(100vh-60px)] pt-[60px] flex items-center justify-center bg-cover bg-center bg-city"
   >
     <div
       class="w-full min-h-[calc(100vh-60px)] flex flex-col justify-center items-center backdrop-blur-lg px-4 md:px-0"
@@ -94,5 +94,3 @@ const handleBack = async () => {
   }
 }
 </script>
-
-<style></style>

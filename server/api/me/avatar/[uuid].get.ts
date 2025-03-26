@@ -4,10 +4,6 @@ import { createError, defineEventHandler, getRouterParam, sendStream, setHeader,
 import s3Client from "~/lib/s3client"
 import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
 
-function sendDefaultAvatar(event: H3Event) {
-  return sendStream(event, createReadStream("public/pexels-juan-pablo-guardia-137931772-18504011.jpg"))
-}
-
 export default defineEventHandler(async (event) => {
   const user = await requireUserAuthenticated(event)
 
@@ -19,10 +15,6 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: "Invalid request" })
   }
 
-  if (avatarUuid === "default") {
-    return sendDefaultAvatar(event)
-  }
-
   let result
   try {
     result = await s3Client?.send(new GetObjectCommand({
@@ -32,14 +24,14 @@ export default defineEventHandler(async (event) => {
   }
   catch (error) {
     if (error instanceof NoSuchKey) {
-      return sendDefaultAvatar(event)
+      throw createError({ statusCode: 404, statusMessage: "Not found" })
     }
     throw error
   }
 
   const stream = result?.Body?.transformToWebStream()
   if (!stream) {
-    throw createError({ statusCode: 404, statusMessage: "Not found" })
+    throw new Error("Failed to get avatar stream")
   }
 
   setHeader(event, "Content-Type", "image/webp")

@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "nuxt-seo-utils",
     "nuxt-auth-utils",
+    "@nuxt/image",
   ],
   ssr: false,
   devtools: { enabled: true },
