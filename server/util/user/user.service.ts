@@ -91,7 +91,6 @@ export function sanitizeUser(user: User): PublicUserInterface {
     isVerified: user.isVerified,
     roles: user.roles,
     avatarUuid: user.avatarUuid,
-    discordId: user.discordId,
     googleId: user.googleId,
   }
 }

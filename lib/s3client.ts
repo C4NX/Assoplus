@@ -1,9 +1,9 @@
 import { S3Client } from "@aws-sdk/client-s3"
 import { createLogger } from "~/server/util/logger/logger.service"
 
-const logger = createLogger("nodemailer")
+const logger = createLogger("S3Client")
 
-const s3ClientSingleton = () => {
+const createS3ClientSingleton = () => {
   const {
     s3: {
       region,
@@ -42,10 +42,10 @@ const s3ClientSingleton = () => {
 }
 
 declare const globalThis: {
-  s3ClientGlobal: ReturnType<typeof s3ClientSingleton>
+  s3ClientGlobal: ReturnType<typeof createS3ClientSingleton>
 } & typeof global
 
-const s3Client = globalThis.s3ClientGlobal ?? s3ClientSingleton()
+const s3Client = globalThis.s3ClientGlobal ?? createS3ClientSingleton()
 
 export default s3Client
 

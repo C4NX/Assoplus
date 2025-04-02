@@ -15,10 +15,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
     oauth: {
-      discord: {
-        clientId: "",
-        clientSecret: "",
-      },
       google: {
         clientId: "",
         clientSecret: "",

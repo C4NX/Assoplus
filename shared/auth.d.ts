@@ -9,7 +9,6 @@ export interface PublicUserInterface {
   roles: string[]
   avatarUuid: string | null
   isVerified: boolean
-  discordId: string | null
   googleId: string | null
 }
 

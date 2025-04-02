@@ -19,7 +19,6 @@ model User {
   createdAt           DateTime  @default(now())
   avatarUuid          String?
 
-  discordId String?
   googleId  String? @unique
 
   association       Association[]

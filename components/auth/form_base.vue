@@ -42,14 +42,6 @@
               <Icon name="logos:google-icon" />
               {{ $t("login.google") }}
             </button>
-            <!-- <button
-              class="btn btn-secondary flex-1"
-              type="button"
-              @click.prevent="openProvider('discord')"
-            >
-              <Icon name="mdi:discord" />
-              {{ $t("login.discord") }}
-            </button> -->
           </div>
         </div>
         <p class="text-center">
