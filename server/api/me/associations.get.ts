@@ -5,11 +5,12 @@ export default defineEventHandler(async (event) => {
   const user = await requireUserAuthenticated(event)
 
   return await prisma.association.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
     where: {
       ownerId: user.id,
     },
-    include: {
-      tags: true,
-    },
-  })
+  });
 })

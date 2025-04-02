@@ -18,22 +18,24 @@ export default defineEventHandler(async (event) => {
 
   return await paginate(event, prisma, {
     data: async (prismaClient, inject) => {
-      const prismaResult = await prismaClient.association.findMany(
+      return await prismaClient.association.findMany(
         {
           ...inject, // pagination
           ...prismaSelectOptions, // search
-          include: { // associations
-            tags : true,
-          },
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            logoUuid: true,
+            tags: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          }
         }
       );
-
-      return prismaResult.map(({ id, name, description, tags }) => ({
-        id,
-        name,
-        description,
-        tags: tags.map(({ id, name }) => ({ id, name })),
-      }))
     },
     count: async prismaClient => prismaClient.association.count(prismaSelectOptions),
     maxItemPerPage: 10,

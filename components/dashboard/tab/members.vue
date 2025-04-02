@@ -10,7 +10,8 @@
                 <input type="checkbox" class="checkbox" />
               </label>
             </th>
-            <th>Name</th>
+            <th>Membre</th>
+            <th>Rôles</th>
             <th></th>
           </tr>
         </thead>
@@ -24,14 +25,14 @@
             </th>
             <td>
               <div class="flex items-center gap-3">
-                <div class="avatar">
+                <!-- <div class="avatar">
                   <div class="mask mask-squircle h-12 w-12">
                     <img src="https://img.daisyui.com/images/profile/demo/2@94.webp"
                       alt="Avatar Tailwind CSS Component" />
                   </div>
-                </div>
+                </div> -->
                 <div>
-                  <div class="font-bold">{{ member.firstname }} {{ member.lastName }}</div>
+                  <div class="font-bold">{{ member.firstName }} {{ member.lastName }}</div>
                   <div class="text-sm opacity-50">{{ member.email }}</div>
                 </div>
               </div>
@@ -48,21 +49,9 @@
 
 <script lang="ts" setup>
 
-const props = defineProps({
-  associationId: {
-    type: Number,
-    required: true
-  }
-});
+const { activeAssociationId } = useDashboardStore();
 
-watch(() => props.associationId, async (newValue) => {
-  
-  if (newValue) {
-    await refresh();
-  }
-});
-
-const { data, refresh, status } = await useFetch(() => `/api/association/${props.associationId}/members`);
+const { data, status } = await useFetch(() => `/api/association/${activeAssociationId}/members`);
 
 </script>
 

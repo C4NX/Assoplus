@@ -7,7 +7,7 @@ import { PublicUserInterface } from "~/shared/auth"
 import prisma from "~/lib/prisma"
 import { createLogger } from "~/server/util/logger/logger.service"
 
-const logger = createLogger("avatar")
+const logger = createLogger("files")
 
 async function convertProfilePicture(buffer: Buffer) {
     return await sharp(buffer)
@@ -77,6 +77,17 @@ export async function getAvatarStream(user: PublicUserInterface) {
     const result = await s3Client?.send(new GetObjectCommand({
         Bucket: bucket,
         Key: `avatars/${user.id}/${user.avatarUuid}`,
+    }))
+
+    return result?.Body?.transformToWebStream()
+}
+
+export async function getAssociationLogoStream(associationId: number, logoUuid: string) {
+    const { s3: { bucket } } = useRuntimeConfig()
+
+    const result = await s3Client?.send(new GetObjectCommand({
+        Bucket: bucket,
+        Key: `associations/${associationId}/logos/${logoUuid}`,
     }))
 
     return result?.Body?.transformToWebStream()
