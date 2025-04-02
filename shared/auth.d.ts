@@ -10,6 +10,7 @@ export interface PublicUserInterface {
   avatarUuid: string | null
   isVerified: boolean
   discordId: string | null
+  googleId: string | null
 }
 
 declare module "#auth-utils" {

@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 import type { H3Event } from "h3"
 import { createError } from "h3"
@@ -9,7 +8,7 @@ import prisma from "@/lib/prisma"
 import { sendMail } from "~/server/util/mailer/mailer.service"
 import { createLogger } from "~/server/util/logger/logger.service"
 import type { PublicUserInterface } from "~/shared/auth"
-import { v4 as uuid } from "uuid"
+import { v4 as uuid, validate } from "uuid"
 import { validateAndHashPassword } from "./auth.service"
 
 const logger = createLogger("user")
@@ -18,16 +17,15 @@ interface CreateUserInterface {
   email: string
   password: string
   firstName: string
-  lastName: string
+  lastName: string,
 }
 
 export async function handleCreateUser(event: H3Event, { email, password, firstName, lastName }: CreateUserInterface) {
-  const salt = await bcrypt.genSalt(10)
   try {
     const user = await prisma.user.create({
       data: {
         email: email,
-        passwordHash: await bcrypt.hash(password, salt),
+        passwordHash: await validateAndHashPassword(password),
         firstName: firstName,
         lastName: lastName,
         isVerified: false,
@@ -94,6 +92,7 @@ export function sanitizeUser(user: User): PublicUserInterface {
     roles: user.roles,
     avatarUuid: user.avatarUuid,
     discordId: user.discordId,
+    googleId: user.googleId,
   }
 }
 

@@ -41,14 +41,14 @@
       </form>
     </dialog>
 
-    <ProfileTabFormPassword v-if="!user?.discordId" />
+    <ProfileTabFormPassword v-if="!isOAuth2" />
 
     <p
-      v-if="user?.discordId"
+      v-if="user?.googleId"
       class="text-bold text-secondary flex items-center justify-center gap-2"
     >
       Ce compte <b>Asso+</b> est lié à un compte
-      <Icon name="mdi:discord" /><b>Discord</b>.
+      <Icon name="logos:google-icon" /><b>Google</b>.
     </p>
     <div class="flex justify-end">
       <button
@@ -78,6 +78,11 @@ const handleDeleteAccount = async () => {
   await clear()
   await router.push("/")
 }
+
+const isOAuth2 = computed(() => {
+  return user.value?.googleId !== null || user.value?.discordId !== null
+})
+
 </script>
 
 <style>

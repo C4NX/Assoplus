@@ -70,10 +70,8 @@
             accept="image/*"
             class="hidden"
           >
-          <NuxtImg
-            :src="user?.avatarUuid ? `/api/me/avatar/${user?.avatarUuid}` : undefined"
-            placeholder="/image/avatar/default.jpg"
-            alt="Avatar de l'utilisateur"
+          <img
+            :src="user?.avatarUuid ? `/api/me/avatar/${user?.avatarUuid}` : '/image/avatar/default.jpg'" alt="Avatar de l'utilisateur"
           />
         </div>
       </div>

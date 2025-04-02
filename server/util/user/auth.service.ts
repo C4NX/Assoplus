@@ -1,4 +1,3 @@
-import type { User } from "@prisma/client"
 import prisma from "@/lib/prisma"
 import { z } from "zod"
 
@@ -28,27 +27,4 @@ export async function authenticateUserByEmail(email: string, password: string) {
   }
 
   return user
-}
-
-export async function authenticateUserByOauth2(provider: string, providerId: string, handleCreateUser: () => Promise<Omit<User, "id" | "discordId">>) {
-  let dbUser: User | null = null
-
-  dbUser = await prisma.user.findFirst({
-    where: {
-      [`${provider}Id`]: providerId,
-    },
-  })
-
-  if (!dbUser) {
-    const createdUser = await handleCreateUser()
-    const createdDbUser = await prisma.user.create({
-      data: {
-        ...createdUser,
-        [`${provider}Id`]: providerId,
-      },
-    })
-    dbUser = createdDbUser
-  }
-
-  return dbUser
 }

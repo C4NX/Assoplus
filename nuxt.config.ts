@@ -19,6 +19,10 @@ export default defineNuxtConfig({
         clientId: "",
         clientSecret: "",
       },
+      google: {
+        clientId: "",
+        clientSecret: "",
+      },
     },
     auth: {
       registerVerifySecret: "",

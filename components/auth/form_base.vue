@@ -35,21 +35,21 @@
           </div>
           <div class="flex gap-2 flex-col lg:flex-row">
             <button
-              class="btn btn-secondary flex-1"
+              class="btn bg-white text-black border-[#e5e5e5] flex-1"
               type="button"
-              disabled
+              @click.prevent="openProvider('google')"
             >
-              <Icon name="mdi:google" />
+              <Icon name="logos:google-icon" />
               {{ $t("login.google") }}
             </button>
-            <button
+            <!-- <button
               class="btn btn-secondary flex-1"
               type="button"
               @click.prevent="openProvider('discord')"
             >
               <Icon name="mdi:discord" />
               {{ $t("login.discord") }}
-            </button>
+            </button> -->
           </div>
         </div>
         <p class="text-center">

@@ -24,12 +24,17 @@
             {{ $t('header.login') }}
           </NuxtLinkLocale>
         </li>
+        <li v-else>
+          <NuxtLinkLocale to="/dashboard">
+            {{ $t('header.dashboard') }}
+          </NuxtLinkLocale>
+        </li>
       </ul>
       <div v-if="loggedIn" class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">
-            <NuxtImg :src="user?.avatarUuid ? `/api/me/avatar/${user?.avatarUuid}` : undefined"
-              placeholder="/image/avatar/default.jpg" alt="Avatar de l'utilisateur" />
+            <img :src="user?.avatarUuid ? `/api/me/avatar/${user?.avatarUuid}` : '/image/avatar/default.jpg'"
+              alt="Avatar de l'utilisateur" />
           </div>
         </div>
         <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
@@ -37,7 +42,6 @@
             <NuxtLinkLocale class="justify-between" to="/profile/me">
               {{ user?.firstName }} {{ user?.lastName }}
               <span v-if="user?.roles?.includes('ROLE_ADMIN')" class="badge badge-error badge-outline">Admin</span>
-              <span v-if="user?.discordId" class="badge badge-info badge-outline">Discord</span>
             </NuxtLinkLocale>
           </li>
           <li><a @click.prevent="handleLogout()">Logout</a></li>

@@ -13,18 +13,13 @@ export default defineEventHandler(async (event) => {
   const user = await requireUserAuthenticated(event)
   const passwordChangeData = await readValidatedBody(event, PasswordChangeSchema.parse)
   const t = await useTranslation(event)
-  const dbUser = await prisma.user.findUniqueOrThrow({
-    where: {
-      id: user.id,
-    },
-  })
 
-  if (!dbUser.passwordHash) {
+  if (!user.passwordHash) {
     return createError({ statusCode: 400, message: t('profile.error.oauth_account') })
   }
 
   // check if old password is correct
-  if (!await verifyPassword(dbUser.passwordHash, passwordChangeData.password)) {
+  if (!await verifyPassword(user.passwordHash, passwordChangeData.password)) {
     return createError({ statusCode: 400, message: t('profile.error.wrong_password') })
   }
 

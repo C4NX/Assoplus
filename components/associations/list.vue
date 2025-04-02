@@ -34,6 +34,7 @@
           {{ association.name }}
         </h1>
         <p>{{ association.description }}</p>
+        <div class="badge badge-neutral mr-2" v-for="tag in association.tags">{{ tag.name }}</div>
       </div>
     </div>
 

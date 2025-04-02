@@ -20,10 +20,44 @@ model User {
   avatarUuid          String?
 
   discordId String?
+  googleId  String? @unique
+
+  association       Association[]
+  AssociationMember AssociationMember[]
 }
 
 model Association {
   id          Int    @id @default(autoincrement())
   name        String
   description String
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  tags    AssociationTag[]
+  members AssociationMember[]
+}
+
+model AssociationMember {
+  id Int @id @default(autoincrement())
+
+  email String
+
+  userId        String?
+  user          User?       @relation(fields: [userId], references: [id])
+  associationId Int
+  association   Association @relation(fields: [associationId], references: [id])
+  role          String
+  firstName     String
+  lastName      String
+  isVerified    Boolean
+  isPending     Boolean
+  createdAt     DateTime    @default(now())
+}
+
+model AssociationTag {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  associations Association[]
 }
