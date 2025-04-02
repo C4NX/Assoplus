@@ -49,6 +49,7 @@
         class="btn btn-primary flex-1"
         type="submit"
       >
+        <Icon name="mdi:check" />
         {{ $t("register.submit") }}
       </button>
     </div>

@@ -10,7 +10,7 @@
     </label>
     <label class="input input-bordered flex items-center gap-2" v-if="token">
       <Icon name="mdi:lock" />
-      <input type="password" class="grow" :placeholder="$t('login.placeholder.password')" v-model="resetForm.repeatPassword" required>
+      <input type="password" class="grow" :placeholder="$t('login.placeholder.repeat_password')" v-model="resetForm.repeatPassword" required>
     </label>
     <button class="btn btn-primary flex-1" type="submit">
       {{ $t("login.reset.submit") }}
@@ -35,7 +35,7 @@ const resetForm = reactive({
 })
 const handleReset = async () => {
   if (!token.value) {
-    await $fetch('/api/auth/password/forget', {
+    await $fetch('/api/auth/password/forgot-password', {
       method: 'POST',
       body: {
         email: email.value

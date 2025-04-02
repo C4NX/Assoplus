@@ -9,6 +9,8 @@ export default defineI18nConfig(() => ({
         register: "S'inscrire",
         success: "Connexion réussie.",
         error: "Erreur de connexion, veuillez réessayer plus tard.",
+        account_not_verified: "Vous devez d'abord vérifier votre compte avant de vous connecter.",
+        invalid_credentials: "Identifiants invalides.",
         submit: "Se connecter",
         google: "Se connecter avec Google",
         forgot_password: "Mot de passe oublié ?",
@@ -21,6 +23,7 @@ export default defineI18nConfig(() => ({
         placeholder: {
           email: "Adresse e-mail",
           password: "Mot de passe",
+          repeat_password: "Mot de passe (répéter)",
           lastName: "Votre nom",
           firstName: "Votre prénom",
         },

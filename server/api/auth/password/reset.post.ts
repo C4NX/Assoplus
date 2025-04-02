@@ -1,11 +1,11 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 import { z } from "zod"
 import prisma from "~/lib/prisma"
-import { validateAndHashPassword } from "~/server/util/user/auth.service"
+import { PasswordSchema, validateAndHashPassword } from "~/server/util/user/auth.service"
 
 const ForgetPasswordSchema = z.object({
   token: z.string(),
-  password: z.string(),
+  password: PasswordSchema,
 })
 
 export default defineEventHandler(async (event) => {
@@ -21,11 +21,11 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, message: t('login.reset.expired') })
   }
 
+  // Update the password for the user only if the last update was >1h ago or never.
   try {
     await prisma.user.update({
       where: {
         id: secure.passwordReset.userId,
-        // Allow reset only if last update was >1h ago or never set
         OR: [
           { passwordLastUpdated: null },
           { passwordLastUpdated: { lt: new Date(Date.now() - 1000 * 60 * 60) } }

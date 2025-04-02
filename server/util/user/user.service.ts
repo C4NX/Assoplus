@@ -8,24 +8,24 @@ import prisma from "@/lib/prisma"
 import { sendMail } from "~/server/util/mailer/mailer.service"
 import { createLogger } from "~/server/util/logger/logger.service"
 import type { PublicUserInterface } from "~/shared/auth"
-import { v4 as uuid, validate } from "uuid"
+import { v4 as uuid } from "uuid"
 import { validateAndHashPassword } from "./auth.service"
 
 const logger = createLogger("user")
 
 interface CreateUserInterface {
   email: string
-  password: string
+  unsafePassword: string
   firstName: string
   lastName: string,
 }
 
-export async function handleCreateUser(event: H3Event, { email, password, firstName, lastName }: CreateUserInterface) {
+export async function createUserWithVerification(event: H3Event, { email, unsafePassword, firstName, lastName }: CreateUserInterface) {
   try {
     const user = await prisma.user.create({
       data: {
         email: email,
-        passwordHash: await validateAndHashPassword(password),
+        passwordHash: await hashPassword(unsafePassword),
         firstName: firstName,
         lastName: lastName,
         isVerified: false,
@@ -44,6 +44,7 @@ export async function handleCreateUser(event: H3Event, { email, password, firstN
         throw createError({ statusCode: 409, message: t("login.email_already_in_use") })
       }
     }
+    
     throw e
   }
 }
@@ -78,7 +79,7 @@ export async function sendPasswordResetEmail(user: User, event: H3Event) {
     to: user.email,
     subject: "Reset your password",
     text: "Please reset your password by clicking on the link below",
-    html: `<a href='${baseUrl}/login/reset?t=${uniqueToken}'>Reset password</a>`,
+    html: `<a href='${baseUrl}/login/forgot-password?t=${uniqueToken}'>Reset password</a>`,
   })
 }
 

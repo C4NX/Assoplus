@@ -26,7 +26,7 @@
     </label>
     <p class="text-right">
       <NuxtLinkLocale
-        to="/login/reset"
+        to="/login/forgot-password"
         class="link link-secondary"
       >
         {{ $t("login.forgot_password") }}

@@ -1,6 +1,5 @@
 import { defineStore } from "pinia"
 import { toast } from "vue3-toastify"
-import type { FetchContext } from "ofetch"
 import { toastifyResponse } from "~/utils/toastify"
 
 export const useAccountStore = defineStore("accounts", {
@@ -28,13 +27,16 @@ export const useAccountStore = defineStore("accounts", {
       const localePath = useLocalePath()
       const nuxtApp = useNuxtApp()
 
-      await $fetch("/api/auth/register", {
+      const result = await $fetch("/api/auth/register", {
         method: "POST",
         body: registerData,
         onResponseError: toastifyResponse,
       })
 
-      await nuxtApp.runWithContext(async () => await router.push(localePath("/login")))
+      await nuxtApp.runWithContext(async () => {
+        await router.push(localePath("/login"))
+        toast.success(result.message, { toastId: "register" })
+      })
     },
     async logout() {
       const router = useRouter()

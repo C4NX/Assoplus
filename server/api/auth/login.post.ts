@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   const t = await useTranslation(event)
   const loginRequestPayload = await readValidatedBody(event, LoginRequestDto.parse)
 
-  const loggedUser = await authenticateUserByEmail(loginRequestPayload.email, loginRequestPayload.password)
+  const loggedUser = await authenticateUserByEmail(event, loginRequestPayload.email, loginRequestPayload.password)
   await setUserSession(event, {
     user: sanitizeUser(loggedUser),
     loggedInAt: Date.now(),

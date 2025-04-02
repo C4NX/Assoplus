@@ -6,23 +6,12 @@ interface ValidationErrorResponse {
   validation: string;
   code: string;
   message: string;
-  path: string[];
+  path: (string|number)[];
 }
 
 interface ValidationResponseData {
   issues: ValidationErrorResponse[];
   name: string;
-}
-
-function isValidationErrorResponse(obj: any): obj is ValidationResponseData {
-  return (
-    typeof obj === 'object' &&
-    typeof obj.validation === 'string' &&
-    typeof obj.code === 'string' &&
-    typeof obj.message === 'string' &&
-    Array.isArray(obj.path) &&
-    obj.path.every((p: any) => typeof p === 'string')
-  );
 }
 
 export function toastifyResponse(ctx: FetchContext) {
@@ -32,11 +21,14 @@ export function toastifyResponse(ctx: FetchContext) {
     if (ctx.response?.ok) {
       toast.success(responseData.message);
     } else {
-      if (ctx.response?.status === 400 && typeof responseData?.data?.issues === 'object' && responseData.data.issues.every((item: any): item is ValidationErrorResponse => isValidationErrorResponse(item))) {
+      if (responseData?.data?.name === 'ZodError') {
         const zodErrors = responseData.data.issues as ValidationErrorResponse[];
         zodErrors.forEach((error: ValidationErrorResponse) => {
-          console.error(`${error.message} (Code: ${error.code}, Path: ${error.path.join(', ')})`)
-          toast.error(error.message ?? 'An error occurred');
+          if(Array.isArray(error.path) && error.path.length > 0 && error.message) {
+            toast.error(`${error.path.join(', ')}: ${error.message}`);
+          } else {
+            toast.error(error.message ?? 'An error occurred');
+          }
         });
       } else {
         toast.error(responseData.message);
