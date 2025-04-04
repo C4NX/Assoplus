@@ -27,9 +27,12 @@
             >
               Rechercher une association
             </NuxtLinkLocale>
-            <button class="btn btn-primary">
+            <NuxtLinkLocale
+              class="btn btn-primary"
+              to="/login"
+            >
               Ajouter votre association
-            </button>
+            </NuxtLinkLocale>
           </div>
         </div>
       </div>
