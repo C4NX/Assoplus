@@ -8,11 +8,11 @@ export default defineEventHandler(async (event) => {
   const prismaSelectOptions = {
     where: search
       ? {
-        OR: [
-          { name: { contains: String(search), mode: Prisma.QueryMode.insensitive } },
-          { description: { contains: String(search), mode: Prisma.QueryMode.insensitive } },
-        ],
-      }
+          OR: [
+            { name: { contains: String(search), mode: Prisma.QueryMode.insensitive } },
+            { description: { contains: String(search), mode: Prisma.QueryMode.insensitive } },
+          ],
+        }
       : undefined,
   }
 
@@ -33,9 +33,9 @@ export default defineEventHandler(async (event) => {
                 name: true,
               },
             },
-          }
-        }
-      );
+          },
+        },
+      )
     },
     count: async prismaClient => prismaClient.association.count(prismaSelectOptions),
     maxItemPerPage: 10,

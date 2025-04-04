@@ -22,7 +22,8 @@ export default defineEventHandler(async (event) => {
       firstName: registrationPayload.firstName,
       lastName: registrationPayload.lastName,
     })
-  } catch {
+  }
+  catch {
     throw createError({ statusCode: 500, message: t("register.error") })
   }
 

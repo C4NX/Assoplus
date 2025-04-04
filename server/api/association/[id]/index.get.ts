@@ -1,4 +1,5 @@
-import { defineEventHandler, H3Event } from "h3"
+import type { H3Event } from "h3"
+import { defineEventHandler } from "h3"
 import prisma from "~/lib/prisma"
 
 export function parseAssociationIdFromRouteId(event: H3Event) {

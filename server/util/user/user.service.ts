@@ -3,13 +3,13 @@ import type { H3Event } from "h3"
 import { createError } from "h3"
 import { useTranslation } from "@intlify/h3"
 import type { User } from "@prisma/client"
+import { v4 as uuid } from "uuid"
 import { signVerifyTokenForUser } from "./verify.service"
+import { validateAndHashPassword } from "./auth.service"
 import prisma from "@/lib/prisma"
 import { sendMail } from "~/server/util/mailer/mailer.service"
 import { createLogger } from "~/server/util/logger/logger.service"
 import type { PublicUserInterface } from "~/shared/auth"
-import { v4 as uuid } from "uuid"
-import { validateAndHashPassword } from "./auth.service"
 
 const logger = createLogger("user")
 
@@ -17,7 +17,7 @@ interface CreateUserInterface {
   email: string
   unsafePassword: string
   firstName: string
-  lastName: string,
+  lastName: string
 }
 
 export async function createUserWithVerification(event: H3Event, { email, unsafePassword, firstName, lastName }: CreateUserInterface) {
@@ -44,7 +44,7 @@ export async function createUserWithVerification(event: H3Event, { email, unsafe
         throw createError({ statusCode: 409, message: t("login.email_already_in_use") })
       }
     }
-    
+
     throw e
   }
 }
@@ -72,8 +72,8 @@ export async function sendPasswordResetEmail(user: User, event: H3Event) {
         token: uniqueToken,
         expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 3), // 3 hours
       },
-    }
-  }) 
+    },
+  })
 
   await sendMail({
     to: user.email,

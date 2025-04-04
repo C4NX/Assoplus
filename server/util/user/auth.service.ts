@@ -1,6 +1,6 @@
-import prisma from "@/lib/prisma"
 import { z } from "zod"
 import type { H3Event } from "h3"
+import prisma from "@/lib/prisma"
 
 export const PasswordSchema = z.string().min(8).max(100)
 

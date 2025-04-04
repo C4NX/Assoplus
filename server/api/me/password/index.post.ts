@@ -15,12 +15,12 @@ export default defineEventHandler(async (event) => {
   const t = await useTranslation(event)
 
   if (!user.passwordHash) {
-    return createError({ statusCode: 400, message: t('profile.error.oauth_account') })
+    return createError({ statusCode: 400, message: t("profile.error.oauth_account") })
   }
 
   // check if old password is correct
   if (!await verifyPassword(user.passwordHash, passwordChangeData.password)) {
-    return createError({ statusCode: 400, message: t('profile.error.wrong_password') })
+    return createError({ statusCode: 400, message: t("profile.error.wrong_password") })
   }
 
   // update password
@@ -34,6 +34,6 @@ export default defineEventHandler(async (event) => {
   })
 
   return {
-    message: t('profile.error.password_updated'),
+    message: t("profile.error.password_updated"),
   }
 })

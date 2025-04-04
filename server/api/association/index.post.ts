@@ -7,7 +7,6 @@ const AssociationCreateSchema = z.object({
   description: z.string().min(1).max(500),
 })
 
-
 export default defineEventHandler(async (event) => {
   const associationCreateData = await readValidatedBody(event, AssociationCreateSchema.parse)
   const user = await requireUserAuthenticated(event)

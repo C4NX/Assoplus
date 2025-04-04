@@ -1,17 +1,17 @@
 import type { H3Event } from "h3"
+import type { User } from "@prisma/client"
 import type { Role } from "./role.enum"
 import type { PublicUserInterface } from "~/shared/auth"
 import prisma from "~/lib/prisma"
-import { User } from "@prisma/client"
 
-export async function requireUserAuthenticated(event: H3Event) : Promise<User> {
+export async function requireUserAuthenticated(event: H3Event): Promise<User> {
   const { user } = await requireUserSession(event) as { user?: PublicUserInterface }
 
   if (!user || !user.id || typeof user.id !== "string") {
     throw createError({ statusCode: 401, statusMessage: "Unauthorized" })
   }
 
-  const databaseUser  = await prisma.user.findUnique({
+  const databaseUser = await prisma.user.findUnique({
     where: { id: user.id },
   })
 

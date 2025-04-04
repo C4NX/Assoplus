@@ -1,12 +1,12 @@
-import { defineEventHandler, sendStream, setHeader} from "h3"
-import { getAssociationLogoStream } from "~/server/util/avatar/avatar.service"
+import { defineEventHandler, sendStream, setHeader } from "h3"
 import { parseAssociationIdFromRouteId } from "../members.get"
+import { getAssociationLogoStream } from "~/server/util/avatar/avatar.service"
 
 export default defineEventHandler(async (event) => {
   const logoUuid = getRouterParam(event, "uuid")
   const associationId = parseAssociationIdFromRouteId(event)
 
-  if(!logoUuid) {
+  if (!logoUuid) {
     throw createError({ statusCode: 400, statusMessage: "Logo UUID is required" })
   }
 

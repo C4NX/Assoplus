@@ -1,8 +1,15 @@
 <template>
   <div class="navbar bg-base-100 fixed z-10">
     <div class="flex-1">
-      <NuxtLinkLocale class="btn btn-ghost text-xl" to="/">
-        <img src="/logo.svg" alt="logo" class="w-10">
+      <NuxtLinkLocale
+        class="btn btn-ghost text-xl"
+        to="/"
+      >
+        <img
+          src="/logo.svg"
+          alt="logo"
+          class="w-10"
+        >
         Asso+
       </NuxtLinkLocale>
     </div>
@@ -20,7 +27,10 @@
           </NuxtLinkLocale>
         </li>
         <li v-if="!loggedIn">
-          <NuxtLinkLocale to="/Login" class="font-bold">
+          <NuxtLinkLocale
+            to="/Login"
+            class="font-bold"
+          >
             {{ $t('header.login') }}
           </NuxtLinkLocale>
         </li>
@@ -30,18 +40,36 @@
           </NuxtLinkLocale>
         </li>
       </ul>
-      <div v-if="loggedIn" class="dropdown dropdown-end">
-        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+      <div
+        v-if="loggedIn"
+        class="dropdown dropdown-end"
+      >
+        <div
+          tabindex="0"
+          role="button"
+          class="btn btn-ghost btn-circle avatar"
+        >
           <div class="w-10 rounded-full">
-            <img :src="user?.avatarUuid ? `/api/me/avatar/${user?.avatarUuid}` : '/image/avatar/default.jpg'"
-              alt="Avatar de l'utilisateur" />
+            <img
+              :src="user?.avatarUuid ? `/api/me/avatar/${user?.avatarUuid}` : '/image/avatar/default.jpg'"
+              alt="Avatar de l'utilisateur"
+            >
           </div>
         </div>
-        <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+        <ul
+          tabindex="0"
+          class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+        >
           <li>
-            <NuxtLinkLocale class="justify-between" to="/profile/me">
+            <NuxtLinkLocale
+              class="justify-between"
+              to="/profile/me"
+            >
               {{ user?.firstName }} {{ user?.lastName }}
-              <span v-if="user?.roles?.includes('ROLE_ADMIN')" class="badge badge-error badge-outline">Admin</span>
+              <span
+                v-if="user?.roles?.includes('ROLE_ADMIN')"
+                class="badge badge-error badge-outline"
+              >Admin</span>
             </NuxtLinkLocale>
           </li>
           <li><a @click.prevent="handleLogout()">Logout</a></li>

@@ -1,8 +1,5 @@
 import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
-import { createLogger } from "~/server/util/logger/logger.service"
 import { uploadAvatarFromRequest } from "~/server/util/avatar/avatar.service"
-
-
 
 export default defineEventHandler(async (event) => {
   const user = await requireUserAuthenticated(event)

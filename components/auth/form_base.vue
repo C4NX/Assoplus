@@ -81,8 +81,9 @@ const openProvider = (provider: string) => {
 const handleBack = async () => {
   if (router.options.history.state.back) { // if router can go back
     router.back()
-  } else {
-    await router.push(localPath('/login'))
+  }
+  else {
+    await router.push(localPath("/login"))
   }
 }
 </script>

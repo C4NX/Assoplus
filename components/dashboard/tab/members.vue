@@ -1,26 +1,38 @@
 <template>
   <DashboardTabBase title="Members">
-    <div class="overflow-x-auto" v-if="status === 'success'">
+    <div
+      v-if="status === 'success'"
+      class="overflow-x-auto"
+    >
       <table class="table">
         <!-- head -->
         <thead>
           <tr>
             <th>
               <label>
-                <input type="checkbox" class="checkbox" />
+                <input
+                  type="checkbox"
+                  class="checkbox"
+                >
               </label>
             </th>
             <th>Membre</th>
             <th>Rôles</th>
-            <th></th>
+            <th />
           </tr>
         </thead>
         <tbody>
           <!-- row 1 -->
-          <tr v-for="member in data?.items" :key="member.id">
+          <tr
+            v-for="member in data?.items"
+            :key="member.id"
+          >
             <th>
               <label>
-                <input type="checkbox" class="checkbox" />
+                <input
+                  type="checkbox"
+                  class="checkbox"
+                >
               </label>
             </th>
             <td>
@@ -32,8 +44,12 @@
                   </div>
                 </div> -->
                 <div>
-                  <div class="font-bold">{{ member.firstName }} {{ member.lastName }}</div>
-                  <div class="text-sm opacity-50">{{ member.email }}</div>
+                  <div class="font-bold">
+                    {{ member.firstName }} {{ member.lastName }}
+                  </div>
+                  <div class="text-sm opacity-50">
+                    {{ member.email }}
+                  </div>
                 </div>
               </div>
             </td>
@@ -41,18 +57,19 @@
         </tbody>
       </table>
     </div>
-    <div class="flex justify-center items-center flex-1" v-else>
-      <span class="loading loading-spinner loading-lg"></span>
+    <div
+      v-else
+      class="flex justify-center items-center flex-1"
+    >
+      <span class="loading loading-spinner loading-lg" />
     </div>
   </DashboardTabBase>
 </template>
 
 <script lang="ts" setup>
+const { activeAssociationId } = useDashboardStore()
 
-const { activeAssociationId } = useDashboardStore();
-
-const { data, status } = await useFetch(() => `/api/association/${activeAssociationId}/members`);
-
+const { data, status } = await useFetch(() => `/api/association/${activeAssociationId}/members`)
 </script>
 
 <style>

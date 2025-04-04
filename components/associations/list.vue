@@ -30,17 +30,26 @@
         :key="association.id"
         class="p-4 bg-base-300 m-2 rounded-box flex flex-row gap-4 items-center"
       >
-        <div class="avatar" v-if="association.logoUuid">
+        <div
+          v-if="association.logoUuid"
+          class="avatar"
+        >
           <div class="w-24 rounded-xl">
-            <img :src="`/api/association/${association.id}/logo/${association.logoUuid}`" />
+            <img :src="`/api/association/${association.id}/logo/${association.logoUuid}`">
           </div>
         </div>
         <div class="flex-1">
           <h1 class="text-2xl font-bold">
-          {{ association.name }}
+            {{ association.name }}
           </h1>
           <p>{{ association.description }}</p>
-          <div class="badge badge-neutral mr-2" v-for="tag in association.tags">{{ tag.name }}</div>
+          <div
+            v-for="tag in association.tags"
+            :key="tag.id"
+            class="badge badge-neutral mr-2"
+          >
+            {{ tag.name }}
+          </div>
         </div>
       </div>
     </div>

@@ -6,8 +6,8 @@ const ADMIN_EMAIL = "admin@admin.admin"
 
 const prisma = new PrismaClient()
 
-let userIds: string[] = []
-let associationIds: number[] = []
+const userIds: string[] = []
+const associationIds: number[] = []
 
 async function cleanup() {
   await prisma.associationMember.deleteMany()
@@ -78,7 +78,7 @@ async function createAssociationTag(n: number) {
 }
 
 async function createAssociationMember(nMinPerAssociation: number, nMaxPerAssociation: number) {
-  const hasRegistered = faker.datatype.boolean({probability: 0.5})
+  const hasRegistered = faker.datatype.boolean({ probability: 0.5 })
   for (let i = 0; i < associationIds.length; i++) {
     await prisma.associationMember.createMany({
       data: Array.from({ length: faker.number.int({ min: nMinPerAssociation, max: nMaxPerAssociation }) }, () => ({

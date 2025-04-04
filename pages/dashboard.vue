@@ -3,15 +3,21 @@
     <div class="container mx-auto max-w-10xl my-10 p-4">
       <div class="flex gap-6">
         <!-- Sidebar Navigation -->
-        <ul class="menu menu-md bg-base-200 rounded-lg w-full max-w-xs" v-if="userAssociations">
+        <ul
+          v-if="userAssociations"
+          class="menu menu-md bg-base-200 rounded-lg w-full max-w-xs"
+        >
           <li>
             <a @click="dashboardStore.setTab(DashboardTabType.HOME, null)">
               <Icon name="mdi:home" />
               Dashboard
             </a>
           </li>
-          <li v-for="activeAssociation in userAssociations" :key="activeAssociation.id"
-            :class="{'disabled': userAssociationsStatus === 'pending'}">
+          <li
+            v-for="activeAssociation in userAssociations"
+            :key="activeAssociation.id"
+            :class="{ disabled: userAssociationsStatus === 'pending' }"
+          >
             <details open>
               <summary>
                 <Icon name="mdi:home" />
@@ -58,15 +64,19 @@
             </a>
           </li>
         </ul>
-        <div class="flex flex-col gap-2 p-4" v-else>
-          <div class="skeleton h-4 w-full"></div>
-          <div class="skeleton h-4 w-full"></div>
-          <div class="skeleton h-4 w-full"></div>
+        <div
+          v-else
+          class="flex flex-col gap-2 p-4"
+        >
+          <div class="skeleton h-4 w-full" />
+          <div class="skeleton h-4 w-full" />
+          <div class="skeleton h-4 w-full" />
         </div>
         <!-- Main Content -->
         <DashboardTabMain v-if="dashboardStore.activeTab === DashboardTabType.HOME" />
         <DashboardTabInformations
-          v-if="userAssociations && dashboardStore.activeTab === DashboardTabType.INFORMATIONS" />
+          v-if="userAssociations && dashboardStore.activeTab === DashboardTabType.INFORMATIONS"
+        />
         <DashboardTabMembers v-if="userAssociations && dashboardStore.activeTab === DashboardTabType.MEMBERS" />
         <DashboardTabCreate v-if="userAssociations && dashboardStore.activeTab === DashboardTabType.CREATE" />
       </div>
@@ -75,11 +85,11 @@
 </template>
 
 <script lang="ts" setup>
-const { data: userAssociations, refresh: refreshUserAssociations, status: userAssociationsStatus } = useFetch('/api/me/associations')
+const { data: userAssociations, refresh: refreshUserAssociations, status: userAssociationsStatus } = useFetch("/api/me/associations")
 
 definePageMeta({
-  title: 'Dashboard',
-  middleware: ['authenticated'],
+  title: "Dashboard",
+  middleware: ["authenticated"],
 })
 
 const dashboardStore = useDashboardStore()
@@ -90,7 +100,6 @@ watch(() => dashboardStore.needAssociationListRefresh, async (newValue, oldValue
     dashboardStore.needAssociationListRefresh = false
   }
 }, { immediate: true })
-
 </script>
 
 <style></style>

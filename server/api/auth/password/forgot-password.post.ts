@@ -16,15 +16,16 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  if(user) {
+  if (user) {
     try {
       await sendPasswordResetEmail(user, event)
-    } catch (e) {
+    }
+    catch {
       throw createError({ statusCode: 500, message: t("login.reset.error_email") })
     }
   }
 
   return {
-    message: t('login.reset.success_email'),
+    message: t("login.reset.success_email"),
   }
 })

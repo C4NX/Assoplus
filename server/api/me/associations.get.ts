@@ -12,5 +12,5 @@ export default defineEventHandler(async (event) => {
     where: {
       ownerId: user.id,
     },
-  });
+  })
 })

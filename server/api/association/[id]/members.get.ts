@@ -1,4 +1,5 @@
-import { defineEventHandler, H3Event } from "h3"
+import type { H3Event } from "h3"
+import { defineEventHandler } from "h3"
 import prisma from "~/lib/prisma"
 import { paginate } from "~/server/util/request/pagination.service"
 
@@ -30,12 +31,12 @@ export default defineEventHandler(async (event) => {
       ...inject,
       where: {
         associationId: associationId,
-      }
+      },
     }),
-    count: async (prismaClient) => await prismaClient.associationMember.count({
+    count: async prismaClient => await prismaClient.associationMember.count({
       where: {
         associationId: associationId,
-      }
-    })
+      },
+    }),
   })
 })

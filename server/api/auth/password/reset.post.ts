@@ -14,11 +14,11 @@ export default defineEventHandler(async (event) => {
   const { secure } = await getUserSession(event)
 
   if (!secure.passwordReset || secure.passwordReset.token !== forgetPasswordData.token) {
-    throw createError({ statusCode: 400, message: t('login.reset.error') })
+    throw createError({ statusCode: 400, message: t("login.reset.error") })
   }
 
-  if(secure.passwordReset.expiresAt < new Date()) {
-    throw createError({ statusCode: 400, message: t('login.reset.expired') })
+  if (secure.passwordReset.expiresAt < new Date()) {
+    throw createError({ statusCode: 400, message: t("login.reset.expired") })
   }
 
   // Update the password for the user only if the last update was >1h ago or never.
@@ -28,19 +28,20 @@ export default defineEventHandler(async (event) => {
         id: secure.passwordReset.userId,
         OR: [
           { passwordLastUpdated: null },
-          { passwordLastUpdated: { lt: new Date(Date.now() - 1000 * 60 * 60) } }
-        ]
+          { passwordLastUpdated: { lt: new Date(Date.now() - 1000 * 60 * 60) } },
+        ],
       },
       data: {
         passwordHash: await validateAndHashPassword(forgetPasswordData.password),
         passwordLastUpdated: new Date(),
       },
     })
-  } catch (e) {
-    if(e instanceof PrismaClientKnownRequestError) {
-      if(e.code === "P2025") {
+  }
+  catch (e) {
+    if (e instanceof PrismaClientKnownRequestError) {
+      if (e.code === "P2025") {
         await replaceUserSession(event, { secure: { passwordReset: undefined } })
-        throw createError({ statusCode: 400, message: t('login.reset.retry') })
+        throw createError({ statusCode: 400, message: t("login.reset.retry") })
       }
       throw e
     }
@@ -49,6 +50,6 @@ export default defineEventHandler(async (event) => {
   await replaceUserSession(event, { secure: { passwordReset: undefined } })
 
   return {
-    message: t('login.reset.success'),
+    message: t("login.reset.success"),
   }
 })

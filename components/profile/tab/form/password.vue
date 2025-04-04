@@ -51,7 +51,6 @@
 
 <script lang="ts" setup>
 import { toast } from "vue3-toastify"
-import type { FetchContext } from "ofetch"
 import { toastifyResponse } from "~/utils/toastify"
 
 const { t } = useI18n()
@@ -66,7 +65,7 @@ const isLoading = ref(false)
 
 const handleSubmitUpdatePassword = async () => {
   if (passwordChangeForm.newPassword !== passwordChangeForm.confirmNewPassword) {
-    return toast.error(t('profile.error.password_does_not_match'))
+    return toast.error(t("profile.error.password_does_not_match"))
   }
 
   isLoading.value = true

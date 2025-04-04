@@ -82,7 +82,6 @@ const handleDeleteAccount = async () => {
 const isOAuth2 = computed(() => {
   return user.value?.googleId !== null
 })
-
 </script>
 
 <style>
