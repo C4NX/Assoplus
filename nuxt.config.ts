@@ -73,6 +73,10 @@ export default defineNuxtConfig({
       cookieKey: "i18n_redirected",
       redirectOn: "root",
     },
+    /* https://github.com/nuxt-modules/i18n/issues/3238#issuecomment-2672492536 */
+    bundle: {
+      optimizeTranslationDirective: false,
+    },
     locales: [
       {
         code: "en",
