@@ -4,7 +4,7 @@ import { createError } from "h3"
 import { useTranslation } from "@intlify/h3"
 import type { User } from "@prisma/client"
 import { v4 as uuid } from "uuid"
-import { signVerifyTokenForUser } from "./verify.service"
+import { sendVerificationEmail } from "./verify.service"
 import { validateAndHashPassword } from "./auth.service"
 import prisma from "@/lib/prisma"
 import { sendMail } from "~/server/util/mailer/mailer.service"
@@ -34,8 +34,7 @@ export async function createUserWithVerification(event: H3Event, { email, unsafe
 
     logger.trace(`User created: ${user.email} (${user.id})`)
 
-    // Send verification email
-    await sendVerificationEmail(user, event)
+    await sendVerificationEmail(event, user)
   }
   catch (e) {
     if (e instanceof PrismaClientKnownRequestError) {
@@ -49,28 +48,16 @@ export async function createUserWithVerification(event: H3Event, { email, unsafe
   }
 }
 
-async function sendVerificationEmail(user: User, event: H3Event) {
-  const { baseUrl } = useRuntimeConfig(event)
-  const token = await signVerifyTokenForUser(user, event)
-
-  await sendMail({
-    to: user.email,
-    subject: "Verify your email",
-    text: "Please verify your email by clicking on the link below",
-    html: `<a href='${baseUrl}/api/auth/verify?token=${token}'>Verify email</a>`,
-  })
-}
-
 export async function sendPasswordResetEmail(user: User, event: H3Event) {
   const { baseUrl } = useRuntimeConfig(event)
   const uniqueToken = uuid()
 
-  await setUserSession(event, {
+  await replaceUserSession(event, {
     secure: {
       passwordReset: {
         userId: user.id,
         token: uniqueToken,
-        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 3), // 3 hours
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 3), // 3 hours (in the session scope)
       },
     },
   })
@@ -79,7 +66,7 @@ export async function sendPasswordResetEmail(user: User, event: H3Event) {
     to: user.email,
     subject: "Reset your password",
     text: "Please reset your password by clicking on the link below",
-    html: `<a href='${baseUrl}/login/forgot-password?t=${uniqueToken}'>Reset password</a>`,
+    html: `<a href='${baseUrl}/login/forgot-password?token=${uniqueToken}'>Reset password</a>`,
   })
 }
 

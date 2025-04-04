@@ -61,7 +61,7 @@ const route = useRoute()
 const router = useRouter()
 const localPath = useLocalePath()
 const { t } = useI18n()
-const token = computed<string | undefined>(() => route.query.t as string | undefined)
+const token = computed<string | undefined>(() => route.query.token as string | undefined)
 
 const resetForm = reactive({
   password: "",

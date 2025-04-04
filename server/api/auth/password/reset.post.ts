@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   const t = await useTranslation(event)
   const { secure } = await getUserSession(event)
 
-  if (!secure.passwordReset || secure.passwordReset.token !== forgetPasswordData.token) {
+  if (!secure || !secure.passwordReset || secure.passwordReset.token !== forgetPasswordData.token) {
     throw createError({ statusCode: 400, message: t("login.reset.error") })
   }
 

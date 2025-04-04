@@ -22,5 +22,10 @@ declare module "#auth-utils" {
       token: string
       expiresAt: Date
     }
+    verify?: {
+      userId: string
+      token: string
+      expiresAt: Date
+    }
   }
 }
