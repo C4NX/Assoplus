@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String    @id @default(uuid())
+  email               String    @unique
+  firstName           String
+  lastName            String
+  passwordHash        String?
+  passwordLastUpdated DateTime?
+  roles               String[]  @default(["ROLE_USER"])
+  isVerified          Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  avatarUuid          String?
+
+  googleId  String? @unique
+
+  association       Association[]
+  AssociationMember AssociationMember[]
+}
+
+model Association {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  logoUuid   String?
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  tags    AssociationTag[]
+  members AssociationMember[]
+}
+
+model AssociationMember {
+  id Int @id @default(autoincrement())
+
+  email String
+
+  userId        String?
+  user          User?       @relation(fields: [userId], references: [id])
+  associationId Int
+  association   Association @relation(fields: [associationId], references: [id])
+  role          String
+  firstName     String
+  lastName      String
+  isVerified    Boolean
+  isPending     Boolean
+  createdAt     DateTime    @default(now())
+}
+
+model AssociationTag {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  associations Association[]
+}
