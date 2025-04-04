@@ -89,6 +89,11 @@
 import VuePictureCropper, { cropper } from "vue-picture-cropper"
 import { toast } from "vue3-toastify"
 
+definePageMeta({
+  name: "Profile",
+  middleware: ["authenticated"],
+})
+
 const accountStore = useAccountStore()
 const { loggedIn, user } = useUserSession()
 const { t } = useI18n()

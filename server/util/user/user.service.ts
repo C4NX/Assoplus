@@ -70,6 +70,11 @@ export async function sendPasswordResetEmail(user: User, event: H3Event) {
   })
 }
 
+/**
+ * Transform a user object to a sanitized object that can be sent to the client.
+ * @param user The user object to sanitize
+ * @returns The sanitized user object
+ */
 export function sanitizeUser(user: User): PublicUserInterface {
   return {
     id: user.id,
@@ -83,6 +88,11 @@ export function sanitizeUser(user: User): PublicUserInterface {
   }
 }
 
+/**
+ * Update the password of a user.
+ * @param user The user object to update
+ * @param newPassword The new password to set
+ */
 export async function updatePassword(user: User, newPassword: string) {
   if (!user.passwordHash) {
     throw createError({ statusCode: 401, message: "Cannot update password for oauth users" })

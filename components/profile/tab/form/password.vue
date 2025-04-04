@@ -9,7 +9,7 @@
         id="current-password"
         v-model="passwordChangeForm.currentPassword"
         type="password"
-        class="input"
+        class="input input-bordered"
         :disabled="isLoading"
       >
     </div>
@@ -19,7 +19,7 @@
         id="new-password"
         v-model="passwordChangeForm.newPassword"
         type="password"
-        class="input"
+        class="input input-bordered"
         :disabled="isLoading"
       >
     </div>
@@ -29,7 +29,7 @@
         id="confirm-password"
         v-model="passwordChangeForm.confirmNewPassword"
         type="password"
-        class="input"
+        class="input input-bordered"
         :disabled="isLoading"
       >
     </div>

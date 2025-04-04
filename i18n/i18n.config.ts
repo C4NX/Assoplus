@@ -11,6 +11,7 @@ export default defineI18nConfig(() => ({
         error: "Erreur de connexion, veuillez réessayer plus tard.",
         account_not_verified: "Vous devez d'abord vérifier votre compte avant de vous connecter.",
         invalid_credentials: "Identifiants invalides.",
+        verification_success: "Votre compte a été vérifié avec succès.",
         submit: "Se connecter",
         google: "Se connecter avec Google",
         forgot_password: "Mot de passe oublié ?",
@@ -37,6 +38,12 @@ export default defineI18nConfig(() => ({
           expired: "Le lien de réinitialisation de mot de passe a expiré.",
           retry: "Vous avez déjà fait une demande de réinitialisation de mot de passe récemment. Veuillez réessayer plus tard.",
         },
+        verify: {
+          error: "Erreur lors de la vérification du compte.",
+          already_verified: "Votre compte est déjà vérifié.",
+          cannot_verify: "Vous ne pouvez pas vérifier un compte lié à un compte tiers.",
+          expired: "Le lien de vérification a expiré.",
+        },
       },
       register: {
         title: "S'inscrire",
@@ -47,9 +54,11 @@ export default defineI18nConfig(() => ({
       profile: {
         security: "Sécurité",
         informations: "Informations",
+        update_success: "Informations mises à jour",
+        email_update_success: "Un e-mail de vérification a été envoyé à votre nouvelle adresse e-mail",
         error: {
           wrong_password: "Mot de passe incorrect",
-          oauth_account: "Vous ne pouvez pas changer le mot de passe d'un compte lié à un compte tiers.",
+          oauth_account: "Vous ne pouvez pas changer le mot de passe d'un compte lié à un compte tiers",
           password_updated: "Mot de passe mis à jour",
           password_does_not_match: "Les mots de passe ne correspondent pas",
         },
@@ -67,6 +76,7 @@ export default defineI18nConfig(() => ({
         login: "Se connecter / S'inscrire",
         home: "Accueil",
         associations: "Associations",
+        dashboard: "Tableau de bord",
       },
       footer: {
         legal: "Mentions légales",

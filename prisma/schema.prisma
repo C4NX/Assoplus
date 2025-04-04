@@ -12,14 +12,18 @@ model User {
   email               String    @unique
   firstName           String
   lastName            String
+
   passwordHash        String?
   passwordLastUpdated DateTime?
+  googleId  String? @unique
   roles               String[]  @default(["ROLE_USER"])
   isVerified          Boolean   @default(false)
+  
   createdAt           DateTime  @default(now())
+  
   avatarUuid          String?
-
-  googleId  String? @unique
+  birthday            DateTime?
+  phoneNumber         String?
 
   association       Association[]
   AssociationMember AssociationMember[]

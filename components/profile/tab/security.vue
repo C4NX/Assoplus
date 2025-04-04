@@ -50,6 +50,9 @@
       Ce compte <b>Asso+</b> est lié à un compte
       <Icon name="logos:google-icon" /><b>Google</b>.
     </p>
+
+    <div class="divider" />
+
     <div class="flex justify-end">
       <button
         class="btn btn-error text-neutral-content"

@@ -1,7 +1,6 @@
 import { defineEventHandler } from "h3"
 import { z } from "zod"
 import { authenticateUserByEmail } from "~/server/util/user/auth.service"
-import { sanitizeUser } from "~/server/util/user/user.service"
 
 const LoginRequestDto = z.object({
   email: z.string(),
@@ -12,11 +11,7 @@ export default defineEventHandler(async (event) => {
   const t = await useTranslation(event)
   const loginRequestPayload = await readValidatedBody(event, LoginRequestDto.parse)
 
-  const loggedUser = await authenticateUserByEmail(event, loginRequestPayload.email, loginRequestPayload.password)
-  await setUserSession(event, {
-    user: sanitizeUser(loggedUser),
-    loggedInAt: Date.now(),
-  })
+  await authenticateUserByEmail(event, loginRequestPayload.email, loginRequestPayload.password)
 
   return {
     message: t("login.success"),
