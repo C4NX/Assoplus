@@ -72,6 +72,7 @@ export default defineI18nConfig(() => ({
       and: "et",
       save: "Enregistrer",
       cancel: "Annuler",
+      last_updated: "Dernière mise à jour",
       header: {
         login: "Se connecter / S'inscrire",
         home: "Accueil",

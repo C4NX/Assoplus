@@ -1,4 +1,5 @@
 import daisyui from "daisyui"
+import tailwindTypography from "@tailwindcss/typography"
 import type { Config } from "tailwindcss"
 
 export default <Partial<Config>>{
@@ -23,5 +24,5 @@ export default <Partial<Config>>{
       },
     },
   },
-  plugins: [daisyui],
+  plugins: [daisyui, tailwindTypography],
 }
