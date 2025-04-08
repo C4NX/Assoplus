@@ -2,11 +2,7 @@
   <footer class="footer bg-base-200 text-base-content p-10">
     <aside>
       <div class="flex items-center justify-center gap-2">
-        <img
-          src="/logo.svg"
-          alt="logo"
-          class="w-10"
-        >
+        <img src="/logo.svg" alt="logo" class="w-10">
         Asso+
       </div>
       <p>
@@ -15,14 +11,22 @@
     </aside>
     <nav>
       <h6 class="footer-title">
-        Services
+        {{ $t("footer.social") }}
       </h6>
-      <a class="link link-hover">Branding</a>
-      <a class="link link-hover">Design</a>
-      <a class="link link-hover">Marketing</a>
-      <a class="link link-hover">Advertisement</a>
+      <a class="link link-hover">
+        LinkedIn
+      </a>
+      <a class="link link-hover">
+        Twitter (formerly X)
+      </a>        
+      <a class="link link-hover">
+        BlueSky
+      </a>
+      <a class="link link-hover">
+        Mastodon
+      </a>
     </nav>
-    <nav>
+    <!-- <nav>
       <h6 class="footer-title">
         Company
       </h6>
@@ -30,21 +34,15 @@
       <a class="link link-hover">Contact</a>
       <a class="link link-hover">Jobs</a>
       <a class="link link-hover">Press kit</a>
-    </nav>
+    </nav> -->
     <nav>
       <h6 class="footer-title">
         {{ $t("footer.legal") }}
       </h6>
-      <NuxtLinkLocale
-        class="link link-hover"
-        to="/terms"
-      >
+      <NuxtLinkLocale class="link link-hover" to="/terms">
         {{ $t("footer.terms") }}
       </NuxtLinkLocale>
-      <NuxtLinkLocale
-        class="link link-hover"
-        to="/privacy"
-      >
+      <NuxtLinkLocale class="link link-hover" to="/privacy">
         {{ $t("footer.privacy") }}
       </NuxtLinkLocale>
     </nav>

@@ -3,6 +3,15 @@ export default defineI18nConfig(() => ({
   messages: {
     fr: {
       localeName: "Français",
+      home: {
+        title: "Bienvenue sur Asso+",
+        description1_1: "La plateforme de gestion associative qui vous simplifie la vie.",
+        description1_2: "Créez, gérez et animez votre association en toute simplicité avec un outil gratuit et facile à prendre en main.",
+        description2_1: "Rejoignez les ",
+        description2_2: " bénévoles déjà inscrits sur Asso+.",
+        register: "Vous etes bénévole ? Rejoignez-nous !",
+        explore: "Rechercher une association",
+      },
       login: {
         title: "Connexion",
         login: "Connexion",
@@ -83,6 +92,7 @@ export default defineI18nConfig(() => ({
         legal: "Mentions légales",
         terms: "CGU",
         privacy: "Politique de confidentialité",
+        social: "Réseaux sociaux",
       },
       back: "Retour",
     },
