@@ -33,4 +33,9 @@
 
 <script setup lang="ts">
 const { data } = useFetch("/api/stats", { default: () => ({ associations: 0 }) })
+
+definePageMeta({
+  title: "Home",
+})
+
 </script>
