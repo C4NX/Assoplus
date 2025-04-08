@@ -50,7 +50,7 @@ model AssociationMember {
   userId        String?
   user          User?       @relation(fields: [userId], references: [id])
   associationId Int
-  association   Association @relation(fields: [associationId], references: [id])
+  association   Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
   role          String
   firstName     String
   lastName      String

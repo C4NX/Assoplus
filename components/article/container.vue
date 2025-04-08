@@ -2,8 +2,16 @@
   <div class="legal-container">
     <div class="legal-card">
       <header class="legal-header">
-        <img src="/logo.svg" alt="Asso+ logo" class="legal-logo" width="80" height="80" />
-        <h1 class="legal-title">{{ $t(title) }}</h1>
+        <img
+          src="/logo.svg"
+          alt="Asso+ logo"
+          class="legal-logo"
+          width="80"
+          height="80"
+        >
+        <h1 class="legal-title">
+          {{ $t(title) }}
+        </h1>
       </header>
 
       <div class="legal-content">
@@ -11,7 +19,12 @@
       </div>
 
       <footer class="legal-footer">
-        <NuxtLinkLocale href="/" class="back-link">{{ $t('back') }}</NuxtLinkLocale>
+        <NuxtLinkLocale
+          href="/"
+          class="back-link"
+        >
+          {{ $t('back') }}
+        </NuxtLinkLocale>
         <div class="version-info">
           {{ $t('last_updated') }}: {{ lastUpdated }}
         </div>
@@ -21,12 +34,12 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { defineProps } from "vue"
 
 defineProps({
   title: {
     type: String,
-    default: 'Article Title',
+    default: "Article Title",
   },
   lastUpdated: {
     type: String,

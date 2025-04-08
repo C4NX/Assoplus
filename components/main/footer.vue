@@ -2,7 +2,11 @@
   <footer class="footer bg-base-200 text-base-content p-10">
     <aside>
       <div class="flex items-center justify-center gap-2">
-        <img src="/logo.svg" alt="logo" class="w-10">
+        <img
+          src="/logo.svg"
+          alt="logo"
+          class="w-10"
+        >
         Asso+
       </div>
       <p>
@@ -18,7 +22,7 @@
       </a>
       <a class="link link-hover">
         Twitter (formerly X)
-      </a>        
+      </a>
       <a class="link link-hover">
         BlueSky
       </a>
@@ -39,10 +43,16 @@
       <h6 class="footer-title">
         {{ $t("footer.legal") }}
       </h6>
-      <NuxtLinkLocale class="link link-hover" to="/terms">
+      <NuxtLinkLocale
+        class="link link-hover"
+        to="/terms"
+      >
         {{ $t("footer.terms") }}
       </NuxtLinkLocale>
-      <NuxtLinkLocale class="link link-hover" to="/privacy">
+      <NuxtLinkLocale
+        class="link link-hover"
+        to="/privacy"
+      >
         {{ $t("footer.privacy") }}
       </NuxtLinkLocale>
     </nav>
