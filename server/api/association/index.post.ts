@@ -5,6 +5,7 @@ import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
 const AssociationCreateSchema = z.object({
   name: z.string().min(1).max(50),
   description: z.string().min(1).max(500),
+  tags: z.array(z.number()).optional(),
 })
 
 export default defineEventHandler(async (event) => {
@@ -19,6 +20,11 @@ export default defineEventHandler(async (event) => {
       name: associationCreateData.name,
       description: associationCreateData.description,
       ownerId: user.id,
+      tags: {
+        connect: associationCreateData.tags?.map((tag) => ({
+          id: tag,
+        })) ?? [],
+      },
       members: {
         create: {
           userId: user.id,

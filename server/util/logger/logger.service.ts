@@ -6,3 +6,5 @@ export function createLogger(name?: string) {
     hideLogPositionForProduction: process.env.NODE_ENV === "production",
   })
 }
+
+export const filesLogger = createLogger("files")

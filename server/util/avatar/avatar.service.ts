@@ -5,31 +5,14 @@ import type { H3Event } from "h3"
 import s3Client from "~/lib/s3client"
 import type { PublicUserInterface } from "~/shared/auth"
 import prisma from "~/lib/prisma"
-import { createLogger } from "~/server/util/logger/logger.service"
-
-const logger = createLogger("files")
+import { extractFileBufferFromRequest } from "~/server/util/request/files.service"
+import { filesLogger } from "../logger/logger.service"
 
 async function convertProfilePicture(buffer: Buffer) {
   return await sharp(buffer)
     .webp()
     .resize(512, 512)
     .toBuffer()
-}
-
-async function checkAndGetImageBuffer(event: H3Event, formName: string) {
-  const multipartFormData = await readMultipartFormData(event)
-
-  const fileIndex = multipartFormData?.findIndex(({ name }) => name === formName)
-
-  if (multipartFormData === undefined || fileIndex === -1 || fileIndex === undefined) {
-    throw createError({ statusCode: 400, statusMessage: "Invalid request" })
-  }
-
-  if (!["image/jpeg", "image/png"].includes(multipartFormData[fileIndex].type ?? "")) {
-    throw createError({ statusCode: 400, statusMessage: "Invalid file type" })
-  }
-
-  return multipartFormData[fileIndex].data
 }
 
 export async function uploadAvatarFromBuffer(event: H3Event, userId: string, buffer: Buffer) {
@@ -44,7 +27,7 @@ export async function uploadAvatarFromBuffer(event: H3Event, userId: string, buf
     Body: await convertProfilePicture(buffer),
   }))
 
-  logger.trace(`User ${userId} uploaded a new avatar`)
+  filesLogger.trace(`User ${userId} uploaded a new avatar`)
 
   return newImageUuid
 }
@@ -63,7 +46,7 @@ export async function updateUserAvatarFromBuffer(event: H3Event, userId: string,
 }
 
 export async function uploadAvatarFromRequest(event: H3Event, userId: string, formName: string) {
-  return await uploadAvatarFromBuffer(event, userId, await checkAndGetImageBuffer(event, formName))
+  return await uploadAvatarFromBuffer(event, userId, await extractFileBufferFromRequest(event, formName, ["image/jpeg", "image/png"]))
 }
 
 export async function getAvatarStream(user: PublicUserInterface) {
@@ -76,17 +59,6 @@ export async function getAvatarStream(user: PublicUserInterface) {
   const result = await s3Client?.send(new GetObjectCommand({
     Bucket: bucket,
     Key: `avatars/${user.id}/${user.avatarUuid}`,
-  }))
-
-  return result?.Body?.transformToWebStream()
-}
-
-export async function getAssociationLogoStream(associationId: number, logoUuid: string) {
-  const { s3: { bucket } } = useRuntimeConfig()
-
-  const result = await s3Client?.send(new GetObjectCommand({
-    Bucket: bucket,
-    Key: `associations/${associationId}/logos/${logoUuid}`,
   }))
 
   return result?.Body?.transformToWebStream()

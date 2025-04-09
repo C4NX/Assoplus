@@ -30,7 +30,7 @@
         <textarea v-model="associationForm.description" class="textarea textarea-primary" placeholder="Description" />
       </label>
       <!-- Association Tags -->
-      <InputTagSelect v-model="associationForm.tags" class="col-span-2" />
+      <InputTagSelect v-model="associationForm.tags" :max-selected="8"  class="col-span-2" />
     </div>
 
     <button class="btn btn-primary" @click="handleCreate">
@@ -66,10 +66,21 @@ const handleCreate = async () => {
     body: {
       name: associationForm.value.name,
       description: associationForm.value.description,
-      // logo: associationForm.value.logo,
+      tags: associationForm.value.tags.map((tag) => tag.id),
+      logo: associationForm.value.logo,
     },
     onResponse: toastifyResponse,
   })
+
+  if(associationForm.value.logo) {
+    const formData = new FormData()
+    formData.append("file", associationForm.value.logo)
+    await $fetch(`/api/association/${result.id}/logo`, {
+      method: "POST",
+      body: formData,
+      onResponse: toastifyResponse,
+    })
+  }
 
   dashboard.needAssociationListRefresh = true
   dashboard.setTab(DashboardTabType.INFORMATIONS, result.id)

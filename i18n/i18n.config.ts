@@ -77,6 +77,12 @@ export default defineI18nConfig(() => ({
           error: "Erreur lors de la mise à jour de la photo de profil",
         },
       },
+      association: {
+        tag_select: {
+          max_selected: "Vous ne pouvez sélectionner que {{max}} tags",
+          empty: "Aucun tag sélectionné",
+        }
+      },
       OR: "OU",
       and: "et",
       save: "Enregistrer",

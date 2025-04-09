@@ -37,3 +37,24 @@ export async function requireUserGranted(event: H3Event, permissions: Role | Rol
 
   return user
 }
+
+export async function requireAssociationOwner(event: H3Event, associationId: number) {
+  const user = await requireUserAuthenticated(event)
+
+  const association = await prisma.association.findUnique({
+    where: { id: associationId },
+    include: {
+      owner: true,
+    },
+  })
+
+  if (!association) {
+    throw createError({ statusCode: 404, statusMessage: "Association not found" })
+  }
+
+  if (association.owner.id !== user.id) {
+    throw createError({ statusCode: 403, statusMessage: "Forbidden" })
+  }
+
+  return user
+}

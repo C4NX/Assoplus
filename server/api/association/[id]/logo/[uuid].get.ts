@@ -1,6 +1,6 @@
 import { defineEventHandler, sendStream, setHeader } from "h3"
 import { parseAssociationIdFromRouteId } from "../members.get"
-import { getAssociationLogoStream } from "~/server/util/avatar/avatar.service"
+import { getAssociationLogoStream } from "~/server/util/association/logo.service"
 
 export default defineEventHandler(async (event) => {
   const logoUuid = getRouterParam(event, "uuid")
