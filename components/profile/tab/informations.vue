@@ -51,7 +51,7 @@
           v-model="informationsFormData.email"
           type="email"
           class="input input-bordered"
-          :disabled="isLoading"
+          :disabled="isLoading || user?.googleId !== null"
         >
       </div>
       <div class="flex flex-col gap-2">

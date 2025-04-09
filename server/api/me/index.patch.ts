@@ -34,7 +34,8 @@ export default defineEventHandler(async (event) => {
   // - Check if the email is being updated
   // - If the email is being updated, check if the new email is already in use
   // - Send a verification email to the new email address
-  const emailUpdate = Boolean(data.email) && data.email !== user.email
+  // OAuth accounts cannot change their email
+  const emailUpdate = Boolean(data.email) && data.email !== user.email && user.passwordHash !== null
 
   if (emailUpdate) {
     const existingUser = await prisma.user.findUnique({
