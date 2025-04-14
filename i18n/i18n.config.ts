@@ -3,6 +3,10 @@ export default defineI18nConfig(() => ({
   messages: {
     fr: {
       localeName: "Français",
+      toast: {
+        success: "L'action a été effectuée avec succès.",
+        error: "Une erreur est survenue, veuillez réessayer plus tard.",
+      },
       home: {
         title: "Bienvenue sur Asso+",
         description1_1: "La plateforme de gestion associative qui vous simplifie la vie.",
@@ -81,12 +85,13 @@ export default defineI18nConfig(() => ({
         tag_select: {
           max_selected: "Vous ne pouvez sélectionner que {{max}} tags",
           empty: "Aucun tag sélectionné",
-        }
+        },
       },
       OR: "OU",
       and: "et",
       save: "Enregistrer",
       cancel: "Annuler",
+      export: "Exporter",
       last_updated: "Dernière mise à jour",
       header: {
         login: "Se connecter / S'inscrire",

@@ -13,11 +13,31 @@ Asso+ is a tool for easy association management.
 
 To start using Asso+, run the following command:
 ```sh
-pnpm install
-pnpm run dev
+npm install
+npm run dev
 ```
 
 This will start the application, and you can access it in your web browser at `http://localhost:3000`.
+
+### 📦 Environment Variables
+
+| Variable | Description |
+| --- | --- |
+| NUXT_SMTP_HOST **(needed)** | SMTP host for email sending |
+| NUXT_SMTP_PORT **(needed)**  | SMTP port for email sending |
+| NUXT_SMTP_SECURE **(needed)**  | Whether to use secure connection for email sending |
+| NUXT_SMTP_FROM **(needed)**  | Email address used as the sender |
+| NUXT_BASE_URL **(needed)**  | Base URL of the application |
+| NUXT_S3_ACCESS_KEY_ID **(needed)**  | Access key ID for S3 storage |
+| NUXT_S3_SECRET_ACCESS_KEY **(needed)**  | Secret access key for S3 storage |
+| NUXT_S3_REGION **(needed)**  | Region of the S3 storage |
+| NUXT_S3_BUCKET **(needed)**  | Name of the S3 bucket |
+| NUXT_S3_ENDPOINT **(needed)**  | Endpoint of the S3 storage |
+| NUXT_SESSION_PASSWORD **(needed)**  | Password for session management |
+| NUXT_OAUTH_GOOGLE_CLIENT_ID **(needed)**  | Client ID for Google OAuth |
+| NUXT_OAUTH_GOOGLE_CLIENT_SECRET **(needed)** | Client secret for Google OAuth |
+| NUXT_OAUTH_GOOGLE_REDIRECT_URL **(needed)** | Redirect URL for Google OAuth (e.g. http://host/api/auth/google) |
+| NUXT_PUBLIC_VERSION | Public version of the application |
 
 ### 🐋 Docker
 
@@ -29,23 +49,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@localhost:5432/assoplus
-      - NUXT_SMTP_HOST=
-      - NUXT_SMTP_PORT=
-      - NUXT_SMTP_SECURE=
-      - NUXT_SMTP_FROM=
-      - NUXT_BASE_URL=
-      - NUXT_S3_ACCESS_KEY_ID=
-      - NUXT_S3_SECRET_ACCESS_KEY=
-      - NUXT_S3_REGION=
-      - NUXT_S3_BUCKET=
-      - NUXT_S3_ENDPOINT=
-      - NUXT_PUBLIC_VERSION=
-      - NUXT_SESSION_PASSWORD=
-      - NUXT_AUTH_REGISTER_VERIFY_SECRET=
-      - NUXT_OAUTH_GOOGLE_CLIENT_ID=
-      - NUXT_OAUTH_GOOGLE_CLIENT_SECRET=
-      - NUXT_OAUTH_GOOGLE_REDIRECT_URL=http://<host>/api/auth/google
+      # See environment variables above
     ports:
       - "80:80"
     depends_on:

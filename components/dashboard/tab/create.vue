@@ -6,34 +6,53 @@
         <div class="label">
           <span class="label-text">Name</span>
         </div>
-        <input v-model="associationForm.name" type="text" placeholder="Type here"
-          class="input input-bordered w-full">
+        <input
+          v-model="associationForm.name"
+          type="text"
+          placeholder="Type here"
+          class="input input-bordered w-full"
+        >
       </label>
       <!-- Association Logo -->
       <label class="form-control w-full">
         <div class="label">
           <span class="label-text">Logo</span>
         </div>
-        <input type="file" class="file-input file-input-bordered w-full" v-on:change="(e) => {
-        const target = e.target as HTMLInputElement | null;
-        const file = target && target.files ? target.files[0] : null;
-        if (file) {
-          associationForm.logo = file
-        }
-      }" />
+        <input
+          type="file"
+          class="file-input file-input-bordered w-full"
+          @change="(e) => {
+            const target = e.target as HTMLInputElement | null;
+            const file = target && target.files ? target.files[0] : null;
+            if (file) {
+              associationForm.logo = file
+            }
+          }"
+        >
       </label>
       <!-- Association Description -->
       <label class="form-control w-full col-span-2">
         <div class="label">
           <span class="label-text">Description</span>
         </div>
-        <textarea v-model="associationForm.description" class="textarea textarea-primary" placeholder="Description" />
+        <textarea
+          v-model="associationForm.description"
+          class="textarea textarea-primary"
+          placeholder="Description"
+        />
       </label>
       <!-- Association Tags -->
-      <InputTagSelect v-model="associationForm.tags" :max-selected="8"  class="col-span-2" />
+      <InputTagSelect
+        v-model="associationForm.tags"
+        :max-selected="8"
+        class="col-span-2"
+      />
     </div>
 
-    <button class="btn btn-primary" @click="handleCreate">
+    <button
+      class="btn btn-primary"
+      @click="handleCreate"
+    >
       <Icon name="mdi:star-four-points" />
       Create Association
     </button>
@@ -66,13 +85,13 @@ const handleCreate = async () => {
     body: {
       name: associationForm.value.name,
       description: associationForm.value.description,
-      tags: associationForm.value.tags.map((tag) => tag.id),
+      tags: associationForm.value.tags.map(tag => tag.id),
       logo: associationForm.value.logo,
     },
     onResponse: toastifyResponse,
   })
 
-  if(associationForm.value.logo) {
+  if (associationForm.value.logo) {
     const formData = new FormData()
     formData.append("file", associationForm.value.logo)
     await $fetch(`/api/association/${result.id}/logo`, {

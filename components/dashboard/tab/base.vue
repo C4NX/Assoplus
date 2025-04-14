@@ -1,7 +1,7 @@
 <template>
-  <div class="flex-1 bg-base-100 p-4 rounded-lg border border-base-200 shadow-md flex flex-col">
-    <h1 class="text-2xl font-bold">
-      {{ title }}
+  <div class="dashboard-tab-base">
+    <h1 class="dashboard-tab-title">
+      {{ $t(title) }}
     </h1>
     <slot />
   </div>
@@ -13,6 +13,12 @@ defineProps({
 })
 </script>
 
-<style>
+<style lang="postcss">
+.dashboard-tab-base {
+  @apply flex-1 bg-base-100 p-4 rounded-lg border border-base-200 shadow-md flex flex-col;
+}
 
+.dashboard-tab-title {
+  @apply text-2xl font-bold mb-2;
+}
 </style>

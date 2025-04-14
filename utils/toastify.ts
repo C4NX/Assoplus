@@ -8,6 +8,22 @@ interface ValidationErrorResponse {
   path: (string | number)[]
 }
 
+/**
+ * A toastify response function that shows a success or error message based on the response status.
+ */
+export function statusToastifyResponse(ctx: FetchContext, t: ReturnType<typeof useI18n>["t"]) {
+  if (ctx.response?.ok) {
+    toast.success(t("toast.success"))
+  }
+  else {
+    toast.error(t("toast.error"))
+  }
+}
+
+/**
+ * A toastify response function that shows a success or error message based on the response status.
+ * It also handles ZodError validation errors and displays them in a user-friendly way.
+ */
 export function toastifyResponse(ctx: FetchContext) {
   const responseData = ctx.response?._data
 

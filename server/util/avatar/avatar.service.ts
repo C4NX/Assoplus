@@ -2,11 +2,11 @@ import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3"
 import sharp from "sharp"
 import { v4 as uuid } from "uuid"
 import type { H3Event } from "h3"
+import { filesLogger } from "../logger/logger.service"
 import s3Client from "~/lib/s3client"
 import type { PublicUserInterface } from "~/shared/auth"
 import prisma from "~/lib/prisma"
 import { extractFileBufferFromRequest } from "~/server/util/request/files.service"
-import { filesLogger } from "../logger/logger.service"
 
 async function convertProfilePicture(buffer: Buffer) {
   return await sharp(buffer)
