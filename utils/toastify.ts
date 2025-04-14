@@ -11,12 +11,12 @@ interface ValidationErrorResponse {
 /**
  * A toastify response function that shows a success or error message based on the response status.
  */
-export function statusToastifyResponse(ctx: FetchContext, t: ReturnType<typeof useI18n>['t']) {
+export function statusToastifyResponse(ctx: FetchContext, t: ReturnType<typeof useI18n>["t"]) {
   if (ctx.response?.ok) {
-    toast.success(t('toast.success'))
+    toast.success(t("toast.success"))
   }
   else {
-    toast.error(t('toast.error'))
+    toast.error(t("toast.error"))
   }
 }
 

@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
       description: associationCreateData.description,
       ownerId: user.id,
       tags: {
-        connect: associationCreateData.tags?.map((tag) => ({
+        connect: associationCreateData.tags?.map(tag => ({
           id: tag,
         })) ?? [],
       },

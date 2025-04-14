@@ -85,7 +85,7 @@ export default defineI18nConfig(() => ({
         tag_select: {
           max_selected: "Vous ne pouvez sélectionner que {{max}} tags",
           empty: "Aucun tag sélectionné",
-        }
+        },
       },
       OR: "OU",
       and: "et",

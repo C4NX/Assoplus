@@ -1,4 +1,4 @@
 export interface AssociationTag {
-    id: number
-    name: string
+  id: number
+  name: string
 }

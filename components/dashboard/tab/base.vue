@@ -14,7 +14,6 @@ defineProps({
 </script>
 
 <style lang="postcss">
-
 .dashboard-tab-base {
   @apply flex-1 bg-base-100 p-4 rounded-lg border border-base-200 shadow-md flex flex-col;
 }
@@ -22,5 +21,4 @@ defineProps({
 .dashboard-tab-title {
   @apply text-2xl font-bold mb-2;
 }
-
 </style>
