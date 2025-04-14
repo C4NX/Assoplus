@@ -28,6 +28,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.9",
+    "csv-stringify": "^6.5.2",
     "eslint": "^9.21.0",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.10.0",

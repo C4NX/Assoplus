@@ -1,0 +1,87 @@
+<template>
+  <button class="btn" @click="openModal">
+    <Icon name="mdi:file-export" class="w-5 h-5" />
+    <slot name="title"/>
+  </button>
+  <dialog class="modal modal-bottom sm:modal-middle" ref="modal">
+    <div class="modal-box">
+      <h3 class="text-lg font-bold">Exporter au format CSV</h3>
+      <p class="py-4">Sélectionnez le délimiteur que vous souhaitez utiliser pour l'exportation au format CSV.</p>
+      <label class="form-control">
+        <span class="label-text">Délimiteur</span>
+        <input type="text" placeholder=";" class="input input-bordered w-full" v-model="delimiter" maxlength="1" />
+      </label>
+      <div class="modal-action">
+        <form method="dialog">
+          <button class="btn">
+            {{ $t("cancel") }}
+          </button>
+        </form>
+        <button class="btn btn-primary" @click="handleExport">
+          <Icon name="mdi:file-export" class="w-5 h-5" />
+          {{ $t("export") }}
+        </button>
+      </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
+</template>
+
+<script lang="ts" setup>
+
+const props = defineProps<{
+  csvUrl: string,
+  fileName: string,
+}>()
+
+const delimiter = ref<string | null>(null)
+const modal = ref<HTMLDialogElement | null>(null)
+
+const openModal = () => {
+  if (modal.value) {
+    delimiter.value = null
+    modal.value.showModal()
+  }
+}
+
+const closeModal = () => {
+  if (modal.value) {
+    modal.value.close()
+  }
+}
+
+const handleExport = async () => {
+  try {
+    const blob = await $fetch<Blob>(props.csvUrl, {
+      method: "GET",
+      headers: {
+        "Accept": "text/csv",
+      },
+      query: {
+        delimiter: delimiter.value ? delimiter.value : undefined,
+      },
+      retry: 0,
+      responseType: "blob",
+      onResponse: statusToastifyResponse, // Use only status code
+    })
+
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = props.fileName
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    window.URL.revokeObjectURL(url)
+  } finally {
+    closeModal()
+  }
+}
+
+</script>
+
+<style>
+
+</style>
