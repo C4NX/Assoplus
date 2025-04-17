@@ -1,4 +1,4 @@
-import { AssociationRole, Role } from "@prisma/client"
+import { AssociationRole } from "@prisma/client"
 import { z } from "zod"
 import prisma from "~/lib/prisma"
 import { requireUserAuthenticated } from "~/server/util/user/auth.guard"

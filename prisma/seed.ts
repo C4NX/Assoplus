@@ -54,6 +54,21 @@ async function createUser(n: number) {
   }
 }
 
+function fakerRandomMarkdown(paragraphs: number) {
+  const title = faker.lorem.sentence()
+  const paragraphsArray = Array.from({ length: paragraphs }, () => faker.lorem.paragraphs(5))
+  const linksArray = Array.from({ length: paragraphs }, () => faker.lorem.words(5))
+  const effectsArray = Array.from({ length: paragraphs }, () => faker.lorem.words(5))
+  const markdown = [
+    `# ${title}`,
+    ...paragraphsArray.map((paragraph, index) => {
+      return `${paragraph}\n\n[${linksArray[index]}](https://example.com)\n\n*${effectsArray[index]}*`
+    }),
+  ].join("\n\n")
+
+  return markdown
+}
+
 async function createAssociation(n: number) {
   for (let i = 0; i < n; i++) {
     const result = await prisma.association.create({
@@ -62,7 +77,16 @@ async function createAssociation(n: number) {
         description: faker.company.catchPhrase(),
         ownerId: userIds[Math.floor(Math.random() * userIds.length)],
         tags: {
-          connect: await createAssociationTag(3),
+          connect: await createTag(3),
+        },
+        news: {
+          createMany: {
+            data: Array.from({ length: 30 }, () => ({
+              title: faker.lorem.sentence(),
+              content: fakerRandomMarkdown(3),
+              authorId: userIds[Math.floor(Math.random() * userIds.length)],
+            })),
+          },
         },
       },
     })
@@ -70,7 +94,7 @@ async function createAssociation(n: number) {
   }
 }
 
-async function createAssociationTag(n: number) {
+async function createTag(n: number) {
   return await prisma.tag.createManyAndReturn({
     data: Array.from({ length: n }, () => ({
       name: faker.lorem.word(),

@@ -1,16 +1,13 @@
 <template>
   <div class="dashboard-tab-base">
     <h1 class="dashboard-tab-title">
-      {{ $t(title) }}
+      <slot name="title" />
     </h1>
     <slot />
   </div>
 </template>
 
 <script lang="ts" setup>
-defineProps({
-  title: String,
-})
 </script>
 
 <style lang="postcss">

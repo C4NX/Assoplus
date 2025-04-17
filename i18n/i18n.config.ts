@@ -92,11 +92,11 @@ export default defineI18nConfig(() => ({
         },
         list: {
           title: "Associations",
-          search: 'Rechercher une association',
-          empty: 'Aucune association trouvée',
+          search: "Rechercher une association",
+          empty: "Aucune association trouvée",
           view: "Voir l'association",
         },
-        create: 'Ajouter votre association',
+        create: "Ajouter votre association",
       },
       privacy: {
         title: "Politique de Confidentialité de Asso+",

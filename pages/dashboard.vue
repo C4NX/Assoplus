@@ -8,7 +8,10 @@
           class="menu menu-md bg-base-200 rounded-lg w-full max-w-xs"
         >
           <li>
-            <a @click="dashboardStore.setTab(DashboardTabType.HOME, null)" :class="{ active: activeTab === DashboardTabType.HOME }">
+            <a
+              :class="{ active: activeTab === DashboardTabType.HOME }"
+              @click="dashboardStore.setTab(DashboardTabType.HOME, null)"
+            >
               <Icon name="mdi:home" />
               Dashboard
             </a>
@@ -25,19 +28,28 @@
               </summary>
               <ul class="menu menu-sub">
                 <li>
-                  <a @click="dashboardStore.setTab(DashboardTabType.INFORMATIONS, activeAssociation.id)" :class="{ active: activeTab === DashboardTabType.INFORMATIONS }">
+                  <a
+                    :class="{ active: activeTab === DashboardTabType.INFORMATIONS }"
+                    @click="dashboardStore.setTab(DashboardTabType.INFORMATIONS, activeAssociation.id)"
+                  >
                     <Icon name="mdi:information" />
                     Informations
                   </a>
                 </li>
                 <li>
-                  <a @click="dashboardStore.setTab(DashboardTabType.MEMBERS, activeAssociation.id)" :class="{ active: activeTab === DashboardTabType.MEMBERS }">
+                  <a
+                    :class="{ active: activeTab === DashboardTabType.MEMBERS }"
+                    @click="dashboardStore.setTab(DashboardTabType.MEMBERS, activeAssociation.id)"
+                  >
                     <Icon name="mdi:account-group" />
                     Members
                   </a>
                 </li>
-                <li >
-                  <a @click="dashboardStore.setTab(DashboardTabType.NEWS, activeAssociation.id)" :class="{ active: activeTab === DashboardTabType.NEWS }">
+                <li>
+                  <a
+                    :class="{ active: activeTab === DashboardTabType.NEWS }"
+                    @click="dashboardStore.setTab(DashboardTabType.NEWS, activeAssociation.id)"
+                  >
                     <Icon name="mdi:newspaper" />
                     News
                   </a>
@@ -57,8 +69,11 @@
               </ul>
             </details>
           </li>
-          <li >
-            <a @click="dashboardStore.setTab(DashboardTabType.CREATE, null)" :class="{ active: activeTab === DashboardTabType.CREATE }">
+          <li>
+            <a
+              :class="{ active: activeTab === DashboardTabType.CREATE }"
+              @click="dashboardStore.setTab(DashboardTabType.CREATE, null)"
+            >
               <Icon name="mdi:plus" />
               Create Association
             </a>

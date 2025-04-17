@@ -1,5 +1,9 @@
 <template>
-  <DashboardTabBase title="Informations">
+  <DashboardTabBase>
+    <template #title>
+      <Icon name="mdi:information-outline" />
+      Informations
+    </template>
     <button
       class="btn btn-error"
       @click="handleDelete"

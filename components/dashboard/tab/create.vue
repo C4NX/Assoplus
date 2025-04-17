@@ -1,5 +1,9 @@
 <template>
-  <DashboardTabBase title="Create Association">
+  <DashboardTabBase>
+    <template #title>
+      <Icon name="mdi:star-four-points" />
+      Create Association
+    </template>
     <div class="grid grid-cols-2 gap-4 my-4">
       <!-- Association Name -->
       <label class="form-control w-full">

@@ -1,5 +1,9 @@
 <template>
-  <DashboardTabBase title="dashboard.tabs.members">
+  <DashboardTabBase>
+    <template #title>
+      <Icon name="mdi:account-group" />
+      {{ $t("dashboard.tabs.members") }}
+    </template>
     <div
       v-if="status === 'success'"
       class="overflow-x-auto"
@@ -32,7 +36,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="member in data?.items"
+            v-for="member in data?.data"
             :key="member.id"
           >
             <th>

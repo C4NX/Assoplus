@@ -7,7 +7,7 @@ import prisma from "~/lib/prisma"
 
 export default defineEventHandler(async (event) => {
   const associationId = parseAssociationIdFromRouteGuid(event)
-  const t = await useTranslation(event);
+  const t = await useTranslation(event)
   await requireAssociationOwner(event, associationId)
 
   const buffer = await extractFileBufferFromRequest(event, "file", ["image/jpeg", "image/png"])

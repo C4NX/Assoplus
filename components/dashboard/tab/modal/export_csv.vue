@@ -92,7 +92,7 @@ const handleExport = async () => {
       },
       retry: 0,
       responseType: "blob",
-      onResponse: (ctx) => statusToastifyResponse(ctx, t), // Use only status code
+      onResponse: ctx => statusToastifyResponse(ctx, t), // Use only status code
     })
 
     const url = window.URL.createObjectURL(blob)

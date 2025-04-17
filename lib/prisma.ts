@@ -13,7 +13,7 @@ const prismaClientSingleton = () => {
         },
       },
     },
-  });
+  })
   logger.info("Created prisma client singleton")
   return prismaClient
 }

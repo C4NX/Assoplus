@@ -1,8 +1,8 @@
 import { defineEventHandler } from "h3"
+import { parseAssociationIdFromRouteGuid } from "./index.get"
 import prisma from "~/lib/prisma"
 import { exportCsv, isRequestingCsv } from "~/server/util/request/exporter.service"
 import { paginate } from "~/server/util/request/pagination.service"
-import { parseAssociationIdFromRouteGuid } from "./index.get"
 
 export default defineEventHandler(async (event) => {
   const associationId = parseAssociationIdFromRouteGuid(event)
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
   }
 
   return paginate(event, {
-    data: async (inject) => await prisma.volunteer.findMany({
+    data: async inject => await prisma.volunteer.findMany({
       ...inject,
       where: {
         associationId: associationId,

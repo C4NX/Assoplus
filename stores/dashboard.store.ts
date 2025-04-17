@@ -12,7 +12,7 @@ export enum DashboardTabType {
 
 export const useDashboardStore = defineStore("dashboard", {
   state: (): {
-    activeAssociationId: Ref<number | null>
+    activeAssociationId: Ref<string | null>
     activeTab: Ref<DashboardTabType>
     needAssociationListRefresh: Ref<boolean>
   } => ({
@@ -21,7 +21,7 @@ export const useDashboardStore = defineStore("dashboard", {
     needAssociationListRefresh: ref(false),
   }),
   actions: {
-    setTab(tab: DashboardTabType, associationId: number | null = null) {
+    setTab(tab: DashboardTabType, associationId: string | null = null) {
       this.activeTab = tab
       this.activeAssociationId = associationId
     },

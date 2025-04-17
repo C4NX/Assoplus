@@ -1,8 +1,7 @@
 import daisyui from "daisyui"
 import tailwindTypography from "@tailwindcss/typography"
 import type { Config } from "tailwindcss"
-
-
+import { emerald } from "daisyui/src/theming/themes"
 
 export default <Partial<Config>>{
   content: [
@@ -11,8 +10,8 @@ export default <Partial<Config>>{
   daisyui: {
     themes: [{
       assoplus: {
-        ...require("daisyui/src/theming/themes")["emerald"],
-      }
+        ...emerald,
+      },
     }],
   },
   theme: {
