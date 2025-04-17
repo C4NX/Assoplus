@@ -96,10 +96,13 @@ async function createAssociationMember(nMinPerAssociation: number, nMaxPerAssoci
 }
 
 async function main() {
+  console.log("Seeding database...")
   await cleanup()
+  console.log("Seeding users...")
   await createUser(10)
   await createUserAdmin()
-  await createAssociation(10)
+  console.log("Seeding associations...")
+  await createAssociation(100)
   await createAssociationMember(5, 10)
   console.log("Seed complete")
 }
