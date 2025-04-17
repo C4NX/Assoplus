@@ -1,5 +1,8 @@
 <template>
-  <ArticleContainer title="terms.title">
+  <ArticleContainer>
+    <template #title>
+      {{ $t('terms.title') }}
+    </template>
     <div class="text-justify">
       <p>
         Adipisicing velit pariatur deserunt aliqua Lorem culpa qui eiusmod adipisicing incididunt in nulla. Consequat
@@ -26,7 +29,6 @@
 </template>
 
 <script lang="ts" setup>
-
 </script>
 
 <style></style>

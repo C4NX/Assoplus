@@ -12,7 +12,11 @@ export default defineNuxtConfig({
     "@nuxt/image",
   ],
   ssr: false,
-  devtools: { enabled: true },
+  devtools: { enabled: false },
+  routeRules: {
+    "/terms": { prerender: true },
+    "/privacy": { prerender: true },
+  },
   runtimeConfig: {
     oauth: {
       google: {
