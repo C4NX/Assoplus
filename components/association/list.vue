@@ -89,7 +89,7 @@ import { ref, computed, onUnmounted } from "vue"
 const searchOrderAsc = ref(true)
 const searchOrder = computed(() => (searchOrderAsc.value ? "asc" : "desc"))
 
-const searchTerm = ref("")
+const searchTerm = ref<string | undefined>("")
 const currentPage = ref(1)
 
 const localPath = useLocalePath()
@@ -111,7 +111,8 @@ const handleSearch = (e: Event) => {
   clearTimeout(searchTimeout)
   searchTimeout = setTimeout(async () => {
     currentPage.value = 1
-    searchTerm.value = (e.target as HTMLInputElement).value
+    const inputValue = (e.target as HTMLInputElement).value
+    searchTerm.value = inputValue.length > 0 ? inputValue : undefined
     await refresh()
   }, 300)
 }
