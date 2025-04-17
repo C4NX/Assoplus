@@ -4,7 +4,7 @@ import prisma from "~/lib/prisma"
 import { paginate } from "~/server/util/request/pagination.service"
 
 export default defineEventHandler(async (event) => {
-  const { search } = getQuery(event)
+  const { search, order } = getQuery(event)
   const prismaSelectOptions = {
     where: search
       ? {
@@ -14,6 +14,9 @@ export default defineEventHandler(async (event) => {
           ],
         }
       : undefined,
+    orderBy: {
+      name: order === "asc" ? Prisma.SortOrder.asc : Prisma.SortOrder.desc,
+    },
   }
 
   return await paginate(event, prisma, {
