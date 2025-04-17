@@ -11,8 +11,8 @@ export default defineNuxtConfig({
     "nuxt-auth-utils",
     "@nuxt/image",
   ],
-  ssr: false,
-  devtools: { enabled: false },
+  ssr: true,
+  devtools: { enabled: true },
   routeRules: {
     "/terms": { prerender: true },
     "/privacy": { prerender: true },

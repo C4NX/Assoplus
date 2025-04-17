@@ -8,7 +8,7 @@
           class="menu menu-md bg-base-200 rounded-lg w-full max-w-xs"
         >
           <li>
-            <a @click="dashboardStore.setTab(DashboardTabType.HOME, null)">
+            <a @click="dashboardStore.setTab(DashboardTabType.HOME, null)" :class="{ active: activeTab === DashboardTabType.HOME }">
               <Icon name="mdi:home" />
               Dashboard
             </a>
@@ -25,19 +25,19 @@
               </summary>
               <ul class="menu menu-sub">
                 <li>
-                  <a @click="dashboardStore.setTab(DashboardTabType.INFORMATIONS, activeAssociation.id)">
+                  <a @click="dashboardStore.setTab(DashboardTabType.INFORMATIONS, activeAssociation.id)" :class="{ active: activeTab === DashboardTabType.INFORMATIONS }">
                     <Icon name="mdi:information" />
                     Informations
                   </a>
                 </li>
                 <li>
-                  <a @click="dashboardStore.setTab(DashboardTabType.MEMBERS, activeAssociation.id)">
+                  <a @click="dashboardStore.setTab(DashboardTabType.MEMBERS, activeAssociation.id)" :class="{ active: activeTab === DashboardTabType.MEMBERS }">
                     <Icon name="mdi:account-group" />
                     Members
                   </a>
                 </li>
-                <li>
-                  <a @click="dashboardStore.setTab(DashboardTabType.NEWS, activeAssociation.id)">
+                <li >
+                  <a @click="dashboardStore.setTab(DashboardTabType.NEWS, activeAssociation.id)" :class="{ active: activeTab === DashboardTabType.NEWS }">
                     <Icon name="mdi:newspaper" />
                     News
                   </a>
@@ -57,8 +57,8 @@
               </ul>
             </details>
           </li>
-          <li>
-            <a @click="dashboardStore.setTab(DashboardTabType.CREATE, null)">
+          <li >
+            <a @click="dashboardStore.setTab(DashboardTabType.CREATE, null)" :class="{ active: activeTab === DashboardTabType.CREATE }">
               <Icon name="mdi:plus" />
               Create Association
             </a>
@@ -73,12 +73,12 @@
           <div class="skeleton h-4 w-full" />
         </div>
         <!-- Main Content -->
-        <DashboardTabMain v-if="dashboardStore.activeTab === DashboardTabType.HOME" />
+        <DashboardTabMain v-if="activeTab === DashboardTabType.HOME" />
         <DashboardTabInformations
-          v-if="userAssociations && dashboardStore.activeTab === DashboardTabType.INFORMATIONS"
+          v-if="userAssociations && activeTab === DashboardTabType.INFORMATIONS"
         />
-        <DashboardTabMembers v-if="userAssociations && dashboardStore.activeTab === DashboardTabType.MEMBERS" />
-        <DashboardTabCreate v-if="userAssociations && dashboardStore.activeTab === DashboardTabType.CREATE" />
+        <DashboardTabMembers v-if="userAssociations && activeTab === DashboardTabType.MEMBERS" />
+        <DashboardTabCreate v-if="userAssociations && activeTab === DashboardTabType.CREATE" />
       </div>
     </div>
   </div>
@@ -93,6 +93,7 @@ definePageMeta({
 })
 
 const dashboardStore = useDashboardStore()
+const { activeTab } = storeToRefs(dashboardStore)
 
 watch(() => dashboardStore.needAssociationListRefresh, async (newValue, oldValue) => {
   if (newValue !== oldValue && newValue) {

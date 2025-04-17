@@ -2,12 +2,18 @@ import daisyui from "daisyui"
 import tailwindTypography from "@tailwindcss/typography"
 import type { Config } from "tailwindcss"
 
+
+
 export default <Partial<Config>>{
   content: [
     "./pages/**/*.{vue,js,jsx,mjs,ts,tsx}",
   ],
   daisyui: {
-    themes: ["emerald"],
+    themes: [{
+      assoplus: {
+        ...require("daisyui/src/theming/themes")["emerald"],
+      }
+    }],
   },
   theme: {
     extend: {

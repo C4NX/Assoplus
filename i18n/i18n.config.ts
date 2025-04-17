@@ -86,6 +86,19 @@ export default defineI18nConfig(() => ({
           max_selected: "Vous ne pouvez sélectionner que {{max}} tags",
           empty: "Aucun tag sélectionné",
         },
+        list: {
+          title: "Associations",
+          search: 'Rechercher une association',
+          empty: 'Aucune association trouvée',
+          view: "Voir l'association",
+        },
+        create: 'Ajouter votre association',
+      },
+      privacy: {
+        title: "Politique de Confidentialité de Asso+",
+      },
+      terms: {
+        title: "Conditions Générales d'Utilisation de Asso+",
       },
       OR: "OU",
       and: "et",
