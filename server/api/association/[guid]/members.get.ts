@@ -1,27 +1,11 @@
-import type { H3Event } from "h3"
 import { defineEventHandler } from "h3"
 import prisma from "~/lib/prisma"
 import { exportCsv, isRequestingCsv } from "~/server/util/request/exporter.service"
 import { paginate } from "~/server/util/request/pagination.service"
-
-export function parseAssociationIdFromRouteId(event: H3Event) {
-  const id = getRouterParam(event, "id")
-
-  if (!id) {
-    throw createError({ statusCode: 400, statusMessage: "Association ID is required" })
-  }
-
-  const associationId = Number(id)
-
-  if (associationId === null || isNaN(associationId)) {
-    throw createError({ statusCode: 400, statusMessage: "Invalid association ID" })
-  }
-
-  return associationId
-}
+import { parseAssociationIdFromRouteGuid } from "./index.get"
 
 export default defineEventHandler(async (event) => {
-  const associationId = parseAssociationIdFromRouteId(event)
+  const associationId = parseAssociationIdFromRouteGuid(event)
 
   if (!associationId) {
     throw createError({ statusCode: 404, statusMessage: "Association not found" })
@@ -35,7 +19,7 @@ export default defineEventHandler(async (event) => {
   }
 
   if (await isRequestingCsv(event)) {
-    return await exportCsv(event, await prisma.associationMember.findMany({
+    return await exportCsv(event, await prisma.volunteer.findMany({
       where: {
         associationId: associationId,
       },
@@ -45,15 +29,15 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  return paginate(event, prisma, {
-    data: async (prismaClient, inject) => await prismaClient.associationMember.findMany({
+  return paginate(event, {
+    data: async (inject) => await prisma.volunteer.findMany({
       ...inject,
       where: {
         associationId: associationId,
       },
       select: prismaSelect,
     }),
-    count: async prismaClient => await prismaClient.associationMember.count({
+    count: async () => await prisma.volunteer.count({
       where: {
         associationId: associationId,
       },

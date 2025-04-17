@@ -83,6 +83,9 @@ export default defineI18nConfig(() => ({
         },
       },
       association: {
+        logo: {
+          uploaded: "Logo de l'association mis à jour",
+        },
         tag_select: {
           max_selected: "Vous ne pouvez sélectionner que {{max}} tags",
           empty: "Aucun tag sélectionné",

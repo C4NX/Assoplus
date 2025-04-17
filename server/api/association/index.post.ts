@@ -1,3 +1,4 @@
+import { AssociationRole, Role } from "@prisma/client"
 import { z } from "zod"
 import prisma from "~/lib/prisma"
 import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
@@ -28,7 +29,7 @@ export default defineEventHandler(async (event) => {
       members: {
         create: {
           userId: user.id,
-          role: "OWNER",
+          role: AssociationRole.PRESIDENT,
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,

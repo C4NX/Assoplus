@@ -1,0 +1,29 @@
+import type { H3Event } from "h3"
+import { defineEventHandler } from "h3"
+import { z } from "zod"
+import prisma from "~/lib/prisma"
+
+export function parseAssociationIdFromRouteGuid(event: H3Event) {
+  return z.string().uuid().parse(getRouterParam(event, "guid"))
+}
+
+export default defineEventHandler(async (event) => {
+  const associationId = parseAssociationIdFromRouteGuid(event)
+
+  const association = await prisma.association.findUnique({
+    select: {
+      id: true,
+      name: true,
+      description: true,
+    },
+    where: {
+      id: associationId,
+    },
+  })
+
+  if (!association) {
+    throw createError({ statusCode: 404, statusMessage: "Association not found" })
+  }
+
+  return association
+})

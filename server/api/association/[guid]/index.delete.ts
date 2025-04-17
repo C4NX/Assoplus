@@ -1,15 +1,15 @@
 import { defineEventHandler } from "h3"
-import { parseAssociationIdFromRouteId } from "./members.get"
+import { parseAssociationIdFromRouteGuid } from "./index.get"
 import prisma from "~/lib/prisma"
 import { requireAssociationOwner } from "~/server/util/user/auth.guard"
 
 export default defineEventHandler(async (event) => {
-  const associationId = parseAssociationIdFromRouteId(event)
-  const user = await requireAssociationOwner(event, associationId)
+  const associationGuid = parseAssociationIdFromRouteGuid(event)
+  const user = await requireAssociationOwner(event, associationGuid)
 
   await prisma.association.delete({
     where: {
-      id: associationId,
+      id: associationGuid,
       ownerId: user.id,
     },
   })

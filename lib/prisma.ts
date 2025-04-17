@@ -1,10 +1,19 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient, type Association } from "@prisma/client"
 import { createLogger } from "~/server/util/logger/logger.service"
 
 const logger = createLogger("prisma")
 
 const prismaClientSingleton = () => {
-  const prismaClient = new PrismaClient()
+  const prismaClient = new PrismaClient().$extends({
+    result: {
+      association: {
+        logoPathUrl: {
+          needs: { logoPath: true },
+          compute: (model: Association) => model.logoPath ? `/api/association/${model.id}/logo` : null,
+        },
+      },
+    },
+  });
   logger.info("Created prisma client singleton")
   return prismaClient
 }

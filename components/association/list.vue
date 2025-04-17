@@ -31,8 +31,8 @@
     <div v-else class="space-y-4">
       <div v-for="association in data?.items" :key="association.id" class="association-card">
         <div class="association-card-content">
-          <div v-if="association.logoUuid" class="avatar-container">
-            <img :src="`/api/association/${association.id}/logo/${association.logoUuid}`" class="association-logo">
+          <div v-if="association.logoPathUrl" class="avatar-container">
+            <img :src="association.logoPathUrl" class="association-logo">
           </div>
           <div class="flex-1">
             <h3 class="association-name">{{ association.name }}</h3>

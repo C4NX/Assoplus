@@ -19,9 +19,9 @@ export default defineEventHandler(async (event) => {
     },
   }
 
-  return await paginate(event, prisma, {
-    data: async (prismaClient, inject) => {
-      return await prismaClient.association.findMany(
+  return await paginate(event, {
+    data: async (inject) => {
+      return (await prisma.association.findMany(
         {
           ...inject, // pagination
           ...prismaSelectOptions, // search
@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
             id: true,
             name: true,
             description: true,
-            logoUuid: true,
+            logoPathUrl: true,
             tags: {
               select: {
                 id: true,
@@ -38,9 +38,9 @@ export default defineEventHandler(async (event) => {
             },
           },
         },
-      )
+      ))
     },
-    count: async prismaClient => prismaClient.association.count(prismaSelectOptions),
+    count: async () => prisma.association.count(prismaSelectOptions),
     maxItemPerPage: 10,
   })
 })

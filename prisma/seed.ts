@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"
+import { AssociationRole, PrismaClient } from "@prisma/client"
 import { faker } from "@faker-js/faker"
 import { Scrypt } from "@adonisjs/hash/drivers/scrypt"
 
@@ -7,11 +7,12 @@ const ADMIN_EMAIL = "admin@admin.admin"
 const prisma = new PrismaClient()
 
 const userIds: string[] = []
-const associationIds: number[] = []
+const associationIds: string[] = []
 
 async function cleanup() {
-  await prisma.associationMember.deleteMany()
-  await prisma.associationTag.deleteMany()
+  await prisma.volunteer.deleteMany()
+  await prisma.tag.deleteMany()
+  await prisma.news.deleteMany()
   await prisma.association.deleteMany()
   await prisma.user.deleteMany()
 }
@@ -70,7 +71,7 @@ async function createAssociation(n: number) {
 }
 
 async function createAssociationTag(n: number) {
-  return await prisma.associationTag.createManyAndReturn({
+  return await prisma.tag.createManyAndReturn({
     data: Array.from({ length: n }, () => ({
       name: faker.lorem.word(),
     })),
@@ -80,13 +81,13 @@ async function createAssociationTag(n: number) {
 async function createAssociationMember(nMinPerAssociation: number, nMaxPerAssociation: number) {
   const hasRegistered = faker.datatype.boolean({ probability: 0.5 })
   for (let i = 0; i < associationIds.length; i++) {
-    await prisma.associationMember.createMany({
+    await prisma.volunteer.createMany({
       data: Array.from({ length: faker.number.int({ min: nMinPerAssociation, max: nMaxPerAssociation }) }, () => ({
         userId: hasRegistered ? userIds[Math.floor(Math.random() * userIds.length)] : null,
         email: faker.internet.email(),
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
-        role: "Développeur",
+        role: faker.helpers.arrayElement(Object.values(AssociationRole)),
         isVerified: faker.datatype.boolean(),
         isPending: faker.datatype.boolean(),
         associationId: associationIds[i],
