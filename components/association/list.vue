@@ -30,7 +30,7 @@
 
     <div v-else class="space-y-4">
       <div v-for="association in data?.items" :key="association.id" class="association-card">
-        <div class="flex gap-6 items-center">
+        <div class="association-card-content">
           <div v-if="association.logoUuid" class="avatar-container">
             <img :src="`/api/association/${association.id}/logo/${association.logoUuid}`" class="association-logo">
           </div>
@@ -43,7 +43,7 @@
               </span>
             </div>
           </div>
-          <div class="flex items-end self-end">
+          <div class="association-card-buttons">
             <NuxtLink :to="`/associations/${association.id}`" class="btn btn-primary">
               <Icon name="mdi:eye" class="w-5 h-5" />
               {{ $t("association.list.view") }}
@@ -172,6 +172,14 @@ const goToDashboard = async (tab: DashboardTabType, associationId: number | null
   @apply p-6 transition-shadow hover:shadow-xl bg-base-100 border border-base-200 rounded-lg;
 }
 
+.association-card-buttons {
+  @apply flex items-end self-end md:items-start md:self-auto;
+}
+
+.association-card-content {
+  @apply flex gap-6 items-start md:items-center flex-col md:flex-row;
+}
+
 .avatar-container {
   @apply w-28 h-28 rounded-2xl overflow-hidden shrink-0;
 }
@@ -201,6 +209,6 @@ const goToDashboard = async (tab: DashboardTabType, associationId: number | null
 }
 
 .btn-pagination {
-  @apply bg-base-100 btn rounded-full ;
+  @apply bg-base-100 btn rounded-full;
 }
 </style>
