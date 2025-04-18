@@ -17,9 +17,9 @@
             {{ $t("home.description1_2") }}
             <span class="block mt-2">
               {{ $t("home.description2_1") }}
-              <strong>{{ data.users }}</strong>
-              {{ $t("home.description2_2") }}
               <strong>{{ data.associations }}</strong>
+              {{ $t("home.description2_2") }}
+              <strong>{{ data.users }}</strong>
               {{ $t("home.description2_3") }}
             </span>
           </p>
