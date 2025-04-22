@@ -16,6 +16,6 @@
 }
 
 .dashboard-tab-title {
-  @apply text-2xl font-bold mb-2;
+  @apply text-2xl font-bold mb-2 flex items-center gap-2;
 }
 </style>

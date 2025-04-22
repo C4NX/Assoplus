@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-[calc(100vh-60px)] pt-[60px] bg-grid">
-    <div class="container mx-auto max-w-10xl my-10 p-4">
-      <div class="flex gap-6">
+    <div class="container mx-auto m-0 max-w-full p-0 lg:p-4 lg:max-w-10xl lg:my-10">
+      <div class="dashboard-content">
         <!-- Sidebar Navigation -->
         <ul v-if="userAssociations" class="dashboard-menu">
           <li>
@@ -57,7 +57,7 @@
           </li>
           <li>
             <a :class="{ active: activeTab === DashboardTabType.CREATE }"
-              @click="dashboardStore.setTab(DashboardTabType.CREATE, null)">
+              @click="dashboardStore.setTab(DashboardTabType.CREATE)">
               <Icon name="mdi:plus" />
               Create Association
             </a>
@@ -89,6 +89,7 @@ definePageMeta({
 const dashboardStore = useDashboardStore()
 const { activeTab } = storeToRefs(dashboardStore)
 
+// Handle refeshing of the user associations list with the dashboard store
 watch(() => dashboardStore.needAssociationListRefresh, async (newValue, oldValue) => {
   if (newValue !== oldValue && newValue) {
     await refreshUserAssociations()
@@ -101,6 +102,10 @@ watch(() => dashboardStore.needAssociationListRefresh, async (newValue, oldValue
 
 .dashboard-menu {
   @apply menu menu-md bg-base-100 rounded-lg border border-base-200 shadow-md;
+}
+
+.dashboard-content {
+  @apply flex gap-6 flex-col-reverse lg:flex-row flex-nowrap;
 }
 
 </style>

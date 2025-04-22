@@ -1,22 +1,18 @@
 <template>
   <div class="dropdown flex flex-row">
     <div>
-      <button
-        class="btn btn-primary border-r-0 rounded-r-none"
-        tabindex="0"
-      >
+      <!-- Tags left button -->
+      <button :class="['btn border-r-0 rounded-r-none', readonlyOrDisabled ? 'btn-disabled' : 'btn-primary']" tabindex="0"
+        :disabled="readonlyOrDisabled">
         <Icon name="mdi:tag" />
         Tags
       </button>
+      <!-- Tags dropdown -->
       <ul
-        class="dropdown-content menu menu-sm p-2 gap-2 shadow bg-base-100 rounded-box max-h-60 overflow-y-auto overflow-x-hidden flex-nowrap"
-        tabindex="0"
-      >
-        <li
-          v-for="tag in data"
-          :key="tag.id"
-          @click="toggleTag(tag)"
-        >
+        :class="['dropdown-content menu menu-sm p-2 gap-2 shadow bg-base-100 rounded-box max-h-60 overflow-y-auto overflow-x-hidden flex-nowrap', readonlyOrDisabled ? 'hidden' : 'block']"
+        :tabindex="(readonlyOrDisabled) ? undefined : 0">
+        <li v-for="tag in data" :key="tag.id" @click="toggleTag(tag)"
+          :class="[readonlyOrDisabled ? 'disabled': 'cursor-pointer']">
           <a :class="{ 'active cursor-pointer': selectedTags.some(t => t.id === tag.id) }">
             <Icon name="mdi:tag" />
             {{ tag.name }}
@@ -24,29 +20,20 @@
         </li>
       </ul>
     </div>
+    <!-- Selected tags input -->
     <div class="input input-bordered flex items-center gap-2 p-1 flex-1 border-l-0 rounded-l-none">
-      <div
-        v-if="selectedTags.length > 0"
-        class="flex flex-wrap gap-2"
-      >
-        <div
-          v-for="tag in selectedTags"
-          :key="tag.id"
-          class="badge badge-lg badge-outline badge-primary flex items-center justify-center gap-2 select-none"
-        >
+      <div v-if="selectedTags.length > 0" class="flex flex-wrap gap-2">
+        <div v-for="tag in selectedTags" :key="tag.id"
+          :class="['badge badge-lg badge-primary badge-outline flex items-center justify-center gap-2 select-none', (readonlyOrDisabled) ? '!badge-ghost !text-opacity-55' : '']">
           <span class="flex-1">{{ tag.name }}</span>
-          <div
-            class="cursor-pointer btn btn-xs btn-circle btn-ghost"
-            @click.prevent="removeTag(tag)"
-          >
+          <div :class="['cursor-pointer btn btn-xs btn-circle btn-ghost', (readonlyOrDisabled) ? 'pointer-events-none' : '']"
+          @click.prevent="removeTag(tag)">
             <Icon name="mdi:close" />
           </div>
         </div>
       </div>
-      <button
-        v-if="selectedTags.length === 0"
-        class="ml-2 text-gray-500 text-left w-full"
-      >
+      <!-- Empty state -->
+      <button v-if="selectedTags.length === 0" class="ml-2 text-gray-500 text-left w-full">
         {{ $t('association.tag_select.empty') }}
       </button>
     </div>
@@ -61,8 +48,12 @@ import type { AssociationTag } from "~/shared/model"
 const props = defineProps<{
   modelValue: AssociationTag[]
   maxSelected?: number
+  disabled?: boolean
+  readonly?: boolean
 }>()
 const { t } = useI18n()
+
+const readonlyOrDisabled = computed(() => props.readonly || props.disabled)
 
 const emit = defineEmits<{
   (e: "update:modelValue", tags: AssociationTag[]): void

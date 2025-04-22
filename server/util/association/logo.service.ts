@@ -1,14 +1,20 @@
-import type { H3Event } from "h3"
+import type { H3Event, MultiPartData } from "h3"
 import { PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
 import sharp from "sharp"
 import s3Client from "~/lib/s3client"
 import { filesLogger } from "~/server/util/logger/logger.service"
+import { extractFileBufferFromRequest, validateMimeTypeFromMultipartFormData } from "../request/files.service"
 
 async function convertAssociationLogo(buffer: Buffer) {
   return await sharp(buffer)
     .webp()
     .resize(512, 512)
     .toBuffer()
+}
+
+export async function uploadAssociationLogoFromRequest(event: H3Event, multipartFormData: MultiPartData[] | undefined, associationId: string, formName: string) {
+  const buffer = validateMimeTypeFromMultipartFormData(multipartFormData, formName, ["image/jpeg", "image/png", "image/jpg"])
+  return await uploadAssociationLogoFromBuffer(event, associationId, buffer)
 }
 
 export async function uploadAssociationLogoFromBuffer(event: H3Event, associationId: string, buffer: Buffer) {

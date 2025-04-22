@@ -15,6 +15,7 @@ export default defineEventHandler(async (event) => {
       id: true,
       name: true,
       description: true,
+      logoPathUrl: true,
     },
     where: {
       id: associationId,
