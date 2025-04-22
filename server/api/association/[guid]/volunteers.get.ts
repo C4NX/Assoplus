@@ -3,9 +3,13 @@ import { parseAssociationIdFromRouteGuid } from "./index.get"
 import prisma from "~/lib/prisma"
 import { exportCsv, isRequestingCsv } from "~/server/util/request/exporter.service"
 import { paginate } from "~/server/util/request/pagination.service"
-
+import { z } from "zod"
 export default defineEventHandler(async (event) => {
   const associationId = parseAssociationIdFromRouteGuid(event)
+
+  const query = await getValidatedQuery(event, z.object({
+    search: z.string().optional(),
+  }).parse)
 
   if (!associationId) {
     throw createError({ statusCode: 404, statusMessage: "Association not found" })
@@ -34,6 +38,28 @@ export default defineEventHandler(async (event) => {
       ...inject,
       where: {
         associationId: associationId,
+        ...(query.search ? { // search filter
+          OR: [
+            {
+              firstName: {
+                contains: query.search,
+                mode: "insensitive",
+              },
+            },
+            {
+              lastName: {
+                contains: query.search,
+                mode: "insensitive",
+              },
+            },
+            {
+              email: {
+                contains: query.search,
+                mode: "insensitive",
+              },
+            },
+          ],
+        } : {}),
       },
       select: prismaSelect,
     }),

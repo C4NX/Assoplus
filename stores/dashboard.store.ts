@@ -2,7 +2,7 @@ import { defineStore } from "pinia"
 
 export enum DashboardTabType {
   HOME = "home",
-  MEMBERS = "members",
+  VOLUNTEER = "volunteer",
   CREATE = "create",
   INFORMATIONS = "informations",
   NEWS = "news",
