@@ -1,6 +1,7 @@
 import { AssociationRole } from "@prisma/client"
 import { z } from "zod"
 import prisma from "~/lib/prisma"
+import { validateBodySchema } from "~/server/util/request/request.service"
 import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
 
 const AssociationCreateSchema = z.object({
@@ -10,7 +11,8 @@ const AssociationCreateSchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  const associationCreateData = await readValidatedBody(event, AssociationCreateSchema.parse)
+  const associationCreateData = await validateBodySchema(event, AssociationCreateSchema)
+
   const user = await requireUserAuthenticated(event)
 
   return await prisma.association.create({

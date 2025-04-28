@@ -1,5 +1,6 @@
 import { defineEventHandler } from "h3"
 import { z } from "zod"
+import { validateBodySchema } from "~/server/util/request/request.service"
 import { PasswordSchema } from "~/server/util/user/auth.service"
 import { createUserWithVerification } from "~/server/util/user/user.service"
 
@@ -11,7 +12,7 @@ const UserRegistrationRequestDto = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  const registrationPayload = await readValidatedBody(event, UserRegistrationRequestDto.parse)
+  const registrationPayload = await validateBodySchema(event, UserRegistrationRequestDto)
   const t = await useTranslation(event)
 
   try {

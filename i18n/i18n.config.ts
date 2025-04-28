@@ -122,6 +122,18 @@ export default defineI18nConfig(() => ({
         privacy: "Politique de confidentialité",
         social: "Réseaux sociaux",
       },
+      dashboard: {
+        tabs: {
+          home: "Tableau de bord",
+          informations: "Informations",
+          volunteers: "Bénévoles",
+          news: "Actualités",
+          events: "Événements",
+          documents: "Documents",
+          settings: "Paramètres",
+          create: "Créer une association",
+        }
+      },
       back: "Retour",
     },
     en: {

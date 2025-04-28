@@ -71,12 +71,19 @@ model News {
   id            Int         @id @default(autoincrement())
   title         String
   content       String
+  status        NewsPublicationStatus @default(DRAFT)
   association   Association @relation(fields: [associationId], references: [id])
   authorId      String
   author        User        @relation(fields: [authorId], references: [id])
   associationId String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+}
+
+enum NewsPublicationStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }
 
 model Tag {

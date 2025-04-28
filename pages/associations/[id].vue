@@ -46,7 +46,7 @@ import { toast } from "vue3-toastify"
 const route = useRoute()
 const router = useRouter()
 
-const { data, error, status } = await useFetch(`/api/association/${route.params.id}`, {
+const { data, error, status } = await useFetch(() => `/api/association/${route.params.id}`, {
   cache: "reload",
 })
 

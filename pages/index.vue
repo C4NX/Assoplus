@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-const { data } = useFetch("/api/stats", { default: () => ({ associations: 0, users: 0 }) })
+const { data } = await useFetch("/api/stats", { default: () => ({ associations: 0, users: 0 }) })
 
 definePageMeta({
   title: "Home",

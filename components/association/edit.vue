@@ -4,10 +4,10 @@
       <!-- Association Name -->
       <label class="form-control w-full">
         <div class="label">
-          <span class="label-text">Name</span>
+          <span class="label-text">Nom de l'association</span>
         </div>
-        <input v-model="associationForm.name" type="text" placeholder="Type here"
-          class="input input-bordered input-primary w-full" :readonly="$props.readonly" :disabled="isLoading" />
+        <input v-model="associationForm.name" type="text" placeholder="Nom de l'association"
+          class="input input-bordered w-full" :readonly="$props.readonly" :disabled="isLoading" />
       </label>
       <!-- Association Logo -->
       <label class="form-control w-full" v-if="!$props.readonly">
@@ -27,12 +27,14 @@
         <div class="label">
           <span class="label-text">Logo</span>
         </div>
-        <img :src="data.logoPathUrl" class="w-32 h-32 mt-2" />
+        <img :src="data?.logoPathUrl" class="w-32 h-32 mt-2" v-if="data?.logoPathUrl" />
       </label>
       <!-- Association Description -->
       <label class="form-control w-full col-span-2" :aria-readonly="$props.readonly">
         <div class="label">
-          <span class="label-text">Description</span>
+          <span class="label-text">
+            Description de votre association, présentez-vous !
+          </span>
         </div>
         <textarea v-model="associationForm.description" class="textarea textarea-primary disabled"
           placeholder="Description" :readonly="$props.readonly" :disabled="isLoading" />
@@ -72,16 +74,15 @@ const props = defineProps({
 })
 
 const emit = defineEmits<{
-  (e: "associationCreated", associationId: string): void
-  (e: "associationEdited", associationId: string): void
+  (e: "association-created", associationId: string): void
+  (e: "association-edited", associationId: string): void
 }>()
 
-const { status, data } = useFetch(() => `/api/association/${props.associationId}`, {
+const { status, data } = await useFetch(() => `/api/association/${props.associationId}`, {
   immediate: !!props.associationId,
   lazy: !!props.associationId,
   transform: (data) => {
     if (data) {
-      console.log("Association data", data)
       associationForm.value.name = data.name
       associationForm.value.description = data.description
       // associationForm.value.tags = data.tags
@@ -130,7 +131,7 @@ const handleCreate = async () => {
       })
     }
 
-    emit("associationCreated", result.id)
+    emit("association-created", result.id)
   } finally {
     isLoading.value = false
   }
@@ -165,7 +166,7 @@ const handleEdit = async () => {
       onResponse: toastifyResponse,
     })
 
-    emit("associationEdited", associationId)
+    emit("association-edited", associationId)
   } finally {
     isLoading.value = false
   }

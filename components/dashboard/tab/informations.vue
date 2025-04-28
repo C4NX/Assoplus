@@ -18,9 +18,9 @@
           <button class="btn" @click="deleteModal?.close()">Annuler</button>
         </div>
       </div>
-      <form method="dialog" class="modal-backdrop">
-        <button>close</button>
-      </form>
+      <div class="modal-backdrop">
+        <button @click="deleteModal?.close()">close</button>
+      </div>
     </dialog>
 
     <div class="flex flex-col gap-4">
@@ -48,8 +48,8 @@
       <div class="flex justify-end">
         <!-- Delete button -->
         <button class="btn btn-error rounded-full text-base-100 tooltip tooltip-left before:text-nowrap before:max-w-96"
-          @click="deleteModal?.show()" data-tip="Delete this association, this action is irreversible !">
-          <Icon name="mdi:delete" />
+          @click="deleteModal?.show()" :data-tip="$t('association.delete.tooltip')">
+          <Icon name="mdi:delete" size="20" />
         </button>
       </div>
     </div>
@@ -71,6 +71,7 @@ const handleDelete = async () => {
   dashboard.needAssociationListRefresh = true
   dashboard.setTab(DashboardTabType.HOME)
 }
+
 </script>
 
 <style></style>

@@ -1,6 +1,7 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 import { z } from "zod"
 import prisma from "~/lib/prisma"
+import { validateBodySchema } from "~/server/util/request/request.service"
 import { PasswordSchema, validateAndHashPassword } from "~/server/util/user/auth.service"
 
 const ForgetPasswordSchema = z.object({
@@ -9,7 +10,7 @@ const ForgetPasswordSchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  const forgetPasswordData = await readValidatedBody(event, ForgetPasswordSchema.parse)
+  const forgetPasswordData = await validateBodySchema(event, ForgetPasswordSchema)
   const t = await useTranslation(event)
   const { secure } = await getUserSession(event)
 

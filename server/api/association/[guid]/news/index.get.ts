@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client"
-import { parseAssociationIdFromRouteGuid } from "./index.get"
+import { parseAssociationIdFromRouteGuid } from "../index.get"
 import prisma from "~/lib/prisma"
 
 import { paginate } from "~/server/util/request/pagination.service"

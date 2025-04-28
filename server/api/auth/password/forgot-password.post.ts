@@ -1,5 +1,6 @@
 import { z } from "zod"
 import prisma from "~/lib/prisma"
+import { validateBodySchema } from "~/server/util/request/request.service"
 import { sendPasswordResetEmail } from "~/server/util/user/user.service"
 
 const ForgetPasswordSchema = z.object({
@@ -7,7 +8,7 @@ const ForgetPasswordSchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  const forgetPasswordData = await readValidatedBody(event, ForgetPasswordSchema.parse)
+  const forgetPasswordData = await validateBodySchema(event, ForgetPasswordSchema)
   const t = await useTranslation(event)
 
   const user = await prisma.user.findUnique({

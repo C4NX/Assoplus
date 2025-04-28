@@ -4,7 +4,11 @@ import { z } from "zod"
 import prisma from "~/lib/prisma"
 
 export function parseAssociationIdFromRouteGuid(event: H3Event) {
-  return z.string().uuid().parse(getRouterParam(event, "guid"))
+  const result = z.string().uuid().safeParse(getRouterParam(event, "guid"))
+  if (!result.success) {
+    throw createError({ statusCode: 400, statusMessage: "Invalid association ID" })
+  }
+  return result.data
 }
 
 export default defineEventHandler(async (event) => {

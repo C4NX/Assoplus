@@ -4,7 +4,7 @@
       <Icon name="mdi:account-group" />
       {{ $t("dashboard.tabs.volunteers") }}
     </template>
-    <div v-if="status === 'success'" class="overflow-x-auto">
+    <UtilsLoading :status="status">
       <div class="flex justify-between items-center gap-4">
         <label class="input input-bordered input-md flex-1 flex items-center gap-2">
           <Icon name="mdi:magnify" class="w-5 h-5" />
@@ -53,10 +53,7 @@
         </tbody>
       </table>
       <InputPagination v-if="data?.totalPages" :total-pages="data?.totalPages" v-model="currentPage" />
-    </div>
-    <div v-else class="flex justify-center items-center flex-1">
-      <span class="loading loading-spinner loading-lg" />
-    </div>
+    </UtilsLoading>
   </DashboardTabBase>
 </template>
 
@@ -69,7 +66,7 @@ const searchParams = computed(() => {
   return searchInput.value !== "" ? searchInput.value : undefined
 })
 
-const { data, status } = await useFetch(() => `/api/association/${activeAssociationId}/volunteers`, {
+const { data, status } = useFetch(() => `/api/association/${activeAssociationId}/volunteers`, {
   params: {
     page: currentPage,
     search: searchParams,
