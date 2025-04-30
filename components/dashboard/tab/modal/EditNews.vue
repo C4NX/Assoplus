@@ -1,22 +1,22 @@
 <template>
   <!-- Using a legacy modal because of the MdEditor -->
-  <input type="checkbox" class="modal-toggle" v-model="isOpen"/>
+  <input type="checkbox" class="modal-toggle" v-model="isModalOpen" />
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="news-modal-content">
       <h3 class="news-modal-title">
-        <Icon name="mdi:pencil" v-if="edit" />
+        <Icon name="mdi:pencil" v-if="isModalEdit" />
         <Icon name="mdi:plus" v-else />
-        {{ edit ? 'Modifier' : 'Ajouter' }} une news
+        {{ isModalEdit ? 'Modifier' : 'Ajouter' }} une news
       </h3>
       <div class="flex gap-2">
-        <input type="text" placeholder="Titre de la news" class="input input-bordered flex-1" v-model="formData.title" />
-        <select class="select select-bordered" v-model="formData.status">
+        <input type="text" placeholder="Titre de la news" class="input input-bordered flex-1" v-model="modalFormData.title" />
+        <select class="select select-bordered" v-model="modalFormData.status">
             <option value="DRAFT">📝 Brouillon</option>
             <option value="PUBLISHED">✅ Publié</option>
             <option value="ARCHIVED">📦 Archivé</option>
         </select>
       </div>
-      <MdEditor v-model="formData.content" language="fr-FR" :toolbars="[
+      <MdEditor v-model="modalFormData.content" language="fr-FR" :toolbars="[
           'bold',
           'underline',
           'italic',
@@ -43,7 +43,7 @@
         ]" />
       <div class="modal-action">
         <button class="btn btn-primary" @click="handleSave">Sauvegarder</button>
-        <button class="btn" @click="handleClose">Close</button>
+        <button class="btn" @click="dashboardNewsStore.closeModal()">Close</button>
       </div>
     </div>
   </div>
@@ -56,40 +56,30 @@ import 'md-editor-v3/lib/style.css';
 import fr_FR from '@vavt/cm-extension/dist/locale/fr-FR';
 import { toast } from 'vue3-toastify';
 
+const dashboardNewsStore = useDashboardNewsStore();
+
+const {
+  isModalOpen,
+  isModalEdit,
+  modalFormData,
+} = storeToRefs(dashboardNewsStore);
+
 const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
   associationId: {
     type: String,
     required: false,
   },
-  edit: {
-    type: Boolean,
-    default: false,
-  },
 })
 
 const emit = defineEmits(['update:modelValue', 'onSave']);
-
-const isOpen = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-});
-
-const newsStore = useNewsStore();
-const formData = reactive({
-  title: '',
-  content: '',
-  status: 'draft',
-})
 
 const handleSave = async () => {
   if(!props.associationId) {
     toast.error('Aucune association sélectionnée');
     return;
   }
+
+  const formData = modalFormData.value;
 
   if (formData.content === '') {
     toast.error('Le contenu de la news ne peut pas être vide');
@@ -101,26 +91,20 @@ const handleSave = async () => {
     return;
   }
 
-  if (props.edit) {
-    await newsStore.updateNews();
+  if (isModalEdit.value) {
+    //TODO: Update the news
+    // await dashboardNewsStore.updateNews();
     emit('onSave', { isEdit: true });
   } else {
-    await newsStore.createNews(props.associationId, {
+    await dashboardNewsStore.createNews(props.associationId, {
       title: formData.title,
       content: formData.content,
       status: formData.status,
     });
     emit('onSave', { isEdit: false });
   }
-  handleClose();
+  dashboardNewsStore.closeModal();
 }
-
-const handleClose = () => {
-  formData.content = '';
-  formData.title = '';
-  formData.status = 'draft';
-  isOpen.value = false;
-};
 
 config({
   editorConfig: {

@@ -14,42 +14,42 @@
               </a>
             </li>
             <!-- Associations List -->
-            <li v-for="activeAssociation in userAssociations" :key="activeAssociation.id">
+            <li v-for="association in userAssociations" :key="association.id">
               <details open>
                 <summary>
                   <Icon name="mdi:home" />
-                  {{ activeAssociation.name }}
+                  {{ association.name }}
                 </summary>
                 <ul class="menu menu-sub">
                   <li>
-                    <a :class="{ active: activeTab === DashboardTabType.INFORMATIONS }"
-                      @click="dashboardStore.setTab(DashboardTabType.INFORMATIONS, activeAssociation.id)">
+                    <a :class="{ active: activeTab === DashboardTabType.INFORMATIONS && dashboardStore.activeAssociationId === association.id }"
+                      @click="dashboardStore.setTab(DashboardTabType.INFORMATIONS, association.id)">
                       <Icon name="mdi:information" />
                       {{ $t("dashboard.tabs.informations") }}
                     </a>
                   </li>
                   <li>
-                    <a :class="{ active: activeTab === DashboardTabType.VOLUNTEER }"
-                      @click="dashboardStore.setTab(DashboardTabType.VOLUNTEER, activeAssociation.id)">
+                    <a :class="{ active: activeTab === DashboardTabType.VOLUNTEER && dashboardStore.activeAssociationId === association.id }"
+                      @click="dashboardStore.setTab(DashboardTabType.VOLUNTEER, association.id)">
                       <Icon name="mdi:account-group" />
                       {{ $t("dashboard.tabs.volunteers") }}
                     </a>
                   </li>
                   <li>
-                    <a :class="{ active: activeTab === DashboardTabType.NEWS }"
-                      @click="dashboardStore.setTab(DashboardTabType.NEWS, activeAssociation.id)">
+                    <a :class="{ active: activeTab === DashboardTabType.NEWS && dashboardStore.activeAssociationId === association.id }"
+                      @click="dashboardStore.setTab(DashboardTabType.NEWS, association.id)">
                       <Icon name="mdi:newspaper" />
                       {{ $t("dashboard.tabs.news") }}
                     </a>
                   </li>
                   <li class="disabled">
-                    <a @click="dashboardStore.setTab(DashboardTabType.EVENTS, activeAssociation.id)">
+                    <a @click="dashboardStore.setTab(DashboardTabType.EVENTS, association.id)">
                       <Icon name="mdi:calendar" />
                       {{ $t("dashboard.tabs.events") }}
                     </a>
                   </li>
                   <li class="disabled">
-                    <a @click="dashboardStore.setTab(DashboardTabType.SETTINGS, activeAssociation.id)">
+                    <a @click="dashboardStore.setTab(DashboardTabType.SETTINGS, association.id)">
                       <Icon name="mdi:cog" />
                       {{ $t("dashboard.tabs.settings") }}
                     </a>

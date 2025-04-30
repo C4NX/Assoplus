@@ -1,12 +1,7 @@
 <template>
-  <DashboardTabModalEditNews 
-    :edit="isModalEdit"
-    :association-id="associationId"
-    v-model="isModalOpen"  
-    @on-save="handleModalSave"
-  />
+  <DashboardTabModalEditNews :association-id="associationId" @on-save="handleModalSave" />
   <div class="flex justify-end items-center mb-4">
-    <button class="btn btn-primary" @click="openCreateModal">Créer une news</button>
+    <button class="btn btn-primary" @click="dashboardNewsStore.openCreate">Créer une news</button>
   </div>
   <UtilsLoading :status="status">
     <div class="overflow-x-auto">
@@ -18,25 +13,43 @@
             <th>Titre</th>
             <th>Auteur.ice</th>
             <th>Date</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in (data?.items || [])" :key="index">
-            <th>{{ index + 1 }}</th>
+            <th>{{ (page - 1) * (data?.itemPerPage || 10) + index + 1 }}</th>
             <td>{{ item.title }}</td>
-            <td>{{ item.author }}</td>
-            <td>{{ item.createdAt }}</td>
+            <td>{{ item.author.firstName }} {{ item.author.lastName }}</td>
+            <td>{{ $d(new Date(item.createdAt), 'long') }}</td>
+            <td>
+              <div class="flex gap-4">
+                <button class="btn btn-primary btn-sm" @click="() => dashboardNewsStore.openEdit(item)">
+                  <Icon name="mdi:pencil" />
+                  Modifier
+                </button>
+                <button class="btn btn-error btn-sm" @click="() => handleDelete(item.id)">
+                  <Icon name="mdi:trash-can" />
+                  Supprimer
+                </button>
+              </div>
+            </td>
           </tr>
           <tr v-if="data?.items.length === 0">
-            <td colspan="4" class="text-center">Aucune news disponible</td>
+            <td colspan="5" class="text-center">Aucune news disponible</td>
           </tr>
         </tbody>
       </table>
+      <div class="flex justify-center items-center mt-4">
+        <InputPagination :total-pages="data?.totalPages ?? 0" v-model="page" @on-page-change="refresh" />
+      </div>
     </div>
   </UtilsLoading>
 </template>
 
 <script lang="ts" setup>
+
+const dashboardNewsStore = useDashboardNewsStore()
 
 const props = defineProps({
   associationId: {
@@ -46,17 +59,37 @@ const props = defineProps({
 })
 
 const associationId = computed(() => props.associationId)
-const isModalOpen = ref(false)
-const isModalEdit = ref(false)
-const { data, refresh, status } = useFetch(() => `/api/association/${associationId.value}/news`)
+const page = ref(1)
 
-const openCreateModal = () => {
-  isModalEdit.value = false
-  isModalOpen.value = true
-}
+const { 
+  data, 
+  refresh, 
+  status 
+} = useFetch(() => `/api/association/${associationId.value}/news`, {
+  params: {
+    page: page,
+  },
+  watch: [page],
+})
 
 const handleModalSave = async () => {
   await refresh()
+}
+
+const handleDelete = async (id: number) => {
+  const currentAssociationId = associationId.value
+  if (currentAssociationId === undefined) {
+    return
+  }
+
+  await dashboardNewsStore.deleteNews(currentAssociationId, id)
+
+  // Refresh the news list
+  if (data.value?.items.length === 1) {
+   page.value = Math.max(1, page.value - 1) 
+  } else {
+    await refresh()
+  }
 }
 
 </script>
