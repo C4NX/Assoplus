@@ -10,18 +10,16 @@ export default defineNuxtConfig({
     "nuxt-seo-utils",
     "nuxt-auth-utils",
     "@nuxt/image",
+    "@nuxtjs/mdc",
   ],
-  ssr: false,
-  devtools: { enabled: true },
+  ssr: true,
+  devtools: { enabled: false },
   runtimeConfig: {
     oauth: {
       google: {
         clientId: "",
         clientSecret: "",
       },
-    },
-    auth: {
-      registerVerifySecret: "",
     },
     s3: {
       endpoint: "",
@@ -42,6 +40,10 @@ export default defineNuxtConfig({
     public: {
       version: "1.0.0",
     },
+  },
+  routeRules: {
+    "/terms": { prerender: true },
+    "/privacy": { prerender: true },
   },
   compatibilityDate: "2024-11-01",
   nitro: {
@@ -104,7 +106,7 @@ export default defineNuxtConfig({
   seo: {
     meta: {
       title: "Asso+",
-      description: "Make your association visible and manage your members better with Asso+.",
+      description: "Rendez votre association visible et gérez mieux votre association avec Asso+.",
       applicationName: "Asso+",
       google: "nositelinkssearchbox",
       googlebot: "notranslate",

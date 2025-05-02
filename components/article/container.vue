@@ -10,7 +10,7 @@
           height="80"
         >
         <h1 class="legal-title">
-          {{ $t(title) }}
+          <slot name="title" />
         </h1>
       </header>
 
@@ -34,13 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue"
-
 defineProps({
-  title: {
-    type: String,
-    default: "Article Title",
-  },
   lastUpdated: {
     type: String,
     default: new Date().toLocaleDateString(),

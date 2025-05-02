@@ -1,5 +1,8 @@
 <template>
-  <ArticleContainer title="privacy.title">
+  <ArticleContainer>
+    <template #title>
+      {{ $t('privacy.title') }}
+    </template>
     <div class="text-justify">
       <p>
         Adipisicing velit pariatur deserunt aliqua Lorem culpa qui eiusmod adipisicing incididunt in nulla. Consequat

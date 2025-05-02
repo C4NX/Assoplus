@@ -16,7 +16,11 @@
             <br>
             {{ $t("home.description1_2") }}
             <span class="block mt-2">
-              {{ $t("home.description2_1") }}<strong>{{ data.associations }}</strong> {{ $t("home.description2_2") }}
+              {{ $t("home.description2_1") }}
+              <strong>{{ data.associations }}</strong>
+              {{ $t("home.description2_2") }}
+              <strong>{{ data.users }}</strong>
+              {{ $t("home.description2_3") }}
             </span>
           </p>
           <div class="flex gap-2 justify-center md:flex-row flex-col">
@@ -48,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-const { data } = useFetch("/api/stats", { default: () => ({ associations: 0 }) })
+const { data } = await useFetch("/api/stats", { default: () => ({ associations: 0, users: 0 }) })
 
 definePageMeta({
   title: "Home",

@@ -1,5 +1,25 @@
 export default defineI18nConfig(() => ({
   locales: ["fr", "en"],
+  datetimeFormats: {
+    en: {
+      short: {
+        year: "numeric", month: "short", day: "numeric",
+      },
+      long: {
+        year: "numeric", month: "short", day: "numeric",
+        weekday: "short", hour: "numeric", minute: "numeric",
+      },
+    },
+    fr: {
+      short: {
+        year: "numeric", month: "2-digit", day: "2-digit",
+      },
+      long: {
+        year: "numeric", month: "2-digit", day: "2-digit",
+        weekday: "short", hour: "2-digit", minute: "2-digit",
+      },
+    },
+  },
   messages: {
     fr: {
       localeName: "Français",
@@ -12,7 +32,8 @@ export default defineI18nConfig(() => ({
         description1_1: "La plateforme de gestion associative qui vous simplifie la vie.",
         description1_2: "Créez, gérez et animez votre association en toute simplicité avec un outil gratuit et facile à prendre en main.",
         description2_1: "Rejoignez les ",
-        description2_2: " bénévoles déjà inscrits sur Asso+.",
+        description2_2: " associations et les",
+        description2_3: " bénévoles déjà inscrits sur Asso+.",
         register: "Vous etes bénévole ? Rejoignez-nous !",
         explore: "Rechercher une association",
       },
@@ -82,10 +103,26 @@ export default defineI18nConfig(() => ({
         },
       },
       association: {
+        logo: {
+          uploaded: "Logo de l'association mis à jour",
+        },
         tag_select: {
           max_selected: "Vous ne pouvez sélectionner que {{max}} tags",
           empty: "Aucun tag sélectionné",
         },
+        list: {
+          title: "Associations",
+          search: "Rechercher une association",
+          empty: "Aucune association trouvée",
+          view: "Voir l'association",
+        },
+        create: "Ajouter votre association",
+      },
+      privacy: {
+        title: "Politique de Confidentialité de Asso+",
+      },
+      terms: {
+        title: "Conditions Générales d'Utilisation de Asso+",
       },
       OR: "OU",
       and: "et",
@@ -105,6 +142,18 @@ export default defineI18nConfig(() => ({
         privacy: "Politique de confidentialité",
         social: "Réseaux sociaux",
       },
+      dashboard: {
+        tabs: {
+          home: "Tableau de bord",
+          informations: "Informations",
+          volunteers: "Bénévoles",
+          news: "Actualités",
+          events: "Événements",
+          documents: "Documents",
+          settings: "Paramètres",
+          create: "Créer une association",
+        },
+      },
       back: "Retour",
     },
     en: {
@@ -114,7 +163,8 @@ export default defineI18nConfig(() => ({
         description1_1: "The associative management platform that simplifies your life.",
         description1_2: "Create, manage, and grow your association with ease using a free and user-friendly tool.",
         description2_1: "Join the ",
-        description2_2: " volunteers already registered on Asso+.",
+        description2_2: " associations and",
+        description2_3: " volunteers already registered on Asso+.",
         register: "Are you a volunteer? Join us!",
         explore: "Search for an association",
       },

@@ -2,7 +2,7 @@ import { defineStore } from "pinia"
 
 export enum DashboardTabType {
   HOME = "home",
-  MEMBERS = "members",
+  VOLUNTEER = "volunteer",
   CREATE = "create",
   INFORMATIONS = "informations",
   NEWS = "news",
@@ -12,16 +12,16 @@ export enum DashboardTabType {
 
 export const useDashboardStore = defineStore("dashboard", {
   state: (): {
-    activeAssociationId: Ref<number | null>
+    activeAssociationId: Ref<string | undefined>
     activeTab: Ref<DashboardTabType>
     needAssociationListRefresh: Ref<boolean>
   } => ({
-    activeAssociationId: ref(null),
+    activeAssociationId: ref(undefined),
     activeTab: ref(DashboardTabType.HOME),
     needAssociationListRefresh: ref(false),
   }),
   actions: {
-    setTab(tab: DashboardTabType, associationId: number | null = null) {
+    setTab(tab: DashboardTabType, associationId: string | undefined = undefined) {
       this.activeTab = tab
       this.activeAssociationId = associationId
     },

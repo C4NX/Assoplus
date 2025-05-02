@@ -1,16 +1,29 @@
 <template>
-  <DashboardTabBase title="dashboard.tabs.members">
-    <div
-      v-if="status === 'success'"
-      class="overflow-x-auto"
-    >
-      <div class="flex justify-end items-center">
+  <DashboardTabBase>
+    <template #title>
+      <Icon name="mdi:account-group" />
+      {{ $t("dashboard.tabs.volunteers") }}
+    </template>
+    <UtilsLoading :status="status">
+      <div class="flex justify-between items-center gap-4">
+        <label class="input input-bordered input-md flex-1 flex items-center gap-2">
+          <Icon
+            name="mdi:magnify"
+            class="w-5 h-5"
+          />
+          <input
+            v-model="searchInput"
+            type=" text"
+            class="grow"
+            placeholder="Rechercher un membre"
+          >
+        </label>
         <DashboardTabModalExportCsv
-          :csv-url="`/api/association/${activeAssociationId}/members`"
+          :csv-url="`/api/association/${activeAssociationId}/volunteers`"
           file-name="members.csv"
         >
           <template #title>
-            {{ $t("dashboard.tabs.members.export_csv") }}
+            Exporter en CSV
           </template>
         </DashboardTabModalExportCsv>
       </div>
@@ -58,20 +71,31 @@
           </tr>
         </tbody>
       </table>
-    </div>
-    <div
-      v-else
-      class="flex justify-center items-center flex-1"
-    >
-      <span class="loading loading-spinner loading-lg" />
-    </div>
+      <InputPagination
+        v-if="data?.totalPages"
+        v-model="currentPage"
+        :total-pages="data?.totalPages"
+      />
+    </UtilsLoading>
   </DashboardTabBase>
 </template>
 
 <script lang="ts" setup>
 const { activeAssociationId } = useDashboardStore()
 
-const { data, status } = await useFetch(() => `/api/association/${activeAssociationId}/members`)
+const currentPage = ref(1)
+const searchInput = ref("")
+const searchParams = computed(() => {
+  return searchInput.value !== "" ? searchInput.value : undefined
+})
+
+const { data, status } = useFetch(() => `/api/association/${activeAssociationId}/volunteers`, {
+  params: {
+    page: currentPage,
+    search: searchParams,
+  },
+  watch: [currentPage, searchParams],
+})
 </script>
 
 <style>

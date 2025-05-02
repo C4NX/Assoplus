@@ -8,60 +8,111 @@ datasource db {
 }
 
 model User {
-  id                  String    @id @default(uuid())
-  email               String    @unique
-  firstName           String
-  lastName            String
+  id        String @id @default(uuid())
+  email     String @unique
+  firstName String
+  lastName  String
 
   passwordHash        String?
   passwordLastUpdated DateTime?
-  googleId  String? @unique
-  roles               String[]  @default(["ROLE_USER"])
+  googleId            String?   @unique
+  roles               Role[]    @default([ROLE_USER])
   isVerified          Boolean   @default(false)
-  
-  createdAt           DateTime  @default(now())
-  
-  avatarUuid          String?
-  birthday            DateTime?
-  phoneNumber         String?
 
-  association       Association[]
-  AssociationMember AssociationMember[]
+  createdAt DateTime @default(now())
+
+  avatarUuid  String?
+  birthday    DateTime?
+  phoneNumber String?
+
+  association Association[]
+  volunteer   Volunteer[]
+
+  writes News[]
 }
 
 model Association {
-  id          Int    @id @default(autoincrement())
+  id          String  @id @default(uuid())
   name        String
   description String
-  logoUuid   String?
+  logoPath    String?
 
   ownerId String
   owner   User   @relation(fields: [ownerId], references: [id])
 
-  tags    AssociationTag[]
-  members AssociationMember[]
+  tags    Tag[]
+  members Volunteer[]
+  news    News[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model AssociationMember {
+model Volunteer {
   id Int @id @default(autoincrement())
-
-  email String
 
   userId        String?
   user          User?       @relation(fields: [userId], references: [id])
-  associationId Int
+  associationId String
   association   Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
-  role          String
-  firstName     String
-  lastName      String
-  isVerified    Boolean
-  isPending     Boolean
-  createdAt     DateTime    @default(now())
+
+  email      String
+  role       AssociationRole
+  firstName  String
+  lastName   String
+  isVerified Boolean
+  isPending  Boolean
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model AssociationTag {
-  id   Int    @id @default(autoincrement())
+model News {
+  id            Int         @id @default(autoincrement())
+  title         String
+  content       String
+  status        NewsPublicationStatus @default(DRAFT)
+  association   Association @relation(fields: [associationId], references: [id])
+  authorId      String
+  author        User        @relation(fields: [authorId], references: [id])
+  associationId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+enum NewsPublicationStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Tag {
+  id   Int      @id @default(autoincrement())
   name String
+  type TagType? @default(TYPE_CLASSIC)
 
   associations Association[]
+}
+
+enum Role {
+  ROLE_USER
+  ROLE_ADMIN
+}
+
+enum TagType {
+  TYPE_CLASSIC
+  TYPE_SPORT
+  TYPE_CULTURE
+  TYPE_ENVIRONMENT
+  TYPE_SOCIAL
+  TYPE_LGBT
+}
+
+enum AssociationRole {
+  VOLUNTEER
+  TREASURER
+  PRESIDENT
+  SECRETARY
+  MEMBER
+  COORDINATOR
 }

@@ -65,6 +65,7 @@ const props = defineProps<{
 
 const delimiter = ref<string | null>(null)
 const modal = ref<HTMLDialogElement | null>(null)
+const { t } = useI18n()
 
 const openModal = () => {
   if (modal.value) {
@@ -91,7 +92,7 @@ const handleExport = async () => {
       },
       retry: 0,
       responseType: "blob",
-      onResponse: statusToastifyResponse, // Use only status code
+      onResponse: ctx => statusToastifyResponse(ctx, t), // Use only status code
     })
 
     const url = window.URL.createObjectURL(blob)

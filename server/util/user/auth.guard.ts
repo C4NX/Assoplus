@@ -38,7 +38,7 @@ export async function requireUserGranted(event: H3Event, permissions: Role | Rol
   return user
 }
 
-export async function requireAssociationOwner(event: H3Event, associationId: number) {
+export async function requireAssociationOwner(event: H3Event, associationId: string) {
   const user = await requireUserAuthenticated(event)
 
   const association = await prisma.association.findUnique({

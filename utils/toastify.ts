@@ -1,13 +1,6 @@
 import type { FetchContext } from "ofetch"
 import { toast } from "vue3-toastify"
 
-interface ValidationErrorResponse {
-  validation: string
-  code: string
-  message: string
-  path: (string | number)[]
-}
-
 /**
  * A toastify response function that shows a success or error message based on the response status.
  */
@@ -27,25 +20,34 @@ export function statusToastifyResponse(ctx: FetchContext, t: ReturnType<typeof u
 export function toastifyResponse(ctx: FetchContext) {
   const responseData = ctx.response?._data
 
-  if (typeof responseData?.message === "string") {
-    if (ctx.response?.ok) {
-      toast.success(responseData.message)
+  if (ctx.response?.ok && typeof responseData?.message === "string") {
+    toast.success(responseData.message)
+    return
+  }
+  else if (!ctx.response?.ok) {
+    // handle ZodError with formErrors
+    if (ctx.response?.status === 422 && typeof responseData?.data?.fieldErrors === "object") {
+      const fieldErrors = responseData.data.fieldErrors as Record<string, string[]>
+
+      Object.entries(fieldErrors).forEach(([key, value]) => {
+        if (Array.isArray(value) && value.length > 0) {
+          toast.error(`${key}: ${value.join(", ")}`)
+        }
+        else {
+          toast.error(value[0] ?? "An error occurred")
+        }
+      })
+
+      return
     }
-    else {
-      if (responseData?.data?.name === "ZodError") {
-        const zodErrors = responseData.data.issues as ValidationErrorResponse[]
-        zodErrors.forEach((error: ValidationErrorResponse) => {
-          if (Array.isArray(error.path) && error.path.length > 0 && error.message) {
-            toast.error(`${error.path.join(", ")}: ${error.message}`)
-          }
-          else {
-            toast.error(error.message ?? "An error occurred")
-          }
-        })
-      }
-      else {
-        toast.error(responseData.message)
-      }
+
+    // Handle error cases
+    if (typeof responseData?.message === "string") {
+      toast.error(responseData.message)
+      return
     }
+
+    // Fallback error message
+    toast.error("An unexpected error occurred")
   }
 }
