@@ -39,28 +39,31 @@ export default defineEventHandler(async (event) => {
       ...inject,
       where: {
         associationId: associationId,
-        ...(query.search ? { // search filter
-          OR: [
-            {
-              firstName: {
-                contains: query.search,
-                mode: "insensitive",
-              },
-            },
-            {
-              lastName: {
-                contains: query.search,
-                mode: "insensitive",
-              },
-            },
-            {
-              email: {
-                contains: query.search,
-                mode: "insensitive",
-              },
-            },
-          ],
-        } : {}),
+        ...(
+          query.search
+            ? { // search filter
+                OR: [
+                  {
+                    firstName: {
+                      contains: query.search,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    lastName: {
+                      contains: query.search,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    email: {
+                      contains: query.search,
+                      mode: "insensitive",
+                    },
+                  },
+                ],
+              }
+            : {}),
       },
       select: prismaSelect,
     }),

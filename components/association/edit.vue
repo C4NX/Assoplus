@@ -112,8 +112,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits<{
-  (e: "association-created", associationId: string): void
-  (e: "association-edited", associationId: string): void
+  (e: "association-created" | "association-edited", associationId: string): void
 }>()
 
 const { status, data } = await useFetch(() => `/api/association/${props.associationId}`, {
@@ -199,7 +198,7 @@ const handleEdit = async () => {
       tags: associationForm.value.tags.map(tag => tag.id),
     })], { type: "application/json" }))
 
-    const result = await $fetch(`/api/association/${associationId}`, {
+    await $fetch(`/api/association/${associationId}`, {
       method: "PATCH",
       body: formData,
       onResponse: toastifyResponse,

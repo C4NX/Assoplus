@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   const newsId = await validateParam(event, "id", z.coerce.number().int().positive())
 
   // TODO: replace with requireAssociationMember
-  const user = await requireAssociationOwner(event, associationId)
+  await requireAssociationOwner(event, associationId)
 
   try {
     await prisma.news.delete({
