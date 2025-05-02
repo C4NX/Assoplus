@@ -29,6 +29,7 @@ interface ExportCsvOptions {
      * @default 'export.csv'
      */
   filename?: string
+  transform?: (data: Record<string, any>[]) => Record<string, any>[]
 }
 
 export async function exportCsv(
@@ -44,7 +45,7 @@ export async function exportCsv(
     columns: data.length > 0 ? Object.keys(data[0]) : [],
   })
 
-  const readable = Readable.from(data)
+  const readable = Readable.from(options?.transform ? options.transform(data) : data)
 
   setResponseHeader(event, "Content-Type", "text/csv")
   setResponseHeader(event, "Content-Disposition", `attachment; filename="${options?.filename ?? "export.csv"}"`)

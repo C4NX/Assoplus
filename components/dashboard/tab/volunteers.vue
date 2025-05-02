@@ -13,7 +13,7 @@
         <DashboardTabModalExportCsv :csv-url="`/api/association/${activeAssociationId}/volunteers`"
           file-name="members.csv">
           <template #title>
-            {{ $t("dashboard.tabs.members.export_csv") }}
+            Exporter en CSV
           </template>
         </DashboardTabModalExportCsv>
       </div>

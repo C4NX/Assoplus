@@ -1,6 +1,12 @@
 <template>
   <DashboardTabModalEditNews :association-id="associationId" @on-save="handleModalSave" />
-  <div class="flex justify-end items-center mb-4">
+  <div class="flex justify-end items-center gap-4 mb-4">
+    <DashboardTabModalExportCsv :csv-url="`/api/association/${associationId}/news`"
+      :file-name="`news-${new Date().toISOString()}.csv`">
+      <template #title>
+        Exporter en CSV
+      </template>
+    </DashboardTabModalExportCsv>
     <button class="btn btn-primary" @click="dashboardNewsStore.openCreate">Créer une news</button>
   </div>
   <UtilsLoading :status="status">
