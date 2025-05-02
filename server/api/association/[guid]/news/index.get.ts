@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
     },
   }
 
-  if(await isRequestingCsv(event)) {
+  if (await isRequestingCsv(event)) {
     const csvData = await prisma.news.findMany({
       ...prismaSelect,
       where: {
@@ -41,8 +41,8 @@ export default defineEventHandler(async (event) => {
           item.author = `${item.author.firstName} ${item.author.lastName}`
           item.createdAt = item.createdAt.toISOString()
         }
-        return data;
-      }
+        return data
+      },
     })
   }
 

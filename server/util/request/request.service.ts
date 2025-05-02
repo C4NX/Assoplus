@@ -1,5 +1,6 @@
-import { H3Event, createError } from "h3"
-import z from "zod"
+import type { H3Event } from "h3"
+import { createError } from "h3"
+import type z from "zod"
 
 export async function validateBodySchema<T>(
   event: H3Event,

@@ -1,9 +1,10 @@
 import { defineEventHandler } from "h3"
+import { z } from "zod"
 import { parseAssociationIdFromRouteGuid } from "./index.get"
 import prisma from "~/lib/prisma"
 import { exportCsv, isRequestingCsv } from "~/server/util/request/exporter.service"
 import { paginate } from "~/server/util/request/pagination.service"
-import { z } from "zod"
+
 export default defineEventHandler(async (event) => {
   const associationId = parseAssociationIdFromRouteGuid(event)
 

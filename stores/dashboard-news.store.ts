@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia"
 
 export interface DashboardNewsModalReactive {
   id: number
@@ -33,13 +33,13 @@ export const useDashboardNewsStore = defineStore("dashboard-news", {
     openCreate() {
       this.isModalEdit = false
       this.isModalOpen = true
-      this.resetFormData();
+      this.resetFormData()
     },
 
     closeModal() {
       this.isModalOpen = false
       this.isModalEdit = false
-      this.resetFormData();
+      this.resetFormData()
     },
 
     resetFormData() {

@@ -3,22 +3,22 @@ export default defineI18nConfig(() => ({
   datetimeFormats: {
     en: {
       short: {
-        year: 'numeric', month: 'short', day: 'numeric'
+        year: "numeric", month: "short", day: "numeric",
       },
       long: {
-        year: 'numeric', month: 'short', day: 'numeric',
-        weekday: 'short', hour: 'numeric', minute: 'numeric'
-      }
+        year: "numeric", month: "short", day: "numeric",
+        weekday: "short", hour: "numeric", minute: "numeric",
+      },
     },
     fr: {
       short: {
-        year: 'numeric', month: '2-digit', day: '2-digit'
+        year: "numeric", month: "2-digit", day: "2-digit",
       },
       long: {
-        year: 'numeric', month: '2-digit', day: '2-digit',
-        weekday: 'short', hour: '2-digit', minute: '2-digit'
-      }
-    }
+        year: "numeric", month: "2-digit", day: "2-digit",
+        weekday: "short", hour: "2-digit", minute: "2-digit",
+      },
+    },
   },
   messages: {
     fr: {
@@ -152,7 +152,7 @@ export default defineI18nConfig(() => ({
           documents: "Documents",
           settings: "Paramètres",
           create: "Créer une association",
-        }
+        },
       },
       back: "Retour",
     },

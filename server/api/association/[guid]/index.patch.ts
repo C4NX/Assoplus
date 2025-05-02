@@ -1,9 +1,9 @@
-import { z } from 'zod'
-import { requireAssociationOwner } from '~/server/util/user/auth.guard'
-import { parseAssociationIdFromRouteGuid } from './index.get'
-import prisma from '~/lib/prisma'
-import { uploadAssociationLogoFromRequest } from '~/server/util/association/logo.service'
-import { hasMultipartFileOfMimeType, validateBodyFromMultipartFormData } from '~/server/util/request/files.service'
+import { z } from "zod"
+import { parseAssociationIdFromRouteGuid } from "./index.get"
+import { requireAssociationOwner } from "~/server/util/user/auth.guard"
+import prisma from "~/lib/prisma"
+import { uploadAssociationLogoFromRequest } from "~/server/util/association/logo.service"
+import { hasMultipartFileOfMimeType, validateBodyFromMultipartFormData } from "~/server/util/request/files.service"
 
 const AssociationPatchSchema = z.object({
   name: z.string().min(1).max(50).optional(),
@@ -16,12 +16,12 @@ export default defineEventHandler(async (event) => {
   const multipartFormData = await readMultipartFormData(event)
   const associationId = parseAssociationIdFromRouteGuid(event)
   await requireAssociationOwner(event, associationId)
-  
+
   // Validate the multipart json body
   const associationPatchData = await validateBodyFromMultipartFormData(multipartFormData, "data", AssociationPatchSchema)
-  
+
   // Check if the logo is present and valid
-  const hasLogo = hasMultipartFileOfMimeType(multipartFormData, 'logo', ['image/png', 'image/jpeg', 'image/jpg'])
+  const hasLogo = hasMultipartFileOfMimeType(multipartFormData, "logo", ["image/png", "image/jpeg", "image/jpg"])
 
   await prisma.association.update({
     where: { id: associationId },
@@ -29,9 +29,9 @@ export default defineEventHandler(async (event) => {
       name: associationPatchData.name,
       description: associationPatchData.description,
       tags: {
-        set: associationPatchData.tags?.map((tagId) => ({ id: tagId })),
+        set: associationPatchData.tags?.map(tagId => ({ id: tagId })),
       },
-      logoPath: hasLogo ? await uploadAssociationLogoFromRequest(event, multipartFormData, associationId, 'logo') : undefined,
+      logoPath: hasLogo ? await uploadAssociationLogoFromRequest(event, multipartFormData, associationId, "logo") : undefined,
     },
   })
 

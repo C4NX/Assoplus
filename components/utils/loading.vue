@@ -1,16 +1,38 @@
 <template>
-  <div v-if="status === 'pending' || status === 'error'" class="loading-container">
+  <div
+    v-if="status === 'pending' || status === 'error'"
+    class="loading-container"
+  >
     <!-- Error state -->
-    <Icon name="mdi:error-outline" class="text-5xl" v-if="status === 'error'" />
-    <h1 class="error-title" v-if="status === 'error'">Une erreur est survenue</h1>
-    <p class="error-message" v-if="status === 'error'">
+    <Icon
+      v-if="status === 'error'"
+      name="mdi:error-outline"
+      class="text-5xl"
+    />
+    <h1
+      v-if="status === 'error'"
+      class="error-title"
+    >
+      Une erreur est survenue
+    </h1>
+    <p
+      v-if="status === 'error'"
+      class="error-message"
+    >
       <slot name="error">
         Une erreur est survenue lors du chargement des données. Veuillez réessayer.
       </slot>
     </p>
     <!-- Loading state -->
-    <Icon name="mdi:loading" class="text-5xl animate-spin" v-if="status === 'pending'" />
-    <p class="loading-message" v-if="status === 'pending'">
+    <Icon
+      v-if="status === 'pending'"
+      name="mdi:loading"
+      class="text-5xl animate-spin"
+    />
+    <p
+      v-if="status === 'pending'"
+      class="loading-message"
+    >
       <slot name="loading">
         Chargement des données...
       </slot>
@@ -23,12 +45,11 @@
 </template>
 
 <script lang="ts" setup>
-import type { AsyncDataRequestStatus } from 'nuxt/app'
+import type { AsyncDataRequestStatus } from "nuxt/app"
 
 defineProps<{
   status: AsyncDataRequestStatus
 }>()
-
 </script>
 
 <style scoped lang="postcss">

@@ -1,9 +1,9 @@
-import { z } from 'zod'
-import { validateBodySchema } from '~/server/util/request/request.service'
-import { requireAssociationOwner } from '~/server/util/user/auth.guard'
-import { parseAssociationIdFromRouteGuid } from '../index.get'
-import prisma from '~/lib/prisma'
-import { NewsPublicationStatus } from '@prisma/client'
+import { z } from "zod"
+import { NewsPublicationStatus } from "@prisma/client"
+import { parseAssociationIdFromRouteGuid } from "../index.get"
+import { validateBodySchema } from "~/server/util/request/request.service"
+import { requireAssociationOwner } from "~/server/util/user/auth.guard"
+import prisma from "~/lib/prisma"
 
 const NewsCreateSchema = z.object({
   title: z.string(),
@@ -14,8 +14,8 @@ const NewsCreateSchema = z.object({
 export default defineEventHandler(async (event) => {
   const newsCreateData = await validateBodySchema(event, NewsCreateSchema)
   const associationId = parseAssociationIdFromRouteGuid(event)
-  
-  //TODO: replace with requireAssociationMember
+
+  // TODO: replace with requireAssociationMember
   const user = await requireAssociationOwner(event, associationId)
 
   return await prisma.news.create({
@@ -32,5 +32,5 @@ export default defineEventHandler(async (event) => {
       associationId,
       authorId: user.id,
     },
-  });
+  })
 })

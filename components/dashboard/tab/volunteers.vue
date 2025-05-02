@@ -7,11 +7,21 @@
     <UtilsLoading :status="status">
       <div class="flex justify-between items-center gap-4">
         <label class="input input-bordered input-md flex-1 flex items-center gap-2">
-          <Icon name="mdi:magnify" class="w-5 h-5" />
-          <input type=" text" class="grow" placeholder="Rechercher un membre" v-model="searchInput" />
+          <Icon
+            name="mdi:magnify"
+            class="w-5 h-5"
+          />
+          <input
+            v-model="searchInput"
+            type=" text"
+            class="grow"
+            placeholder="Rechercher un membre"
+          >
         </label>
-        <DashboardTabModalExportCsv :csv-url="`/api/association/${activeAssociationId}/volunteers`"
-          file-name="members.csv">
+        <DashboardTabModalExportCsv
+          :csv-url="`/api/association/${activeAssociationId}/volunteers`"
+          file-name="members.csv"
+        >
           <template #title>
             Exporter en CSV
           </template>
@@ -23,7 +33,10 @@
           <tr>
             <th>
               <label>
-                <input type="checkbox" class="checkbox">
+                <input
+                  type="checkbox"
+                  class="checkbox"
+                >
               </label>
             </th>
             <th>Membre</th>
@@ -31,10 +44,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="member in data?.items" :key="member.id">
+          <tr
+            v-for="member in data?.items"
+            :key="member.id"
+          >
             <th>
               <label>
-                <input type="checkbox" class="checkbox">
+                <input
+                  type="checkbox"
+                  class="checkbox"
+                >
               </label>
             </th>
             <td>
@@ -52,7 +71,11 @@
           </tr>
         </tbody>
       </table>
-      <InputPagination v-if="data?.totalPages" :total-pages="data?.totalPages" v-model="currentPage" />
+      <InputPagination
+        v-if="data?.totalPages"
+        v-model="currentPage"
+        :total-pages="data?.totalPages"
+      />
     </UtilsLoading>
   </DashboardTabBase>
 </template>

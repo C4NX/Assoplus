@@ -1,5 +1,5 @@
 import type { H3Event, MultiPartData } from "h3"
-import z from "zod"
+import type z from "zod"
 
 export async function extractFileBufferFromRequest(event: H3Event, formName: string, mimeTypes: string[]) {
   const multipartFormData = await readMultipartFormData(event)
@@ -30,10 +30,10 @@ export async function validateBodyFromMultipartFormData<T>(multipartFormData: Mu
   if (multipartFormData === undefined || fileIndex === -1 || fileIndex === undefined) {
     throw createError({ statusCode: 400, statusMessage: "Invalid request" })
   }
-  if(multipartFormData[fileIndex].type !== "application/json") {
+  if (multipartFormData[fileIndex].type !== "application/json") {
     throw createError({ statusCode: 400, statusMessage: "Invalid file type" })
   }
-  const bodyData = multipartFormData[fileIndex].data;
+  const bodyData = multipartFormData[fileIndex].data
   const body = JSON.parse(bodyData.toString())
   if (body === undefined) {
     throw createError({ statusCode: 400, statusMessage: "Invalid request" })

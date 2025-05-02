@@ -1,20 +1,30 @@
 <template>
   <div class="min-h-[calc(100vh-60px)] pt-[60px] bg-grid flex flex-col">
     <UtilsLoading :status="userAssociationsStatus">
-      <aside class="container mx-auto m-0 max-w-full p-0 lg:p-4 lg:max-w-10xl lg:my-10"
-        v-if="userAssociationsStatus === 'success'">
+      <aside
+        v-if="userAssociationsStatus === 'success'"
+        class="container mx-auto m-0 max-w-full p-0 lg:p-4 lg:max-w-10xl lg:my-10"
+      >
         <div class="dashboard-content">
           <!-- Sidebar Navigation -->
-          <ul v-if="userAssociations" class="dashboard-menu">
+          <ul
+            v-if="userAssociations"
+            class="dashboard-menu"
+          >
             <li>
-              <a :class="{ active: activeTab === DashboardTabType.HOME }"
-                @click="() => dashboardStore.setTab(DashboardTabType.HOME)">
+              <a
+                :class="{ active: activeTab === DashboardTabType.HOME }"
+                @click="() => dashboardStore.setTab(DashboardTabType.HOME)"
+              >
                 <Icon name="mdi:home" />
                 {{ $t("dashboard.tabs.home") }}
               </a>
             </li>
             <!-- Associations List -->
-            <li v-for="association in userAssociations" :key="association.id">
+            <li
+              v-for="association in userAssociations"
+              :key="association.id"
+            >
               <details open>
                 <summary>
                   <Icon name="mdi:home" />
@@ -22,22 +32,28 @@
                 </summary>
                 <ul class="menu menu-sub">
                   <li>
-                    <a :class="{ active: activeTab === DashboardTabType.INFORMATIONS && dashboardStore.activeAssociationId === association.id }"
-                      @click="dashboardStore.setTab(DashboardTabType.INFORMATIONS, association.id)">
+                    <a
+                      :class="{ active: activeTab === DashboardTabType.INFORMATIONS && dashboardStore.activeAssociationId === association.id }"
+                      @click="dashboardStore.setTab(DashboardTabType.INFORMATIONS, association.id)"
+                    >
                       <Icon name="mdi:information" />
                       {{ $t("dashboard.tabs.informations") }}
                     </a>
                   </li>
                   <li>
-                    <a :class="{ active: activeTab === DashboardTabType.VOLUNTEER && dashboardStore.activeAssociationId === association.id }"
-                      @click="dashboardStore.setTab(DashboardTabType.VOLUNTEER, association.id)">
+                    <a
+                      :class="{ active: activeTab === DashboardTabType.VOLUNTEER && dashboardStore.activeAssociationId === association.id }"
+                      @click="dashboardStore.setTab(DashboardTabType.VOLUNTEER, association.id)"
+                    >
                       <Icon name="mdi:account-group" />
                       {{ $t("dashboard.tabs.volunteers") }}
                     </a>
                   </li>
                   <li>
-                    <a :class="{ active: activeTab === DashboardTabType.NEWS && dashboardStore.activeAssociationId === association.id }"
-                      @click="dashboardStore.setTab(DashboardTabType.NEWS, association.id)">
+                    <a
+                      :class="{ active: activeTab === DashboardTabType.NEWS && dashboardStore.activeAssociationId === association.id }"
+                      @click="dashboardStore.setTab(DashboardTabType.NEWS, association.id)"
+                    >
                       <Icon name="mdi:newspaper" />
                       {{ $t("dashboard.tabs.news") }}
                     </a>
@@ -59,20 +75,28 @@
             </li>
             <!-- Add Association -->
             <li>
-              <a :class="{ active: activeTab === DashboardTabType.CREATE }"
-                @click="dashboardStore.setTab(DashboardTabType.CREATE)">
+              <a
+                :class="{ active: activeTab === DashboardTabType.CREATE }"
+                @click="dashboardStore.setTab(DashboardTabType.CREATE)"
+              >
                 <Icon name="mdi:plus" />
                 Créer une association
               </a>
             </li>
           </ul>
-          <div v-else class="flex flex-col gap-2 p-4">
+          <div
+            v-else
+            class="flex flex-col gap-2 p-4"
+          >
             <div class="skeleton h-4 w-full" />
             <div class="skeleton h-4 w-full" />
             <div class="skeleton h-4 w-full" />
           </div>
           <!-- Main Content -->
-          <article v-if="userAssociations" class="flex-1 flex">
+          <article
+            v-if="userAssociations"
+            class="flex-1 flex"
+          >
             <DashboardTabMain v-if="activeTab === DashboardTabType.HOME" />
             <DashboardTabInformations v-if="activeTab === DashboardTabType.INFORMATIONS" />
             <DashboardTabVolunteers v-if="activeTab === DashboardTabType.VOLUNTEER" />
@@ -106,7 +130,6 @@ watch(() => dashboardStore.needAssociationListRefresh, async (newValue, oldValue
 </script>
 
 <style lang="postcss" scoped>
-
 .dashboard-menu {
   @apply menu menu-md bg-base-100 rounded-lg border border-base-200 shadow-md;
 }
@@ -114,5 +137,4 @@ watch(() => dashboardStore.needAssociationListRefresh, async (newValue, oldValue
 .dashboard-content {
   @apply flex gap-6 flex-col-reverse lg:flex-row flex-nowrap;
 }
-
 </style>

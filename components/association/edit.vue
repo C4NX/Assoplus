@@ -6,45 +6,84 @@
         <div class="label">
           <span class="label-text">Nom de l'association</span>
         </div>
-        <input v-model="associationForm.name" type="text" placeholder="Nom de l'association"
-          class="input input-bordered w-full" :readonly="$props.readonly" :disabled="isLoading" />
+        <input
+          v-model="associationForm.name"
+          type="text"
+          placeholder="Nom de l'association"
+          class="input input-bordered w-full"
+          :readonly="$props.readonly"
+          :disabled="isLoading"
+        >
       </label>
       <!-- Association Logo -->
-      <label class="form-control w-full" v-if="!$props.readonly">
+      <label
+        v-if="!$props.readonly"
+        class="form-control w-full"
+      >
         <div class="label">
           <span class="label-text">Logo</span>
         </div>
-        <input type="file" class="file-input file-input-primary file-input-bordered w-full" :readonly="$props.readonly" :disabled="isLoading"
+        <input
+          type="file"
+          class="file-input file-input-primary file-input-bordered w-full"
+          :readonly="$props.readonly"
+          :disabled="isLoading"
           @change="(e) => {
-          const target = e.target as HTMLInputElement | null;
-          const file = target && target.files ? target.files[0] : null;
-          if (file) {
-            associationForm.logo = file
-          }
-        }">
+            const target = e.target as HTMLInputElement | null;
+            const file = target && target.files ? target.files[0] : null;
+            if (file) {
+              associationForm.logo = file
+            }
+          }"
+        >
       </label>
-      <label class="form-control w-full" v-else>
+      <label
+        v-else
+        class="form-control w-full"
+      >
         <div class="label">
           <span class="label-text">Logo</span>
         </div>
-        <img :src="data?.logoPathUrl" class="w-32 h-32 mt-2" v-if="data?.logoPathUrl" />
+        <img
+          v-if="data?.logoPathUrl"
+          :src="data?.logoPathUrl"
+          class="w-32 h-32 mt-2"
+        >
       </label>
       <!-- Association Description -->
-      <label class="form-control w-full col-span-2" :aria-readonly="$props.readonly">
+      <label
+        class="form-control w-full col-span-2"
+        :aria-readonly="$props.readonly"
+      >
         <div class="label">
           <span class="label-text">
             Description de votre association, présentez-vous !
           </span>
         </div>
-        <textarea v-model="associationForm.description" class="textarea textarea-primary disabled"
-          placeholder="Description" :readonly="$props.readonly" :disabled="isLoading" />
+        <textarea
+          v-model="associationForm.description"
+          class="textarea textarea-primary disabled"
+          placeholder="Description"
+          :readonly="$props.readonly"
+          :disabled="isLoading"
+        />
       </label>
       <!-- Association Tags -->
-      <InputTagSelect v-model="associationForm.tags" :max-selected="8" class="col-span-2" :readonly="$props.readonly" :disabled="isLoading" />
+      <InputTagSelect
+        v-model="associationForm.tags"
+        :max-selected="8"
+        class="col-span-2"
+        :readonly="$props.readonly"
+        :disabled="isLoading"
+      />
     </div>
 
-    <button class="btn btn-primary w-full" @click="() => associationId ? handleEdit() : handleCreate()" v-if="!$props.readonly"
-      :disabled="isLoading">
+    <button
+      v-if="!$props.readonly"
+      class="btn btn-primary w-full"
+      :disabled="isLoading"
+      @click="() => associationId ? handleEdit() : handleCreate()"
+    >
       <Icon name="mdi:star-four-points" />
       {{ associationId ? "Editer" : "Créer" }} une association
     </button>
@@ -52,7 +91,6 @@
 </template>
 
 <script lang="ts" setup>
-
 import type { AssociationTag } from "~/shared/model"
 
 interface AssociationForm {
@@ -86,7 +124,7 @@ const { status, data } = await useFetch(() => `/api/association/${props.associat
       associationForm.value.name = data.name
       associationForm.value.description = data.description
       // associationForm.value.tags = data.tags
-      associationForm.value.tags = [];
+      associationForm.value.tags = []
     }
     return data
   },
@@ -132,7 +170,8 @@ const handleCreate = async () => {
     }
 
     emit("association-created", result.id)
-  } finally {
+  }
+  finally {
     isLoading.value = false
   }
 }
@@ -167,11 +206,11 @@ const handleEdit = async () => {
     })
 
     emit("association-edited", associationId)
-  } finally {
+  }
+  finally {
     isLoading.value = false
   }
 }
-
 </script>
 
 <style>

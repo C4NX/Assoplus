@@ -23,7 +23,8 @@ export function toastifyResponse(ctx: FetchContext) {
   if (ctx.response?.ok && typeof responseData?.message === "string") {
     toast.success(responseData.message)
     return
-  } else if(!ctx.response?.ok) {
+  }
+  else if (!ctx.response?.ok) {
     // handle ZodError with formErrors
     if (ctx.response?.status === 422 && typeof responseData?.data?.fieldErrors === "object") {
       const fieldErrors = responseData.data.fieldErrors as Record<string, string[]>

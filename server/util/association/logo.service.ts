@@ -1,9 +1,9 @@
 import type { H3Event, MultiPartData } from "h3"
 import { PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
 import sharp from "sharp"
+import { extractFileBufferFromRequest, validateMimeTypeFromMultipartFormData } from "../request/files.service"
 import s3Client from "~/lib/s3client"
 import { filesLogger } from "~/server/util/logger/logger.service"
-import { extractFileBufferFromRequest, validateMimeTypeFromMultipartFormData } from "../request/files.service"
 
 async function convertAssociationLogo(buffer: Buffer) {
   return await sharp(buffer)
