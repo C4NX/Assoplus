@@ -7,6 +7,13 @@ export interface DashboardNewsModalReactive {
   status: string
 }
 
+const defaultFormDataFactory: () => DashboardNewsModalReactive = () => ({
+  id: 0,
+  title: "",
+  content: "",
+  status: "DRAFT",
+})
+
 export const useDashboardNewsStore = defineStore("dashboard-news", {
   state: (): {
     isModalOpen: boolean
@@ -15,12 +22,7 @@ export const useDashboardNewsStore = defineStore("dashboard-news", {
   } => ({
     isModalOpen: false,
     isModalEdit: false,
-    modalFormData: {
-      id: 0,
-      title: "",
-      content: "",
-      status: "DRAFT",
-    },
+    modalFormData: defaultFormDataFactory(),
   }),
   actions: {
     openEdit(news: DashboardNewsModalReactive) {
@@ -43,18 +45,13 @@ export const useDashboardNewsStore = defineStore("dashboard-news", {
     },
 
     resetFormData() {
-      this.modalFormData = {
-        id: 0,
-        title: "",
-        content: "",
-        status: "DRAFT",
-      }
+      this.modalFormData = defaultFormDataFactory()
     },
 
     async createNews(associationId: string, news: { title: string, content: string, status: string }) {
       const data = await $fetch(`/api/association/${associationId}/news`, {
         method: "POST",
-        body: JSON.stringify(news),
+        body: news,
         headers: {
           "Content-Type": "application/json",
         },

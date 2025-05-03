@@ -13,19 +13,22 @@ export function statusToastifyResponse(ctx: FetchContext, t: ReturnType<typeof u
   }
 }
 
+
 /**
  * A toastify response function that shows a success or error message based on the response status.
  * It also handles ZodError validation errors and displays them in a user-friendly way.
  */
 export function toastifyResponse(ctx: FetchContext) {
   const responseData = ctx.response?._data
-
-  if (ctx.response?.ok && typeof responseData?.message === "string") {
+  console.log("ctx", ctx)
+  if (ctx.error === undefined && typeof responseData?.message === "string") {
     toast.success(responseData.message)
     return
   }
-  else if (!ctx.response?.ok) {
+  // Handle only 422 and 500 errors
+  else if (ctx.error !== undefined || ctx.response?.status === 422 || ctx.response?.status === 500) {
     // handle ZodError with formErrors
+
     if (ctx.response?.status === 422 && typeof responseData?.data?.fieldErrors === "object") {
       const fieldErrors = responseData.data.fieldErrors as Record<string, string[]>
 

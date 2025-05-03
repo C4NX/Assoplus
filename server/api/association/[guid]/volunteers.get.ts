@@ -21,6 +21,9 @@ export default defineEventHandler(async (event) => {
     email: true,
     firstName: true,
     lastName: true,
+    role: true,
+    isPending: true,
+    userId: true,
   }
 
   if (await isRequestingCsv(event)) {
@@ -34,7 +37,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  return paginate(event, {
+  return await paginate(event, {
     data: async inject => await prisma.volunteer.findMany({
       ...inject,
       where: {

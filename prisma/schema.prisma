@@ -56,11 +56,10 @@ model Volunteer {
   associationId String
   association   Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
 
-  email      String
+  email      String?
   role       AssociationRole
-  firstName  String
-  lastName   String
-  isVerified Boolean
+  firstName  String?
+  lastName   String?
   isPending  Boolean
 
   createdAt DateTime @default(now())

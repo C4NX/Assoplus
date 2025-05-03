@@ -28,7 +28,7 @@
             <th />
             <th>Titre</th>
             <th>Auteur.ice</th>
-            <th>Date</th>
+            <th>Créer le</th>
             <th />
           </tr>
         </thead>

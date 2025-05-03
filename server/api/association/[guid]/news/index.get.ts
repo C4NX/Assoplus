@@ -36,6 +36,7 @@ export default defineEventHandler(async (event) => {
       },
     })
     return exportCsv(event, csvData, {
+      delimiterFromQuery: true,
       transform: (data) => {
         for (const item of data) {
           item.author = `${item.author.firstName} ${item.author.lastName}`
