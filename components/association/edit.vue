@@ -144,7 +144,6 @@ const associationForm = ref<AssociationForm>({
 const isLoading = ref(false)
 
 const handleCreate = async () => {
-  console.log("Creating association", associationForm.value)
   try {
     isLoading.value = true
     const result = await $fetch("/api/association", {
@@ -176,8 +175,6 @@ const handleCreate = async () => {
 }
 
 const handleEdit = async () => {
-  console.log("Editing association", associationForm.value)
-
   try {
     isLoading.value = true
     const associationId = props.associationId

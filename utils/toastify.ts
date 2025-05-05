@@ -20,7 +20,6 @@ export function statusToastifyResponse(ctx: FetchContext, t: ReturnType<typeof u
  */
 export function toastifyResponse(ctx: FetchContext) {
   const responseData = ctx.response?._data
-  console.log("ctx", ctx)
   if (ctx.response?.ok && typeof responseData?.message === "string") {
     toast.success(responseData.message)
     return

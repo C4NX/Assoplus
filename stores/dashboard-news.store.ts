@@ -29,7 +29,6 @@ export const useDashboardNewsStore = defineStore("dashboard-news", {
       this.isModalEdit = true
       this.isModalOpen = true
       this.modalFormData = news
-      console.log("openEdit", this.modalFormData)
     },
 
     openCreate() {
