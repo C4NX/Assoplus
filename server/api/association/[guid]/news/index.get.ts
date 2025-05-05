@@ -4,9 +4,17 @@ import prisma from "~/lib/prisma"
 
 import { paginate } from "~/server/util/request/pagination.service"
 import { exportCsv, isRequestingCsv } from "~/server/util/request/exporter.service"
+import { requireAssociationOwner } from "~/server/util/user/auth.guard"
 
+/**
+ * Récupère la liste de toutes les actualités d'une association, avec pagination et export CSV
+ * Cette route est pour les gérants d'associations.
+ */
 export default defineEventHandler(async (event) => {
   const associationId = parseAssociationIdFromRouteGuid(event)
+
+  // TODO: Check volunteer !!
+  await requireAssociationOwner(event, associationId)
 
   const prismaSelect = {
     select: {

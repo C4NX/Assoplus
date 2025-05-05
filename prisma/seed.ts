@@ -1,4 +1,4 @@
-import { AssociationRole, PrismaClient } from "@prisma/client"
+import { AssociationRole, NewsPublicationStatus, PrismaClient } from "@prisma/client"
 import { faker } from "@faker-js/faker"
 import { Scrypt } from "@adonisjs/hash/drivers/scrypt"
 
@@ -85,6 +85,7 @@ async function createAssociation(n: number) {
               title: faker.lorem.sentence(),
               content: fakerRandomMarkdown(3),
               authorId: userIds[Math.floor(Math.random() * userIds.length)],
+              status: faker.helpers.arrayElement(Object.values(NewsPublicationStatus))
             })),
           },
         },
@@ -112,7 +113,6 @@ async function createAssociationMember(nMinPerAssociation: number, nMaxPerAssoci
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
         role: faker.helpers.arrayElement(Object.values(AssociationRole)),
-        isVerified: faker.datatype.boolean(),
         isPending: faker.datatype.boolean(),
         associationId: associationIds[i],
       })),

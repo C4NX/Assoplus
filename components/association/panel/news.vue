@@ -1,50 +1,27 @@
 <template>
-  <p class="text-gray-500 text-h2xl font-bold">
-    News
-    <span class="text-gray-500">({{ data?.total }})</span>
-  </p>
-  <div
-    v-for="news in data?.items"
-    :key="news.id"
-    class="association-news-container"
-  >
-    <div
-      class="collapse collapse-plus"
-    >
-      <input
-        ref="newsOpenCheckbox"
-        type="checkbox"
-        :data-news-id="news.id"
-        @change="articleOpenChange"
-      >
-      <div class="collapse-title text-xl font-medium">
-        {{ news.title }}
-      </div>
-      <div class="collapse-content">
-        <MDC
-          v-if="renderedArticles[news.id]"
-          :value="news.content"
-          tag="article"
-        />
-        <div
-          v-else
-          class="text-sm text-gray-500"
-        >
-          Loading...
+  <UtilsLoading :status="status">
+    <p class="text-gray-500 text-h2xl font-bold">
+      News
+      <span class="text-gray-500">({{ data?.total }})</span>
+    </p>
+    <div v-for="news in data?.items" :key="news.id" class="association-news-container">
+      <div class="collapse collapse-plus">
+        <input ref="newsOpenCheckbox" type="checkbox" :data-news-id="news.id" @change="articleOpenChange">
+        <div class="collapse-title text-xl font-medium">
+          {{ news.title }}
         </div>
-        <p class="text-sm text-gray-400 text-right">
-          <span class="text-gray-700 font-semibold">{{ news.author.firstName }} {{ news.author.lastName }}</span>
-          -
-          {{ $d(new Date(news.createdAt)) }}
-        </p>
+        <div class="collapse-content">
+          <article v-html="$sanitizeHTML(news.content)" />
+          <p class="text-sm text-gray-400 text-right">
+            <span class="text-gray-700 font-semibold">{{ news.author.firstName }} {{ news.author.lastName }}</span>
+            -
+            {{ $d(new Date(news.createdAt)) }}
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-  <InputPagination
-    v-if="data?.totalPages"
-    v-model="currentPage"
-    :total-pages="data.totalPages"
-  />
+    <InputPagination v-if="data?.totalPages" v-model="currentPage" :total-pages="data.totalPages" />
+  </UtilsLoading>
 </template>
 
 <script lang="ts" setup>
@@ -68,7 +45,7 @@ const props = defineProps({
   },
 })
 
-const { data } = await useFetch(`/api/association/${props.associationId}/news`, {
+const { data, status } = useFetch(`/api/association/${props.associationId}/news/public`, {
   params: {
     page: currentPage,
   },
@@ -77,7 +54,9 @@ const { data } = await useFetch(`/api/association/${props.associationId}/news`, 
 </script>
 
 <style lang="postcss" scoped>
+
 .association-news-container {
   @apply bg-base-100 rounded-lg border border-base-200 shadow-md;
 }
+
 </style>

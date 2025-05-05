@@ -1,21 +1,13 @@
 <template>
-  <DashboardTabModalEditNews
-    :association-id="associationId"
-    @on-save="handleModalSave"
-  />
+  <DashboardTabModalEditNews :association-id="associationId" @on-save="handleModalSave" />
   <div class="flex justify-end items-center gap-4 mb-4">
-    <DashboardTabModalExportCsv
-      :csv-url="`/api/association/${associationId}/news`"
-      :file-name="`news-${new Date().toISOString()}.csv`"
-    >
+    <DashboardTabModalExportCsv :csv-url="`/api/association/${associationId}/news`"
+      :file-name="`news-${new Date().toISOString()}.csv`">
       <template #title>
         Exporter en CSV
       </template>
     </DashboardTabModalExportCsv>
-    <button
-      class="btn btn-primary"
-      @click="dashboardNewsStore.openCreate"
-    >
+    <button class="btn btn-primary" @click="dashboardNewsStore.openCreate">
       Créer une news
     </button>
   </div>
@@ -29,31 +21,28 @@
             <th>Titre</th>
             <th>Auteur.ice</th>
             <th>Créer le</th>
-            <th />
+            <th>Status de publication</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(item, index) in (data?.items || [])"
-            :key="index"
-          >
+          <tr v-for="(item, index) in (data?.items || [])" :key="index">
             <th>{{ (page - 1) * (data?.itemPerPage || 10) + index + 1 }}</th>
             <td>{{ item.title }}</td>
             <td>{{ item.author.firstName }} {{ item.author.lastName }}</td>
             <td>{{ $d(new Date(item.createdAt), 'long') }}</td>
             <td>
-              <div class="flex gap-4">
-                <button
-                  class="btn btn-primary btn-sm"
-                  @click="() => dashboardNewsStore.openEdit(item)"
-                >
+              <span v-if="item.status === 'DRAFT'" class="badge badge-success badge-outline">Brouillon</span>
+              <span v-else-if="item.status === 'PUBLISHED'" class="badge badge-primary badge-outline">Publié</span>
+              <span v-else-if="item.status === 'ARCHIVED'" class="badge badge-error badge-outline">Archivé</span>
+            </td>
+            <td>
+              <div class="flex gap-4 flex-col md:flex-row">
+                <button class="btn btn-primary btn-sm" @click="() => dashboardNewsStore.openEdit(item)">
                   <Icon name="mdi:pencil" />
                   Modifier
                 </button>
-                <button
-                  class="btn btn-error btn-sm"
-                  @click="() => handleDelete(item.id)"
-                >
+                <button class="btn btn-error btn-sm" @click="() => handleDelete(item.id)">
                   <Icon name="mdi:trash-can" />
                   Supprimer
                 </button>
@@ -61,21 +50,14 @@
             </td>
           </tr>
           <tr v-if="data?.items.length === 0">
-            <td
-              colspan="5"
-              class="text-center"
-            >
+            <td colspan="5" class="text-center">
               Aucune news disponible
             </td>
           </tr>
         </tbody>
       </table>
       <div class="flex justify-center items-center mt-4">
-        <InputPagination
-          v-model="page"
-          :total-pages="data?.totalPages ?? 0"
-          @on-page-change="refresh"
-        />
+        <InputPagination v-model="page" :total-pages="data?.totalPages ?? 0" @on-page-change="refresh" />
       </div>
     </div>
   </UtilsLoading>

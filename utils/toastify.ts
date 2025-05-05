@@ -21,14 +21,12 @@ export function statusToastifyResponse(ctx: FetchContext, t: ReturnType<typeof u
 export function toastifyResponse(ctx: FetchContext) {
   const responseData = ctx.response?._data
   console.log("ctx", ctx)
-  if (ctx.error === undefined && typeof responseData?.message === "string") {
+  if (ctx.response?.ok && typeof responseData?.message === "string") {
     toast.success(responseData.message)
     return
   }
-  // Handle only 422 and 500 errors
-  else if (ctx.error !== undefined || ctx.response?.status === 422 || ctx.response?.status === 500) {
+  else if (!ctx.response?.ok) {
     // handle ZodError with formErrors
-
     if (ctx.response?.status === 422 && typeof responseData?.data?.fieldErrors === "object") {
       const fieldErrors = responseData.data.fieldErrors as Record<string, string[]>
 

@@ -5,6 +5,9 @@ import { validateBodySchema } from "~/server/util/request/request.service"
 import { requireAssociationOwner } from "~/server/util/user/auth.guard"
 import prisma from "~/lib/prisma"
 
+import { defineEventHandler } from "h3"
+import { sanitize } from "~/server/util/request/sanitizer.service"
+
 const NewsCreateSchema = z.object({
   title: z.string(),
   content: z.string(),
@@ -27,7 +30,7 @@ export default defineEventHandler(async (event) => {
     },
     data: {
       title: newsCreateData.title,
-      content: newsCreateData.content,
+      content: sanitize(newsCreateData.content),
       status: newsCreateData.status,
       associationId,
       authorId: user.id,

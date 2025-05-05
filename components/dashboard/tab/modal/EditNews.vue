@@ -1,39 +1,17 @@
 <template>
   <!-- Using a legacy modal because of the MdEditor -->
-  <input
-    v-model="isModalOpen"
-    type="checkbox"
-    class="modal-toggle"
-  >
-  <div
-    class="modal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modal-title"
-  >
+  <input v-model="isModalOpen" type="checkbox" class="modal-toggle">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="news-modal-content">
       <h3 class="news-modal-title">
-        <Icon
-          v-if="isModalEdit"
-          name="mdi:pencil"
-        />
-        <Icon
-          v-else
-          name="mdi:plus"
-        />
+        <Icon v-if="isModalEdit" name="mdi:pencil" />
+        <Icon v-else name="mdi:plus" />
         {{ isModalEdit ? 'Modifier' : 'Ajouter' }} une news
       </h3>
       <div class="flex gap-2">
-        <input
-          v-model="modalFormData.title"
-          type="text"
-          placeholder="Titre de la news"
-          class="input input-bordered flex-1"
-        >
-        <select
-          v-model="modalFormData.status"
-          class="select select-bordered"
-        >
+        <input v-model="modalFormData.title" type="text" placeholder="Titre de la news"
+          class="input input-bordered flex-1">
+        <select v-model="modalFormData.status" class="select select-bordered">
           <option value="DRAFT">
             📝 Brouillon
           </option>
@@ -45,46 +23,18 @@
           </option>
         </select>
       </div>
-      <MdEditor
-        v-model="modalFormData.content"
-        language="fr-FR"
-        :toolbars="[
-          'bold',
-          'underline',
-          'italic',
-          '-',
-          'title',
-          'strikeThrough',
-          'sub',
-          'sup',
-          'quote',
-          'unorderedList',
-          'orderedList',
-          'task',
-          '-',
-          'link',
-          'image',
-          'table',
-          '-',
-          'revoke',
-          'next',
-          '=',
-          'preview',
-          'previewOnly',
-          'catalog',
-        ]"
-      />
+      <Editor 
+        tinymce-script-src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.6.1/tinymce.min.js" 
+        :init="{
+          plugins: 'lists link image table code help wordcount', 
+          promotion: false,
+        }"  
+        v-model="modalFormData.content" />
       <div class="modal-action">
-        <button
-          class="btn btn-primary"
-          @click="handleSave"
-        >
+        <button class="btn btn-primary" @click="handleSave">
           Sauvegarder
         </button>
-        <button
-          class="btn"
-          @click="dashboardNewsStore.closeModal()"
-        >
+        <button class="btn" @click="dashboardNewsStore.closeModal()">
           Close
         </button>
       </div>
@@ -93,9 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import { config, MdEditor } from "md-editor-v3"
-import "md-editor-v3/lib/style.css"
-import fr_FR from "@vavt/cm-extension/dist/locale/fr-FR"
+import Editor from '@tinymce/tinymce-vue'
 import { toast } from "vue3-toastify"
 
 const dashboardNewsStore = useDashboardNewsStore()
@@ -148,14 +96,6 @@ const handleSave = async () => {
   }
   dashboardNewsStore.closeModal()
 }
-
-config({
-  editorConfig: {
-    languageUserDefined: {
-      "fr-FR": fr_FR,
-    },
-  },
-})
 </script>
 
 <style scoped lang="postcss">

@@ -35,7 +35,6 @@ export default defineEventHandler(async (event) => {
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
-          isVerified: true,
           isPending: false,
         },
       },

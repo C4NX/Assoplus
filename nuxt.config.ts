@@ -10,7 +10,6 @@ export default defineNuxtConfig({
     "nuxt-seo-utils",
     "nuxt-auth-utils",
     "@nuxt/image",
-    "@nuxtjs/mdc",
   ],
   ssr: true,
   devtools: { enabled: false },
