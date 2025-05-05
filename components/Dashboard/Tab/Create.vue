@@ -4,7 +4,7 @@
       <Icon name="mdi:star-four-points" />
       {{ $t("dashboard.tabs.create") }}
     </template>
-    <AssociationEdit @association-created="handleOnAssociationCreated" />
+    <AssociationForm @association-created="handleOnAssociationCreated" />
   </DashboardTabBase>
 </template>
 

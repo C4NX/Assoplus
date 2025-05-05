@@ -52,7 +52,7 @@ defineProps<{
 }>()
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
 .loading-container {
   @apply flex flex-col items-center justify-center h-full;
 }

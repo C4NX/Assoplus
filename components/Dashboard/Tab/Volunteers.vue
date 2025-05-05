@@ -15,12 +15,12 @@
           <Icon name="mdi:plus" class="w-5 h-5" />
           Ajouter un membre
         </button>
-        <DashboardTabModalExportCsv :csv-url="`/api/association/${activeAssociationId}/volunteers`"
+        <DashboardModalExportCsv :csv-url="`/api/association/${activeAssociationId}/volunteers`"
           file-name="volunteers.csv">
           <template #title>
             Exporter en CSV
           </template>
-        </DashboardTabModalExportCsv>
+        </DashboardModalExportCsv>
       </div>
       <table class="table">
         <!-- head -->

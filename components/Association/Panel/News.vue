@@ -53,7 +53,7 @@ const { data, status } = useFetch(`/api/association/${props.associationId}/news/
 })
 </script>
 
-<style lang="postcss" scoped>
+<style scoped>
 
 .association-news-container {
   @apply bg-base-100 rounded-lg border border-base-200 shadow-md;

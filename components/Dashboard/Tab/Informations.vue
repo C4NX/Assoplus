@@ -64,7 +64,7 @@
         </button>
       </div>
 
-      <AssociationEdit
+      <AssociationForm
         :association-id="dashboard.activeAssociationId"
         :readonly="!editMode"
       />
