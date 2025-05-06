@@ -113,20 +113,19 @@ export const useAccountStore = defineStore("accounts", {
      * @returns {Promise<void>} A promise that resolves when the account is deleted
      */
     async deleteAccount() {
-      const { loggedIn, fetch: refreshSession } = useUserSession()
+      const router = useRouter()
+      const localePath = useLocalePath()
+      const { loggedIn, clear } = useUserSession()
       if (!loggedIn) {
         return
       }
 
-      try {
-        await $fetch("/api/me", {
-          method: "DELETE",
-        })
-        await refreshSession()
-      }
-      catch {
-        toast.error("An error occured while deleting your account")
-      }
+      await $fetch("/api/me", {
+        method: "DELETE",
+        onResponse: toastifyResponse,
+      })
+      await clear();
+      await router.push(localePath("/"))
     },
   },
 })

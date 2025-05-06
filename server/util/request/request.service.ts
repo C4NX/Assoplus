@@ -2,6 +2,13 @@ import type { H3Event } from "h3"
 import { createError } from "h3"
 import type z from "zod"
 
+/**
+ * Validates the body of the request against a Zod schema
+ * @param event H3 event
+ * @param schema The Zod schema to validate
+ * @returns The validated data
+ * @throws 422 if the validation fails
+ */
 export async function validateBodySchema<T>(
   event: H3Event,
   schema: z.ZodSchema<T>,
@@ -19,6 +26,14 @@ export async function validateBodySchema<T>(
   return result.data
 }
 
+/**
+ * Validates a query parameter against a Zod schema
+ * @param event H3 event
+ * @param paramName The name of the query parameter
+ * @param schema The Zod schema to validate
+ * @returns The validated data
+ * @throws 422 if the validation fails
+ */
 export async function validateParam<T>(
   event: H3Event,
   paramName: string,

@@ -91,13 +91,13 @@
 </template>
 
 <script lang="ts" setup>
-import type { AssociationTag } from "~/shared/model"
+import type { Tag } from "~/shared/model"
 
 interface AssociationForm {
   name: string
   description: string
   logo: File | null
-  tags: AssociationTag[]
+  tags: Tag[]
 }
 
 const props = defineProps({

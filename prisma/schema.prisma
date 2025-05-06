@@ -38,7 +38,7 @@ model Association {
   logoPath    String?
 
   ownerId String
-  owner   User   @relation(fields: [ownerId], references: [id])
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   tags    Tag[]
   members Volunteer[]
@@ -52,7 +52,7 @@ model Volunteer {
   id Int @id @default(autoincrement())
 
   userId        String?
-  user          User?       @relation(fields: [userId], references: [id])
+  user          User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
   associationId String
   association   Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
 
@@ -73,7 +73,7 @@ model News {
   status        NewsPublicationStatus @default(DRAFT)
   association   Association @relation(fields: [associationId], references: [id])
   authorId      String
-  author        User        @relation(fields: [authorId], references: [id])
+  author        User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
   associationId String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
