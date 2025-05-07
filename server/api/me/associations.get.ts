@@ -10,7 +10,10 @@ export default defineEventHandler(async (event) => {
       name: true,
     },
     where: {
-      ownerId: user.id,
+      OR: [
+        { ownerId: user.id }, // Associations where the user is the owner
+        { members: { some: { userId: user.id, isPending: false } } }, // Associations where the user is a member and not pending
+      ]
     },
   })
 })
