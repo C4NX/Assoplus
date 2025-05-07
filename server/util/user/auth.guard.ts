@@ -1,6 +1,6 @@
 import type { H3Event } from "h3"
-import type { User } from "@prisma/client"
-import type { Role } from "./role.enum"
+import type { AssociationRole, User } from "@prisma/client"
+import { Role } from "./role.enum"
 import type { PublicUserInterface } from "~/shared/auth"
 import prisma from "~/lib/prisma"
 
@@ -54,6 +54,47 @@ export async function requireAssociationOwner(event: H3Event, associationId: str
 
   if (association.owner.id !== user.id) {
     throw createError({ statusCode: 403, statusMessage: "Forbidden" })
+  }
+
+  return user
+}
+
+/**
+ * Checks if the user is a volunteer in the association
+ * @param event H3Event
+ * @param associationId Association ID 
+ * @param role Role required to access the resource
+ * @returns User object if the user is a volunteer in the association
+ */
+export async function requireAssociationVolunteer(event: H3Event, associationId: string, role?: AssociationRole|AssociationRole[]) {
+  const user = await requireUserAuthenticated(event)
+
+  // Admin users are always granted access
+  if(user.roles.includes(Role.ADMIN)) {
+    return user
+  }
+
+  const volunteer = await prisma.volunteer.findFirst({
+    select: {
+      id: true,
+      role: true,
+    },
+    where: { associationId: associationId, userId: user.id },
+  });
+
+  if (!volunteer) {
+    throw createError({ statusCode: 403, statusMessage: "Forbidden" })
+  }
+
+  // Check if the user has the required role
+  // If no role is provided, grant access to all roles
+  if (role) {
+    const hasRole = Array.isArray(role)
+      ? role.some(r => volunteer.role === r)
+      : volunteer.role === role
+    if (!hasRole) {
+      throw createError({ statusCode: 403, statusMessage: "Forbidden" })
+    }
   }
 
   return user
