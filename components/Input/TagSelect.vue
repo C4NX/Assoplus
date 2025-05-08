@@ -14,10 +14,9 @@
         <UtilsLoading :status="status">
           <li v-for="tag in data" :key="tag.id" :class="[readonlyOrDisabled ? 'disabled' : 'cursor-pointer']"
             @click="toggleTag(tag)">
-            <a :class="{ 'active cursor-pointer': selectedTags.some(t => t.id === tag.id) }">
-              <Icon name="mdi:tag" />
+            <AssociationTag :type="tag.type" :class="[selectedTags.some(t => t.id === tag.id) ? 'active cursor-pointer' : 'cursor-pointer']" inline v-if="tag">
               {{ tag.name }}
-            </a>
+            </AssociationTag>
           </li>
         </UtilsLoading>
       </ul>
@@ -27,12 +26,14 @@
       <div v-if="selectedTags.length > 0" class="flex flex-wrap gap-2">
         <div v-for="tag in selectedTags" :key="tag.id"
           :class="['badge badge-lg badge-primary badge-outline flex items-center justify-center gap-2 select-none', (readonlyOrDisabled) ? '!badge-ghost !text-opacity-55' : '']">
-          <span class="flex-1">{{ tag.name }}</span>
-          <div
-            :class="['cursor-pointer btn btn-xs btn-circle btn-ghost', (readonlyOrDisabled) ? 'pointer-events-none' : '']"
-            @click.prevent="removeTag(tag)">
-            <Icon name="mdi:close" />
-          </div>
+          <AssociationTag :type="tag.type" inline v-if="tag">
+              {{ tag.name }}
+              <div
+                :class="['cursor-pointer btn btn-xs btn-circle btn-ghost', (readonlyOrDisabled) ? 'pointer-events-none' : '']"
+                @click.prevent="removeTag(tag)">
+                <Icon name="mdi:close" />
+              </div>
+          </AssociationTag>
         </div>
       </div>
       <!-- Empty state -->
@@ -44,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+import { AssociationTag } from "#components";
 import { computed } from "vue"
 import { toast } from "vue3-toastify"
 import type { Tag } from "~/shared/model"

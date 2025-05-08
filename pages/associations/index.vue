@@ -42,9 +42,9 @@
                   {{ association.description }}
                 </p>
                 <div class="tags-container">
-                  <span v-for="tag in association.tags" :key="tag.id" class="association-tag">
+                  <AssociationTag v-for="tag in association.tags" :key="tag.id" :type="tag.type">
                     {{ tag.name }}
-                  </span>
+                  </AssociationTag>
                 </div>
               </div>
               <div class="association-card-buttons">
@@ -70,6 +70,7 @@
 </template>
 
 <script lang="ts" setup>
+import { AssociationTag } from "#components"
 import { ref, computed, onUnmounted } from "vue"
 
 const searchOrderAsc = ref(true)
