@@ -61,18 +61,37 @@
           class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
         >
           <li>
-            <NuxtLinkLocale
+            <a 
+              @click.prevent="handleProfile()"
               class="justify-between"
-              to="/profile/me"
             >
               {{ user?.firstName }} {{ user?.lastName }}
               <span
                 v-if="user?.roles?.includes('ROLE_ADMIN')"
                 class="badge badge-error badge-outline"
               >Admin</span>
-            </NuxtLinkLocale>
+            </a>
           </li>
-          <li><a @click.prevent="handleLogout()">Logout</a></li>
+          <li>
+            <button 
+              @click.prevent="handleNotification()"
+            >
+              <Icon
+                name="mdi:email"
+                size="18"
+                class="mr-1"
+              />
+              Notifications
+            </button>
+          </li>
+          <li><button @click.prevent="handleLogout()">
+            <Icon
+              name="mdi:logout"
+              size="18"
+              class="mr-1"
+            />
+            Logout
+          </button></li>
         </ul>
       </div>
     </div>
@@ -80,11 +99,25 @@
 </template>
 
 <script lang="ts" setup>
+import { ProfileTab, useProfileStore } from '~/stores/profile.store'
+
 const { loggedIn, user } = useUserSession()
 const accountStore = useAccountStore()
+const profileStore = useProfileStore()
+const localPath = useLocalePath()
 
 const handleLogout = async () => {
   await accountStore.logout()
+}
+
+const handleNotification = () => {
+  profileStore.setActiveTab(ProfileTab.NOTIFICATIONS)
+  navigateTo(localPath('/profile/me'))
+}
+
+const handleProfile = () => {
+  profileStore.setActiveTab(ProfileTab.INFO)
+  navigateTo(localPath('/profile/me'))
 }
 </script>
 

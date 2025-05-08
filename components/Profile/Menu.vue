@@ -11,7 +11,7 @@
                 'flex items-center gap-4 p-4 transition-colors',
                 activeTab === ProfileTab.INFO ? 'bg-primary-50 text-primary' : 'hover:bg-gray-50',
               ]"
-              @click.prevent="activeTab = ProfileTab.INFO"
+              @click.prevent="() => profileStore.setActiveTab(ProfileTab.INFO)"
             >
               <Icon
                 name="mdi:account"
@@ -27,7 +27,7 @@
                 'flex items-center gap-4 p-4 transition-colors',
                 activeTab === ProfileTab.SECURITY ? 'bg-primary-50 text-primary' : 'hover:bg-gray-50',
               ]"
-              @click.prevent="activeTab = ProfileTab.SECURITY"
+              @click.prevent="() => profileStore.setActiveTab(ProfileTab.SECURITY)"
             >
               <Icon
                 name="mdi:lock"
@@ -39,8 +39,11 @@
           <li>
             <a
               href="#"
-              class="flex items-center gap-4 p-4"
-              @click.prevent="activeTab = ProfileTab.NOTIFICATIONS"
+              :class="[
+                'flex items-center gap-4 p-4 transition-colors',
+                activeTab === ProfileTab.NOTIFICATIONS ? 'bg-primary-50 text-primary' : 'hover:bg-gray-50',
+              ]"
+              @click.prevent="() => profileStore.setActiveTab(ProfileTab.NOTIFICATIONS)"
             >
               <Icon
                 name="mdi:email"
@@ -63,11 +66,8 @@
 </template>
 
 <script lang="ts" setup>
-enum ProfileTab {
-  INFO = "info",
-  SECURITY = "security",
-  NOTIFICATIONS = "notifications",
-}
+import { ProfileTab, useProfileStore } from '~/stores/profile.store';
 
-const activeTab = ref<ProfileTab>(ProfileTab.INFO)
+const profileStore = useProfileStore()
+const { activeTab } = storeToRefs(profileStore)
 </script>
