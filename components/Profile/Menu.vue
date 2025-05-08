@@ -39,8 +39,8 @@
           <li>
             <a
               href="#"
-              class="flex items-center gap-4 p-4 text-gray-400 cursor-not-allowed"
-              @click.prevent
+              class="flex items-center gap-4 p-4"
+              @click.prevent="activeTab = ProfileTab.NOTIFICATIONS"
             >
               <Icon
                 name="mdi:email"
@@ -53,9 +53,10 @@
       </div>
 
       <!-- Content Area -->
-      <div class="rounded-lg shadow-xl">
+      <div class="rounded-lg">
         <ProfileTabInformations v-if="activeTab === ProfileTab.INFO" />
         <ProfileTabSecurity v-if="activeTab === ProfileTab.SECURITY" />
+        <ProfileTabNotifications v-if="activeTab === ProfileTab.NOTIFICATIONS" />
       </div>
     </div>
   </div>

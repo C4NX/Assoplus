@@ -38,6 +38,7 @@ export default defineNuxtConfig({
     baseUrl: "",
     public: {
       version: "1.0.0",
+      contactEmail: "contact@assoplus.com",
     },
   },
   routeRules: {

@@ -20,7 +20,7 @@
           </p>
           <div class="flex gap-5 justify-end">
             <form method="dialog" v-if="cancelable">
-              <button class="btn btn-primary text-neutral-content" @click="$emit('update:modelValue', false); $emit('cancel')">
+              <button class="btn" @click="$emit('update:modelValue', false); $emit('cancel')">
                 <slot name="cancel">
                   {{ $t("common.cancel") }}
                 </slot>
@@ -39,7 +39,7 @@
         <form
           method="dialog"
           class="modal-backdrop"
-          @click="$emit('update:modelValue', false)"
+          @submit.prevent="$emit('update:modelValue', false)"
         >
           <button>close</button>
       </form>

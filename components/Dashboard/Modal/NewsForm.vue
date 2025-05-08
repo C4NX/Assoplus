@@ -1,7 +1,6 @@
 <template>
-  <!-- Using a legacy modal because of the MdEditor -->
   <input v-model="isModalOpen" type="checkbox" class="modal-toggle">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <form class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" @submit.prevent="handleSubmit">
     <div class="news-modal-content">
       <h3 class="news-modal-title">
         <Icon v-if="isModalEdit" name="mdi:pencil" />
@@ -28,18 +27,19 @@
         :init="{
           plugins: 'lists link image table code help wordcount', 
           promotion: false,
+          license_key: 'gpl',
         }"  
         v-model="modalFormData.content" />
       <div class="modal-action">
-        <button class="btn btn-primary" @click="handleSave">
+        <button type="submit" class="btn btn-primary">
           Sauvegarder
         </button>
-        <button class="btn" @click="dashboardNewsStore.closeModal()">
+        <button type="button" class="btn" @click="dashboardNewsStore.closeModal()">
           Close
         </button>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script lang="ts" setup>
@@ -63,7 +63,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue", "onSave"])
 
-const handleSave = async () => {
+const handleSubmit = async () => {
   if (!props.associationId) {
     toast.error("Aucune association sélectionnée")
     return
@@ -82,12 +82,17 @@ const handleSave = async () => {
   }
 
   if (isModalEdit.value) {
-    // TODO: Update the news
-    // await dashboardNewsStore.updateNews();
+    await dashboardNewsStore.updateNews({
+      id: formData.id,
+      title: formData.title,
+      content: formData.content,
+      status: formData.status,
+    });
     emit("onSave", { isEdit: true })
   }
   else {
-    await dashboardNewsStore.createNews(props.associationId, {
+    await dashboardNewsStore.createNews({
+      associationId: props.associationId,
       title: formData.title,
       content: formData.content,
       status: formData.status,

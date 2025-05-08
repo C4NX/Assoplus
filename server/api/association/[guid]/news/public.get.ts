@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client"
+import { NewsPublicationStatus, Prisma } from "@prisma/client"
 import { parseAssociationIdFromRouteGuid } from "../index.get"
 import prisma from "~/lib/prisma"
 
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
       content: true,
       createdAt: true,
       status: true,
-      author: {
+      createdBy: {
         select: {
           id: true,
           firstName: true,
@@ -36,14 +36,14 @@ export default defineEventHandler(async (event) => {
       ...prismaSelect,
       where: {
         associationId,
-        status: 'PUBLISHED',
+        status: NewsPublicationStatus.PUBLISHED,
       },
       ...inject,
     }),
     count: async () => await prisma.news.count({
       where: {
         associationId,
-        status: 'PUBLISHED',
+        status: NewsPublicationStatus.PUBLISHED,
       },
     }),
   })

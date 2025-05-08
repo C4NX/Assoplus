@@ -2,6 +2,7 @@
   <button
     class="btn"
     @click="openModal"
+    :disabled="props.disabled"
   >
     <Icon
       name="mdi:file-export"
@@ -61,6 +62,7 @@
 const props = defineProps<{
   csvUrl: string
   fileName: string
+  disabled?: boolean
 }>()
 
 const delimiter = ref<string | null>(null)

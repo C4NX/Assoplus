@@ -71,20 +71,34 @@ function fakerRandomMarkdown(paragraphs: number) {
 
 async function createAssociation(n: number) {
   for (let i = 0; i < n; i++) {
+    const membersId = new Set<string>()
+
+    for (let j = 0; j < 5; j++) {
+      const userId = userIds[Math.floor(Math.random() * userIds.length)]
+      membersId.add(userId)
+    }
+
     const result = await prisma.association.create({
       data: {
         name: faker.company.name(),
         description: faker.company.catchPhrase(),
-        ownerId: userIds[Math.floor(Math.random() * userIds.length)],
         tags: {
           connect: await createTag(3),
+        },
+        members: {
+          createMany: {
+            data: Array.from(membersId).map((userId, index) => ({
+              userId,
+              roles: index === 0 ? [AssociationRole.PRESIDENT] : [faker.helpers.arrayElement(Object.values(AssociationRole).filter(role => role !== AssociationRole.PRESIDENT))],
+            })),
+          }
         },
         news: {
           createMany: {
             data: Array.from({ length: 30 }, () => ({
               title: faker.lorem.sentence(),
               content: fakerRandomMarkdown(3),
-              authorId: userIds[Math.floor(Math.random() * userIds.length)],
+              createdById: userIds[Math.floor(Math.random() * userIds.length)],
               status: faker.helpers.arrayElement(Object.values(NewsPublicationStatus))
             })),
           },
@@ -103,23 +117,6 @@ async function createTag(n: number) {
   })
 }
 
-async function createAssociationMember(nMinPerAssociation: number, nMaxPerAssociation: number) {
-  const hasRegistered = faker.datatype.boolean({ probability: 0.5 })
-  for (let i = 0; i < associationIds.length; i++) {
-    await prisma.volunteer.createMany({
-      data: Array.from({ length: faker.number.int({ min: nMinPerAssociation, max: nMaxPerAssociation }) }, () => ({
-        userId: hasRegistered ? userIds[Math.floor(Math.random() * userIds.length)] : null,
-        email: faker.internet.email(),
-        firstName: faker.person.firstName(),
-        lastName: faker.person.lastName(),
-        role: faker.helpers.arrayElement(Object.values(AssociationRole)),
-        isPending: faker.datatype.boolean(),
-        associationId: associationIds[i],
-      })),
-    })
-  }
-}
-
 async function main() {
   console.log("Seeding database...")
   await cleanup()
@@ -128,7 +125,6 @@ async function main() {
   await createUserAdmin()
   console.log("Seeding associations...")
   await createAssociation(100)
-  await createAssociationMember(5, 10)
   console.log("Seed complete")
 }
 

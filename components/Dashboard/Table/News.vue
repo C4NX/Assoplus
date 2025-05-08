@@ -1,15 +1,16 @@
 <template>
   <DashboardModalNewsForm :association-id="associationId" @on-save="handleModalSave" />
   <div class="flex justify-end items-center gap-4 mb-4">
+    <button class="btn btn-primary" @click="dashboardNewsStore.openCreate" v-if="hasRights">
+      <Icon name="mdi:plus" class="w-5 h-5" />
+      Ajouter une news
+    </button>
     <DashboardModalExportCsv :csv-url="`/api/association/${associationId}/news`"
       :file-name="`news-${new Date().toISOString()}.csv`">
       <template #title>
         Exporter en CSV
       </template>
     </DashboardModalExportCsv>
-    <button class="btn btn-primary" @click="dashboardNewsStore.openCreate">
-      Créer une news
-    </button>
   </div>
   <UtilsLoading :status="status">
     <div class="overflow-x-auto">
@@ -19,8 +20,8 @@
           <tr>
             <th />
             <th>Titre</th>
-            <th>Auteur.ice</th>
-            <th>Créer le</th>
+            <th>Date de création / auteur.ice</th>
+            <th>Date de dernière modification</th>
             <th>Status de publication</th>
             <th>Actions</th>
           </tr>
@@ -29,8 +30,12 @@
           <tr v-for="(item, index) in (data?.items || [])" :key="index">
             <th>{{ (page - 1) * (data?.itemPerPage || 10) + index + 1 }}</th>
             <td>{{ item.title }}</td>
-            <td>{{ item.author.firstName }} {{ item.author.lastName }}</td>
-            <td>{{ $d(new Date(item.createdAt), 'long') }}</td>
+            <td>
+              {{ $d(new Date(item.createdAt), 'long') }} - {{ item.createdBy.firstName }} {{ item.createdBy.lastName
+              }}
+            </td>
+            <td>{{ $d(new Date(item.updatedAt), 'long') }} - {{ item.updatedBy?.firstName }} {{ item.updatedBy?.lastName
+              }}</td>
             <td>
               <span v-if="item.status === 'DRAFT'" class="badge badge-success badge-outline">Brouillon</span>
               <span v-else-if="item.status === 'PUBLISHED'" class="badge badge-primary badge-outline">Publié</span>
@@ -38,7 +43,12 @@
             </td>
             <td>
               <div class="flex gap-4 flex-col md:flex-row">
-                <button class="btn btn-primary btn-sm" @click="() => dashboardNewsStore.openEdit(item)">
+                <button class="btn btn-warning btn-sm" v-if="item.status == 'ARCHIVED' && hasRights" @click="handleUnarchive(item)">
+                  <Icon name="mdi:pencil" />
+                  Désarchiver
+                </button>
+                <button class="btn btn-primary btn-sm" @click="() => dashboardNewsStore.openEdit(item)"
+                  v-if="item.status != 'ARCHIVED' && hasRights">
                   <Icon name="mdi:pencil" />
                   Modifier
                 </button>
@@ -65,6 +75,7 @@
 
 <script lang="ts" setup>
 const dashboardNewsStore = useDashboardNewsStore()
+const dashboardStore = useDashboardStore()
 
 const props = defineProps({
   associationId: {
@@ -75,6 +86,10 @@ const props = defineProps({
 
 const associationId = computed(() => props.associationId)
 const page = ref(1)
+
+const hasRights = computed(() => {
+  return dashboardStore.hasRoleOnAssociation(associationId.value, 'WRITER'); 
+})
 
 const {
   data,
@@ -92,21 +107,20 @@ const handleModalSave = async () => {
 }
 
 const handleDelete = async (id: number) => {
-  const currentAssociationId = associationId.value
-  if (currentAssociationId === undefined) {
-    return
-  }
-
-  await dashboardNewsStore.deleteNews(currentAssociationId, id)
+  await dashboardNewsStore.deleteNews(id)
 
   // Refresh the news list
   if (data.value?.items.length === 1) {
     page.value = Math.max(1, page.value - 1)
   }
-  else {
-    await refresh()
-  }
+  await refresh()
 }
+
+const handleUnarchive = async (news: NewsData) => {
+    dashboardNewsStore.updateNews({ id: news.id, status: 'DRAFT' })
+    await refresh()
+}
+
 </script>
 
 <style>

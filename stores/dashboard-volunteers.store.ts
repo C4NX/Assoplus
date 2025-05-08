@@ -1,71 +1,86 @@
 import { defineStore } from 'pinia'
 
-export interface DashboardVolunteersFormData {
-  id?: number
-  email: string
-  firstName: string
-  lastName: string
-  isVerified?: boolean
-  isPending?: boolean
-
-  userId?: string
-  associationId?: string
+interface VolunteerFormData {
+  id: number
+  roles: string[]
+  user: {
+    id: number
+    firstName: string
+    lastName: string
+    email: string
+  }
 }
 
-const defaultFormDataFactory: () => DashboardVolunteersFormData = () => ({
-  id: 0,
-  email: '',
-  firstName: '',
-  lastName: '',
-  isVerified: false,
-  isPending: false,
-  userId: '',
-})
+interface VolunteerUpdate {
+  id: number
+  roles: string[]
+}
 
 export const useDashboardVolunteersStore = defineStore(
   'dashboard-volunteers', {
-    state: (): {
-      isModalOpen: boolean
-      isModalEdit: boolean
-      modalFormData: DashboardVolunteersFormData
-    } => ({
-      isModalOpen: false,
-      isModalEdit: false,
-      modalFormData: defaultFormDataFactory(),
+    state: () => ({
+      isInviteModalOpen: ref(false),
+      isFormModalOpen: ref(false),
+      inviteModalEmail: ref(''),
+      formModalData: ref<VolunteerFormData | null>(null),
     }),
   actions: {
-    openCreate() {
-      this.isModalEdit = false
-      this.isModalOpen = true
-      this.resetFormData()
+    openInviteModal() {
+      this.isInviteModalOpen = true
     },
 
-    openEdit(volunteer: DashboardVolunteersFormData) {
-      this.isModalEdit = true
-      this.isModalOpen = true
-      this.modalFormData = volunteer
+    closeInviteModal() {
+      this.isInviteModalOpen = false
+      this.inviteModalEmail = ''
     },
 
-    closeModal() {
-      this.isModalOpen = false
-      this.isModalEdit = false
-      this.resetFormData()
+    openFormModal(formData: VolunteerFormData) {
+      this.formModalData = formData
+      this.isFormModalOpen = true
     },
 
-    resetFormData() {
-      this.modalFormData = defaultFormDataFactory()
+    closeFormModal() {
+      this.isFormModalOpen = false
+      this.formModalData = null
     },
 
-    async createVolunteer(volunteers: DashboardVolunteersFormData) {
-      const data = await $fetch(`/api/volunteer`, {
+    async inviteVolunteer({ associationId, email}: { associationId: string, email: string }) {
+      const data = await $fetch(`/api/invite`, {
         method: "POST",
-        body: volunteers,
+        body: {
+          associationId,
+          email,
+        },
         onResponse: toastifyResponse,
         headers: {
           "Content-Type": "application/json",
         },
       })
       return data
-    }
+    },
+    async deleteVolunteer(volunteerId: number) {
+      const data = await $fetch(`/api/volunteers/${volunteerId}`, {
+        method: "DELETE",
+        onResponse: toastifyResponse,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      return data
+    },
+
+    async updateVolunteer(updates: VolunteerUpdate) {
+      const data = await $fetch(`/api/volunteers/${updates.id}`, {
+        method: "PATCH",
+        body: {
+          roles: updates.roles,
+        },
+        onResponse: toastifyResponse,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      return data
+    },
   }
 })

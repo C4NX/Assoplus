@@ -26,7 +26,7 @@ export async function sendMail(options: SendMailOptions): Promise<void> {
     await nodemailerTransport?.sendMail({
       from,
       to: options.to,
-      subject: options.subject,
+      subject: `[Asso+] ${options.subject}`,
       text: options.text,
       html: options.html,
     })

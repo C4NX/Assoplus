@@ -120,6 +120,13 @@ definePageMeta({
 const dashboardStore = useDashboardStore()
 const { activeTab } = storeToRefs(dashboardStore)
 
+// Handle list of associations in the dashboard store
+watch(userAssociations, (newValue) => {
+  if (newValue) {
+    dashboardStore.setAssociations(newValue)
+  }
+}, { immediate: true })
+
 // Handle refeshing of the user associations list with the dashboard store
 watch(() => dashboardStore.needAssociationListRefresh, async (newValue, oldValue) => {
   if (newValue !== oldValue && newValue) {

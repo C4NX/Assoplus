@@ -1,25 +1,22 @@
 import { z } from "zod"
 import { NewsPublicationStatus } from "@prisma/client"
-import { parseAssociationIdFromRouteGuid } from "../index.get"
 import { validateBodySchema } from "~/server/util/request/request.service"
-import { requireAssociationOwner } from "~/server/util/user/auth.guard"
+import { requireAssociationVolunteer } from "~/server/util/user/auth.guard"
 import prisma from "~/lib/prisma"
 
 import { defineEventHandler } from "h3"
 import { sanitize } from "~/server/util/request/sanitizer.service"
 
 const NewsCreateSchema = z.object({
+  associationId: z.string(),
   title: z.string(),
-  content: z.string(),
-  status: z.nativeEnum(NewsPublicationStatus).optional().default(NewsPublicationStatus.DRAFT),
+  content: z.string().transform((arg) => sanitize(arg)),
+  status: z.nativeEnum(NewsPublicationStatus).default(NewsPublicationStatus.DRAFT).optional(),
 })
 
 export default defineEventHandler(async (event) => {
   const newsCreateData = await validateBodySchema(event, NewsCreateSchema)
-  const associationId = parseAssociationIdFromRouteGuid(event)
-
-  // TODO: replace with requireAssociationMember
-  const user = await requireAssociationOwner(event, associationId)
+  const user = await requireAssociationVolunteer(event, newsCreateData.associationId)
 
   return await prisma.news.create({
     select: {
@@ -30,10 +27,11 @@ export default defineEventHandler(async (event) => {
     },
     data: {
       title: newsCreateData.title,
-      content: sanitize(newsCreateData.content),
+      content: newsCreateData.content,
       status: newsCreateData.status,
-      associationId,
-      authorId: user.id,
+      associationId: newsCreateData.associationId,
+      createdById: user.id,
+      updatedById: user.id,
     },
   })
 })

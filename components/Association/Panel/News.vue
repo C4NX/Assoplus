@@ -13,7 +13,7 @@
         <div class="collapse-content">
           <article v-html="$sanitizeHTML(news.content)" />
           <p class="text-sm text-gray-400 text-right">
-            <span class="text-gray-700 font-semibold">{{ news.author.firstName }} {{ news.author.lastName }}</span>
+            <span class="text-gray-700 font-semibold">{{ news.createdBy.firstName }} {{ news.createdBy.lastName }}</span>
             -
             {{ $d(new Date(news.createdAt)) }}
           </p>

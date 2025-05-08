@@ -1,13 +1,21 @@
 import { defineStore } from "pinia"
 
-export interface DashboardNewsModalReactive {
+export interface NewsData {
   id: number
   title: string
   content: string
   status: string
 }
 
-const defaultFormDataFactory: () => DashboardNewsModalReactive = () => ({
+export interface NewsCreate extends Omit<NewsData, "id"> {
+  associationId: string
+}
+
+export interface NewsUpdate extends Partial<NewsData> {
+  id: number
+}
+
+const defaultFormDataFactory: () => NewsData = () => ({
   id: 0,
   title: "",
   content: "",
@@ -18,14 +26,14 @@ export const useDashboardNewsStore = defineStore("dashboard-news", {
   state: (): {
     isModalOpen: boolean
     isModalEdit: boolean
-    modalFormData: DashboardNewsModalReactive
+    modalFormData: NewsData
   } => ({
     isModalOpen: false,
     isModalEdit: false,
     modalFormData: defaultFormDataFactory(),
   }),
   actions: {
-    openEdit(news: DashboardNewsModalReactive) {
+    openEdit(news: NewsData) {
       this.isModalEdit = true
       this.isModalOpen = true
       this.modalFormData = news
@@ -47,8 +55,8 @@ export const useDashboardNewsStore = defineStore("dashboard-news", {
       this.modalFormData = defaultFormDataFactory()
     },
 
-    async createNews(associationId: string, news: { title: string, content: string, status: string }) {
-      const data = await $fetch(`/api/association/${associationId}/news`, {
+    async createNews(news: NewsCreate) {
+      const data = await $fetch(`/api/news`, {
         method: "POST",
         body: news,
         headers: {
@@ -58,8 +66,21 @@ export const useDashboardNewsStore = defineStore("dashboard-news", {
       return data
     },
 
-    async deleteNews(associationId: string, newsId: number) {
-      await $fetch(`/api/association/${associationId}/news/${newsId}`, {
+    async editNews(news: NewsData) {
+      const data = await $fetch(`/api/news`, {
+        method: "PATCH",
+        body: {
+          ...news,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      return data
+    },
+
+    async deleteNews(newsId: number) {
+      await $fetch(`/api/news/${newsId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -67,10 +88,11 @@ export const useDashboardNewsStore = defineStore("dashboard-news", {
       })
     },
 
-    async updateNews(associationId: string, newsId: number, updates: Partial<DashboardNewsModalReactive>) {
-      const data = await $fetch(`/api/association/${associationId}/news/${newsId}`, {
+    async updateNews(updates: NewsUpdate) {
+      const { id, ...updateData } = updates
+      const data = await $fetch(`/api/news/${id}`, {
         method: "PATCH",
-        body: updates,
+        body: updateData,
         headers: {
           "Content-Type": "application/json",
         },
