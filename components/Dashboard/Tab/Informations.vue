@@ -67,6 +67,9 @@
       <AssociationForm
         :association-id="dashboard.activeAssociationId"
         :readonly="!editMode"
+        @association-edited="() => {
+          editMode = false
+        }"
       />
 
       <div class="flex justify-end">
@@ -88,16 +91,18 @@
 
 <script lang="ts" setup>
 const dashboard = useDashboardStore()
+const associationStore = useAssociationsStore()
 
 const deleteModal = ref<HTMLDialogElement | null>(null)
 const editMode = ref(false)
 
 const handleDelete = async () => {
-  await $fetch(`/api/association/${dashboard.activeAssociationId}`, {
-    method: "DELETE",
-    onResponse: toastifyResponse,
-  })
+  if(!dashboard.activeAssociationId) {
+    deleteModal.value?.close()
+    return
+  }
 
+  await associationStore.delete(dashboard.activeAssociationId)
   dashboard.needAssociationListRefresh = true
   dashboard.setTab(DashboardTabType.HOME)
 }

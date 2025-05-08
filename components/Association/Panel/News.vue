@@ -1,6 +1,7 @@
 <template>
   <UtilsLoading :status="status">
-    <p class="text-gray-500 text-h2xl font-bold">
+    <div>
+      <p class="text-gray-500 text-h2xl font-bold">
       News
       <span class="text-gray-500">({{ data?.total }})</span>
     </p>
@@ -13,7 +14,7 @@
         <div class="collapse-content">
           <article v-html="$sanitizeHTML(news.content)" />
           <p class="text-sm text-gray-400 text-right">
-            <span class="text-gray-700 font-semibold">{{ news.createdBy.firstName }} {{ news.createdBy.lastName }}</span>
+            <span class="text-gray-700 font-semibold">{{ news.createdBy?.firstName }} {{ news.createdBy?.lastName }}</span>
             -
             {{ $d(new Date(news.createdAt)) }}
           </p>
@@ -21,6 +22,10 @@
       </div>
     </div>
     <InputPagination v-if="data?.totalPages" v-model="currentPage" :total-pages="data.totalPages" />
+  </div>
+  <p v-if="data?.items.length === 0" class="text-gray-500 text-sm">
+    Pas de news disponible pour le moment
+  </p>
   </UtilsLoading>
 </template>
 
