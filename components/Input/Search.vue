@@ -1,5 +1,5 @@
 <template>
-  <label class="input input-bordered input-md flex-1 flex items-center gap-2">
+  <label :class="['input input-bordered flex-1 flex items-center gap-2', sizeClasses]">
     <Icon
       name="mdi:magnify"
       class="w-5 h-5"
@@ -35,6 +35,11 @@ const props = defineProps({
     type: Number,
     default: 300,
   },
+  size: {
+    type: String,
+    default: "md",
+    validate: (value: string) => ["xs", "sm", "md", "lg"].includes(value),
+  },
 })
 
 const emit = defineEmits(["update:modelValue"])
@@ -55,5 +60,18 @@ const searchInput = computed({
   set: (value) => {
     internalValue.value = value
   },
+})
+
+const sizeClasses = computed(() => {
+  switch (props.size) {
+    case "xs":
+      return "input-xs"
+    case "sm":
+      return "input-sm"
+    case "lg":
+      return "input-lg"
+    default:
+      return ""
+  }
 })
 </script>

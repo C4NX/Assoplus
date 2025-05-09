@@ -1,8 +1,10 @@
 import { NewsPublicationStatus, Prisma } from "@prisma/client"
 import { parseAssociationIdFromRouteGuid } from "../index.get"
 import prisma from "~/lib/prisma"
+import { z } from "zod"
 
 import { paginate } from "~/server/util/request/pagination.service"
+import { getValidatedQuery } from "h3"
 
 /**
  * Récupère la liste des actualités d'une association, avec pagination.
@@ -11,7 +13,11 @@ import { paginate } from "~/server/util/request/pagination.service"
 export default defineEventHandler(async (event) => {
   const associationId = parseAssociationIdFromRouteGuid(event)
 
-  const prismaSelect = {
+  const { search } = await getValidatedQuery(event, z.object({
+    search: z.string().optional(),
+  }).parse)
+
+  const prismaOptions = {
     select: {
       id: true,
       title: true,
@@ -20,7 +26,6 @@ export default defineEventHandler(async (event) => {
       status: true,
       createdBy: {
         select: {
-          id: true,
           firstName: true,
           lastName: true,
         },
@@ -29,22 +34,26 @@ export default defineEventHandler(async (event) => {
     orderBy: {
       createdAt: Prisma.SortOrder.desc,
     },
+    where: {
+      associationId,
+      status: NewsPublicationStatus.PUBLISHED,
+      ...(search ? {
+        OR: [
+          { title: { contains: String(search), mode: Prisma.QueryMode.insensitive } },
+          // { content: { contains: String(search), mode: Prisma.QueryMode.insensitive } },
+        ],
+      } : {}),
+    },
   }
 
   return paginate(event, {
-    data: async inject => await prisma.news.findMany({
-      ...prismaSelect,
-      where: {
-        associationId,
-        status: NewsPublicationStatus.PUBLISHED,
-      },
-      ...inject,
+    data: async ({take, skip}) => await prisma.news.findMany({
+      ...prismaOptions,
+      take,
+      skip,
     }),
     count: async () => await prisma.news.count({
-      where: {
-        associationId,
-        status: NewsPublicationStatus.PUBLISHED,
-      },
+      where: prismaOptions.where,
     }),
   })
 })

@@ -1,10 +1,21 @@
 <template>
   <UtilsLoading :status="status">
-    <div>
-      <p class="text-gray-500 text-h2xl font-bold">
-        News
-        <span class="text-gray-500">({{ data?.total }})</span>
-      </p>
+    <div class="flex flex-col gap-2">
+      <!-- Header -->
+      <div class="flex flex-row gap-2 items-center">
+        <span class="text-gray-500 text-h2xl font-bold">
+          News
+          <span class="text-gray-500">({{ data?.total }})</span>
+        </span>
+        <InputSearch
+          v-model="searchInput"
+          :placeholder="$t('association.news.search')"
+          size="sm"
+          debounce
+        />
+      </div>
+
+      <!-- News List -->
       <div
         v-for="news in data?.items"
         :key="news.id"
@@ -47,6 +58,7 @@
 
 <script lang="ts" setup>
 const currentPage = ref(1)
+const searchInput = ref<string | undefined>(undefined)
 
 const newsOpenCheckbox = ref<HTMLInputElement[] | null>(null)
 const renderedArticles = reactive<Record<string, boolean>>({})
@@ -67,10 +79,10 @@ const props = defineProps({
 })
 
 const { data, status } = useFetch(`/api/association/${props.associationId}/news/public`, {
-  params: {
+  query: {
     page: currentPage,
-  },
-  watch: [currentPage],
+    search: searchInput
+  }
 })
 </script>
 
