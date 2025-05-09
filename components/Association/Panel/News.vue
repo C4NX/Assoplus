@@ -10,6 +10,10 @@
       size="sm"
       debounce
     />
+    <InputButtonSort
+      v-model="searchOrder"
+      size="sm"
+    />
   </div>
   <UtilsLoading :status="status">
     <div class="flex flex-col gap-2">
@@ -46,9 +50,9 @@
     </div>
     <p
       v-if="data?.items.length === 0"
-      class="text-gray-500 text-sm"
+      class="text-gray-500 text-sm text-center"
     >
-      Pas de news disponible pour le moment
+      {{ $t("association.news.no_news") }}
     </p>
   </UtilsLoading>
 </template>
@@ -56,6 +60,7 @@
 <script lang="ts" setup>
 const currentPage = ref(1)
 const searchInput = ref<string | undefined>(undefined)
+const searchOrder = ref<"asc" | "desc">("asc")
 
 const newsOpenCheckbox = ref<HTMLInputElement[] | null>(null)
 const renderedArticles = reactive<Record<string, boolean>>({})
@@ -78,7 +83,8 @@ const props = defineProps({
 const { data, status } = useFetch(`/api/association/${props.associationId}/news/public`, {
   query: {
     page: currentPage,
-    search: searchInput
+    search: searchInput,
+    order: searchOrder,
   }
 })
 </script>

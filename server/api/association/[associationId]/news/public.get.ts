@@ -13,8 +13,9 @@ import { getValidatedQuery } from "h3"
 export default defineEventHandler(async (event) => {
   const associationId = parseAssociationIdFromRouteGuid(event)
 
-  const { search } = await getValidatedQuery(event, z.object({
+  const { search, order } = await getValidatedQuery(event, z.object({
     search: z.string().optional(),
+    order: z.enum(["asc", "desc"]).default("desc"),
   }).parse)
 
   const prismaOptions = {
@@ -32,7 +33,7 @@ export default defineEventHandler(async (event) => {
       },
     },
     orderBy: {
-      createdAt: Prisma.SortOrder.desc,
+      createdAt: order === "asc" ? Prisma.SortOrder.asc : Prisma.SortOrder.desc,
     },
     where: {
       associationId,

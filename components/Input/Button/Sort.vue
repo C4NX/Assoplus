@@ -1,5 +1,5 @@
 <template>
-  <label class="swap swap-rotate btn">
+  <label :class="['swap swap-rotate btn', size]">
     <input
       v-model="isAscending"
       type="checkbox"
@@ -22,6 +22,11 @@ const props = defineProps({
     default: "asc",
     validator: (value: string) => ["asc", "desc"].includes(value),
   },
+  size: {
+    type: String,
+    default: "md",
+    validator: (value: string) => ["xs", "sm", "md", "lg"].includes(value),
+  },
 })
 
 const emit = defineEmits<{
@@ -31,6 +36,21 @@ const emit = defineEmits<{
 const isAscending = computed({
   get: () => props.modelValue === "asc",
   set: value => emit("update:modelValue", value ? "asc" : "desc"),
+})
+
+const size = computed(() => {
+  switch (props.size) {
+    case "xs":
+      return "btn-xs"
+    case "sm":
+      return "btn-sm"
+    case "md":
+      return "btn-md"
+    case "lg":
+      return "btn-lg"
+    default:
+      return ""
+  }
 })
 </script>
 
