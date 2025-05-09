@@ -1,15 +1,15 @@
-import type { H3Event } from 'h3'
+import type { H3Event } from "h3"
 
 export function emailTemplateBase(event: H3Event, {
-    title,
-    content,
+  title,
+  content,
 }: {
-    title: string
-    content: string
+  title: string
+  content: string
 }) {
-    const { public: { contactEmail }, baseUrl } = useRuntimeConfig(event)
+  const { public: { contactEmail }, baseUrl } = useRuntimeConfig(event)
 
-    return `
+  return `
 <!DOCTYPE html>
 <html lang="fr">
 <head>

@@ -1,16 +1,39 @@
 <template>
-  <input v-model="isModalOpen" type="checkbox" class="modal-toggle">
-  <form class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" @submit.prevent="handleSubmit">
+  <input
+    v-model="isModalOpen"
+    type="checkbox"
+    class="modal-toggle"
+  >
+  <form
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    @submit.prevent="handleSubmit"
+  >
     <div class="news-modal-content">
       <h3 class="news-modal-title">
-        <Icon v-if="isModalEdit" name="mdi:pencil" />
-        <Icon v-else name="mdi:plus" />
+        <Icon
+          v-if="isModalEdit"
+          name="mdi:pencil"
+        />
+        <Icon
+          v-else
+          name="mdi:plus"
+        />
         {{ isModalEdit ? 'Modifier' : 'Ajouter' }} une news
       </h3>
       <div class="flex gap-2">
-        <input v-model="modalFormData.title" type="text" placeholder="Titre de la news"
-          class="input input-bordered flex-1">
-        <select v-model="modalFormData.status" class="select select-bordered">
+        <input
+          v-model="modalFormData.title"
+          type="text"
+          placeholder="Titre de la news"
+          class="input input-bordered flex-1"
+        >
+        <select
+          v-model="modalFormData.status"
+          class="select select-bordered"
+        >
           <option value="DRAFT">
             📝 Brouillon
           </option>
@@ -22,19 +45,27 @@
           </option>
         </select>
       </div>
-      <Editor 
-        tinymce-script-src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.6.1/tinymce.min.js" 
+      <Editor
+        v-model="modalFormData.content"
+        tinymce-script-src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.6.1/tinymce.min.js"
         :init="{
-          plugins: 'lists link image table code help wordcount', 
+          plugins: 'lists link image table code help wordcount',
           promotion: false,
           license_key: 'gpl',
-        }"  
-        v-model="modalFormData.content" />
+        }"
+      />
       <div class="modal-action">
-        <button type="submit" class="btn btn-primary">
+        <button
+          type="submit"
+          class="btn btn-primary"
+        >
           Sauvegarder
         </button>
-        <button type="button" class="btn" @click="dashboardNewsStore.closeModal()">
+        <button
+          type="button"
+          class="btn"
+          @click="dashboardNewsStore.closeModal()"
+        >
           Close
         </button>
       </div>
@@ -43,7 +74,7 @@
 </template>
 
 <script lang="ts" setup>
-import Editor from '@tinymce/tinymce-vue'
+import Editor from "@tinymce/tinymce-vue"
 import { toast } from "vue3-toastify"
 
 const dashboardNewsStore = useDashboardNewsStore()
@@ -87,7 +118,7 @@ const handleSubmit = async () => {
       title: formData.title,
       content: formData.content,
       status: formData.status,
-    });
+    })
     emit("onSave", { isEdit: true })
   }
   else {

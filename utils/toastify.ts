@@ -13,7 +13,6 @@ export function statusToastifyResponse(ctx: FetchContext, t: ReturnType<typeof u
   }
 }
 
-
 /**
  * A toastify response function that shows a success or error message based on the response status.
  * It also handles ZodError validation errors and displays them in a user-friendly way.

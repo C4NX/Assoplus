@@ -1,16 +1,16 @@
 import { z } from "zod"
 import { NewsPublicationStatus } from "@prisma/client"
+import { defineEventHandler } from "h3"
 import { validateBodySchema } from "~/server/util/request/request.service"
 import { requireAssociationVolunteer } from "~/server/util/user/auth.guard"
 import prisma from "~/lib/prisma"
 
-import { defineEventHandler } from "h3"
 import { sanitize } from "~/server/util/request/sanitizer.service"
 
 const NewsCreateSchema = z.object({
   associationId: z.string(),
   title: z.string(),
-  content: z.string().transform((arg) => sanitize(arg)),
+  content: z.string().transform(arg => sanitize(arg)),
   status: z.nativeEnum(NewsPublicationStatus).default(NewsPublicationStatus.DRAFT).optional(),
 })
 

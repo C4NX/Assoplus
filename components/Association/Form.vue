@@ -13,7 +13,7 @@
           class="input input-bordered w-full"
           :readonly="$props.readonly"
           :disabled="isLoading"
-        />
+        >
       </label>
 
       <!-- Association Logo -->
@@ -36,10 +36,13 @@
               associationForm.logo = file
             }
           }"
-        />
+        >
       </label>
 
-      <label v-else class="form-control w-full">
+      <label
+        v-else
+        class="form-control w-full"
+      >
         <div class="label">
           <span class="label-text">Logo</span>
         </div>
@@ -47,8 +50,11 @@
           v-if="data?.logoPathUrl"
           :src="data.logoPathUrl"
           class="w-full max-w-xs object-cover rounded"
-        />
-        <span v-else class="text-sm text-gray-500 text-center">Aucune image</span>
+        >
+        <span
+          v-else
+          class="text-sm text-gray-500 text-center"
+        >Aucune image</span>
       </label>
 
       <!-- Association Description -->

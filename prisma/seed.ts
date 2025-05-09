@@ -91,7 +91,7 @@ async function createAssociation(n: number) {
         name: faker.company.name(),
         description: faker.company.catchPhrase(),
         tags: {
-          connect: Array.from(tags).map((tagId) => ({
+          connect: Array.from(tags).map(tagId => ({
             id: tagId,
           })),
         },
@@ -101,7 +101,7 @@ async function createAssociation(n: number) {
               userId,
               roles: index === 0 ? [AssociationRole.PRESIDENT] : [faker.helpers.arrayElement(Object.values(AssociationRole).filter(role => role !== AssociationRole.PRESIDENT))],
             })),
-          }
+          },
         },
         news: {
           createMany: {
@@ -109,7 +109,7 @@ async function createAssociation(n: number) {
               title: faker.lorem.sentence(),
               content: fakerRandomHtml(3),
               createdById: userIds[Math.floor(Math.random() * userIds.length)],
-              status: faker.helpers.arrayElement(Object.values(NewsPublicationStatus))
+              status: faker.helpers.arrayElement(Object.values(NewsPublicationStatus)),
             })),
           },
         },
@@ -142,9 +142,9 @@ async function createTags() {
         name: "LGBTQIA+",
         type: TagType.TYPE_LGBT,
       },
-    ]
+    ],
   })
-  tagIds = (await prisma.tag.findMany({select: { id: true } })).map(tag => tag.id)
+  tagIds = (await prisma.tag.findMany({ select: { id: true } })).map(tag => tag.id)
 }
 
 async function main() {

@@ -10,23 +10,23 @@ export default defineEventHandler(async (event) => {
       name: true,
       members: {
         where: {
-          userId: user.id
+          userId: user.id,
         },
         select: {
-          roles: true
-        }
+          roles: true,
+        },
       },
     },
     where: {
       OR: [
         { members: { some: { userId: user.id } } }, // Associations where the user is a member and not pending
-      ]
+      ],
     },
   })
 
   return associations.map(association => ({
     id: association.id,
     name: association.name,
-    roles: association.members[0]?.roles || null
+    roles: association.members[0]?.roles || null,
   }))
 })

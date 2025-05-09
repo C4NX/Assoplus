@@ -1,8 +1,8 @@
 import { z } from "zod"
+import { AssociationRole } from "@prisma/client"
 import { requireAssociationVolunteer } from "~/server/util/user/auth.guard"
 import prisma from "~/lib/prisma"
 import { validateParam } from "~/server/util/request/request.service"
-import { AssociationRole } from "@prisma/client"
 
 export default defineEventHandler(async (event) => {
   const newsId = await validateParam(event, "newsId", z.coerce.number().int().positive())

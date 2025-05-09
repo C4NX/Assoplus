@@ -1,8 +1,7 @@
-import { requireAssociationOwner } from "~/server/util/user/auth.guard"
 import { z } from "zod"
+import { requireAssociationOwner } from "~/server/util/user/auth.guard"
 import { validateBodySchema } from "~/server/util/request/request.service"
 import prisma from "~/lib/prisma"
-import { AssociationRole } from "@prisma/client"
 import { sendMail } from "~/server/util/mailer/mailer.service"
 import { emailTemplateBase } from "~/server/util/mailer/templates"
 
@@ -14,7 +13,7 @@ const VolunteerInviteSchema = z.object({
 export default defineEventHandler(async (event) => {
   const body = await validateBodySchema(event, VolunteerInviteSchema)
   const user = await requireAssociationOwner(event, body.associationId)
-  const { baseUrl } = useRuntimeConfig();
+  const { baseUrl } = useRuntimeConfig()
 
   const association = await prisma.association.findUnique({
     where: {
@@ -32,14 +31,14 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  if(existingInvite) {
+  if (existingInvite) {
     throw createError({
       statusCode: 400,
       statusMessage: "Invite already exists",
     })
   }
 
-  const inviteToken = crypto.randomUUID();
+  const inviteToken = crypto.randomUUID()
 
   await prisma.invite.create({
     data: {
@@ -53,7 +52,7 @@ export default defineEventHandler(async (event) => {
   await sendMail({
     to: body.email,
     subject: "Invitation to join the association",
-    html: emailTemplateBase(event,{
+    html: emailTemplateBase(event, {
       title: "Invitation to join the association",
       content: `
       <p>Hello,</p>
@@ -64,7 +63,7 @@ export default defineEventHandler(async (event) => {
       <p>${user.firstName} ${user.lastName}</p>
       <p>${association?.name}</p>
     `,
-    })
+    }),
   })
 
   return {

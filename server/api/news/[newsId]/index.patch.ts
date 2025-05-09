@@ -1,14 +1,14 @@
-import { validateBodySchema, validateParam } from "~/server/util/request/request.service"
 import { z } from "zod"
+import { AssociationRole, NewsPublicationStatus } from "@prisma/client"
+import { validateBodySchema, validateParam } from "~/server/util/request/request.service"
 import prisma from "~/lib/prisma"
 import { requireAssociationVolunteer } from "~/server/util/user/auth.guard"
-import { AssociationRole, NewsPublicationStatus } from "@prisma/client"
 import { sanitize } from "~/server/util/request/sanitizer.service"
 
 const NewsUpdateSchema = z.object({
   title: z.string().optional(),
   content: z.string()
-    .transform((arg) => sanitize(arg))
+    .transform(arg => sanitize(arg))
     .optional(),
   status: z.nativeEnum(NewsPublicationStatus).optional(),
 })

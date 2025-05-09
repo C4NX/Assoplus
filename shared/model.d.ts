@@ -4,4 +4,4 @@ export interface Tag {
   type: string
 }
 
-export type DatabaseId = number | string;
+export type DatabaseId = number | string

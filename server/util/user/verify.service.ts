@@ -1,9 +1,8 @@
 import type { H3Event } from "h3"
-import { v4 as uuid } from "uuid"
 import type { User } from "@prisma/client"
 import { sendMail } from "../mailer/mailer.service"
-import prisma from "~/lib/prisma"
 import { emailTemplateBase } from "../mailer/templates"
+import prisma from "~/lib/prisma"
 
 /**
  * Verify a user account with a given token stored in session. If the tokens match, the user is verified,

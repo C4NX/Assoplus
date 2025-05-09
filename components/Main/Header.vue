@@ -61,9 +61,9 @@
           class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
         >
           <li>
-            <a 
-              @click.prevent="handleProfile()"
+            <a
               class="justify-between"
+              @click.prevent="handleProfile()"
             >
               {{ user?.firstName }} {{ user?.lastName }}
               <span
@@ -73,7 +73,7 @@
             </a>
           </li>
           <li>
-            <button 
+            <button
               @click.prevent="handleNotification()"
             >
               <Icon
@@ -84,14 +84,16 @@
               Notifications
             </button>
           </li>
-          <li><button @click.prevent="handleLogout()">
-            <Icon
-              name="mdi:logout"
-              size="18"
-              class="mr-1"
-            />
-            Logout
-          </button></li>
+          <li>
+            <button @click.prevent="handleLogout()">
+              <Icon
+                name="mdi:logout"
+                size="18"
+                class="mr-1"
+              />
+              Logout
+            </button>
+          </li>
         </ul>
       </div>
     </div>
@@ -99,7 +101,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ProfileTab, useProfileStore } from '~/stores/profile.store'
+import { ProfileTab, useProfileStore } from "~/stores/profile.store"
 
 const { loggedIn, user } = useUserSession()
 const accountStore = useAccountStore()
@@ -112,12 +114,12 @@ const handleLogout = async () => {
 
 const handleNotification = () => {
   profileStore.setActiveTab(ProfileTab.NOTIFICATIONS)
-  navigateTo(localPath('/profile/me'))
+  navigateTo(localPath("/profile/me"))
 }
 
 const handleProfile = () => {
   profileStore.setActiveTab(ProfileTab.INFO)
-  navigateTo(localPath('/profile/me'))
+  navigateTo(localPath("/profile/me"))
 }
 </script>
 

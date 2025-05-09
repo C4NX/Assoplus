@@ -1,9 +1,9 @@
 import { defineEventHandler } from "h3"
 import { z } from "zod"
+import { parseAssociationIdFromRouteGuid } from "../index.get"
 import prisma from "~/lib/prisma"
 import { exportCsv, isRequestingCsv } from "~/server/util/request/exporter.service"
 import { paginate } from "~/server/util/request/pagination.service"
-import { parseAssociationIdFromRouteGuid } from "../index.get"
 import { requireAssociationVolunteer } from "~/server/util/user/auth.guard"
 
 export default defineEventHandler(async (event) => {
@@ -24,8 +24,8 @@ export default defineEventHandler(async (event) => {
         firstName: true,
         lastName: true,
         email: true,
-      }
-    }
+      },
+    },
   }
 
   if (await isRequestingCsv(event)) {
@@ -54,7 +54,7 @@ export default defineEventHandler(async (event) => {
                         contains: query.search,
                         mode: "insensitive",
                       },
-                    }
+                    },
                   },
                   {
                     user: {
@@ -62,7 +62,7 @@ export default defineEventHandler(async (event) => {
                         contains: query.search,
                         mode: "insensitive",
                       },
-                    }
+                    },
                   },
                   {
                     user: {
@@ -70,7 +70,7 @@ export default defineEventHandler(async (event) => {
                         contains: query.search,
                         mode: "insensitive",
                       },
-                    }
+                    },
                   },
                 ],
               }

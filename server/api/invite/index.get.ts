@@ -1,4 +1,4 @@
-import prisma from "~/lib/prisma";
+import prisma from "~/lib/prisma"
 import { paginate } from "~/server/util/request/pagination.service"
 import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
 
@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
           where,
         })
       },
-      data: async ({skip, take}) => {
+      data: async ({ skip, take }) => {
         return await prisma.invite.findMany({
           where,
           skip,
@@ -32,18 +32,18 @@ export default defineEventHandler(async (event) => {
               select: {
                 firstName: true,
                 lastName: true,
-              }
+              },
             },
             association: {
               select: {
                 id: true,
                 name: true,
                 description: true,
-              }
+              },
             },
           },
         })
-      }
+      },
     },
   )
 })

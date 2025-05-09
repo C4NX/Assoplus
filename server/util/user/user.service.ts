@@ -69,7 +69,7 @@ export async function sendPasswordResetEmail(user: User, event: H3Event) {
     html: emailTemplateBase(event, {
       title: "Please reset your password by clicking on the link below",
       content: `<a href='${baseUrl}/login/forgot-password?token=${uniqueToken}'>Reset password</a>`,
-    })
+    }),
   })
 }
 

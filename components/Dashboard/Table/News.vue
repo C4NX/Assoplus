@@ -1,12 +1,24 @@
 <template>
-  <DashboardModalNewsForm :association-id="associationId" @on-save="handleModalSave" />
+  <DashboardModalNewsForm
+    :association-id="associationId"
+    @on-save="handleModalSave"
+  />
   <div class="flex justify-end items-center gap-4 mb-4">
-    <button class="btn btn-primary" @click="dashboardNewsStore.openCreate" v-if="hasRights">
-      <Icon name="mdi:plus" class="w-5 h-5" />
+    <button
+      v-if="hasRights"
+      class="btn btn-primary"
+      @click="dashboardNewsStore.openCreate"
+    >
+      <Icon
+        name="mdi:plus"
+        class="w-5 h-5"
+      />
       Ajouter une news
     </button>
-    <DashboardModalExportCsv :csv-url="`/api/association/${associationId}/news`"
-      :file-name="`news-${new Date().toISOString()}.csv`">
+    <DashboardModalExportCsv
+      :csv-url="`/api/association/${associationId}/news`"
+      :file-name="`news-${new Date().toISOString()}.csv`"
+    >
       <template #title>
         Exporter en CSV
       </template>
@@ -27,32 +39,56 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in (data?.items || [])" :key="index">
+          <tr
+            v-for="(item, index) in (data?.items || [])"
+            :key="index"
+          >
             <th>{{ (page - 1) * (data?.itemPerPage || 10) + index + 1 }}</th>
             <td>{{ item.title }}</td>
             <td>
               {{ $d(new Date(item.createdAt), 'long') }} - {{ item.createdBy.firstName }} {{ item.createdBy.lastName
               }}
             </td>
-            <td>{{ $d(new Date(item.updatedAt), 'long') }} - {{ item.updatedBy?.firstName }} {{ item.updatedBy?.lastName
-              }}</td>
             <td>
-              <span v-if="item.status === 'DRAFT'" class="badge badge-success badge-outline">Brouillon</span>
-              <span v-else-if="item.status === 'PUBLISHED'" class="badge badge-primary badge-outline">Publié</span>
-              <span v-else-if="item.status === 'ARCHIVED'" class="badge badge-error badge-outline">Archivé</span>
+              {{ $d(new Date(item.updatedAt), 'long') }} - {{ item.updatedBy?.firstName }} {{ item.updatedBy?.lastName
+              }}
+            </td>
+            <td>
+              <span
+                v-if="item.status === 'DRAFT'"
+                class="badge badge-success badge-outline"
+              >Brouillon</span>
+              <span
+                v-else-if="item.status === 'PUBLISHED'"
+                class="badge badge-primary badge-outline"
+              >Publié</span>
+              <span
+                v-else-if="item.status === 'ARCHIVED'"
+                class="badge badge-error badge-outline"
+              >Archivé</span>
             </td>
             <td>
               <div class="flex gap-4 flex-col md:flex-row">
-                <button class="btn btn-warning btn-sm" v-if="item.status == 'ARCHIVED' && hasRights" @click="handleUnarchive(item)">
+                <button
+                  v-if="item.status == 'ARCHIVED' && hasRights"
+                  class="btn btn-warning btn-sm"
+                  @click="handleUnarchive(item)"
+                >
                   <Icon name="mdi:pencil" />
                   Désarchiver
                 </button>
-                <button class="btn btn-primary btn-sm" @click="() => dashboardNewsStore.openEdit(item)"
-                  v-if="item.status != 'ARCHIVED' && hasRights">
+                <button
+                  v-if="item.status != 'ARCHIVED' && hasRights"
+                  class="btn btn-primary btn-sm"
+                  @click="() => dashboardNewsStore.openEdit(item)"
+                >
                   <Icon name="mdi:pencil" />
                   Modifier
                 </button>
-                <button class="btn btn-error btn-sm" @click="() => handleDelete(item.id)">
+                <button
+                  class="btn btn-error btn-sm"
+                  @click="() => handleDelete(item.id)"
+                >
                   <Icon name="mdi:trash-can" />
                   Supprimer
                 </button>
@@ -60,14 +96,21 @@
             </td>
           </tr>
           <tr v-if="data?.items.length === 0">
-            <td colspan="5" class="text-center">
+            <td
+              colspan="5"
+              class="text-center"
+            >
               Aucune news disponible
             </td>
           </tr>
         </tbody>
       </table>
       <div class="flex justify-center items-center mt-4">
-        <InputPagination v-model="page" :total-pages="data?.totalPages ?? 0" @on-page-change="refresh" />
+        <InputPagination
+          v-model="page"
+          :total-pages="data?.totalPages ?? 0"
+          @on-page-change="refresh"
+        />
       </div>
     </div>
   </UtilsLoading>
@@ -88,7 +131,7 @@ const associationId = computed(() => props.associationId)
 const page = ref(1)
 
 const hasRights = computed(() => {
-  return dashboardStore.hasRoleOnAssociation(associationId.value, 'WRITER'); 
+  return dashboardStore.hasRoleOnAssociation(associationId.value, "WRITER")
 })
 
 const {
@@ -117,10 +160,9 @@ const handleDelete = async (id: number) => {
 }
 
 const handleUnarchive = async (news: NewsData) => {
-    dashboardNewsStore.updateNews({ id: news.id, status: 'DRAFT' })
-    await refresh()
+  dashboardNewsStore.updateNews({ id: news.id, status: "DRAFT" })
+  await refresh()
 }
-
 </script>
 
 <style>

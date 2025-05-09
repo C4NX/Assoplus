@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ProfileTab, useProfileStore } from '~/stores/profile.store';
+import { ProfileTab, useProfileStore } from "~/stores/profile.store"
 
 const profileStore = useProfileStore()
 const { activeTab } = storeToRefs(profileStore)

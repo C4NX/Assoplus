@@ -1,5 +1,6 @@
 import type { H3Event } from "h3"
-import { AssociationRole, User } from "@prisma/client"
+import type { User } from "@prisma/client"
+import { AssociationRole } from "@prisma/client"
 import { Role } from "./role.enum"
 import type { PublicUserInterface } from "~/shared/auth"
 import prisma from "~/lib/prisma"
@@ -18,11 +19,12 @@ export function createInvalidSession() {
 
 export async function tryGetAuthenticatedUser(event: H3Event): Promise<User | null> {
   let user = null
- 
+
   try {
     const { user: sessionUser } = await requireUserSession(event) as { user?: PublicUserInterface }
     user = sessionUser
-  } catch (e) {
+  }
+  catch {
     return null
   }
 
@@ -100,15 +102,15 @@ export async function requireAssociationOwner(event: H3Event, associationId: str
 /**
  * Checks if the user is a volunteer in the association
  * @param event H3Event
- * @param associationId Association ID 
+ * @param associationId Association ID
  * @param role Role required to access the resource
  * @returns User object if the user is a volunteer in the association
  */
-export async function requireAssociationVolunteer(event: H3Event, associationId: string, role?: AssociationRole|AssociationRole[]) {
+export async function requireAssociationVolunteer(event: H3Event, associationId: string, role?: AssociationRole | AssociationRole[]) {
   const user = await requireUserAuthenticated(event)
 
   // Admin users are always granted access
-  if(user.roles.includes(Role.ADMIN)) {
+  if (user.roles.includes(Role.ADMIN)) {
     return user
   }
 
@@ -118,7 +120,7 @@ export async function requireAssociationVolunteer(event: H3Event, associationId:
       roles: true,
     },
     where: { associationId: associationId, userId: user.id },
-  });
+  })
 
   if (!volunteer) {
     throw createForbidden()

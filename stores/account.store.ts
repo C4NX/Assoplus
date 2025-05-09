@@ -124,7 +124,7 @@ export const useAccountStore = defineStore("accounts", {
         method: "DELETE",
         onResponse: toastifyResponse,
       })
-      await clear();
+      await clear()
       await router.push(localePath("/"))
     },
   },

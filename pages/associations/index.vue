@@ -11,28 +11,61 @@
       <div class="flex items-center gap-2 mb-4">
         <!-- Search Bar -->
         <label class="input input-bordered flex items-center gap-2 flex-1">
-          <Icon name="mdi:magnify" class="w-5 h-5" />
-          <input type="text" class="grow" :placeholder="$t('association.list.search')" @input="handleSearch($event)">
+          <Icon
+            name="mdi:magnify"
+            class="w-5 h-5"
+          />
+          <input
+            type="text"
+            class="grow"
+            :placeholder="$t('association.list.search')"
+            @input="handleSearch($event)"
+          >
         </label>
         <!-- Refresh Button -->
         <label class="swap swap-rotate btn">
-          <input v-model="searchOrderAsc" type="checkbox">
-          <Icon name="mdi-sort-alphabetical-ascending" class="swap-on fill-current w-5 h-5" />
-          <Icon name="mdi-sort-alphabetical-descending" class="swap-off fill-current w-5 h-5" />
+          <input
+            v-model="searchOrderAsc"
+            type="checkbox"
+          >
+          <Icon
+            name="mdi-sort-alphabetical-ascending"
+            class="swap-on fill-current w-5 h-5"
+          />
+          <Icon
+            name="mdi-sort-alphabetical-descending"
+            class="swap-off fill-current w-5 h-5"
+          />
         </label>
         <!-- Add Association Button -->
-        <button class="btn btn-primary" @click="goToDashboard(DashboardTabType.CREATE)">
-          <Icon name="mdi:plus" class="w-5 h-5" />
+        <button
+          class="btn btn-primary"
+          @click="goToDashboard(DashboardTabType.CREATE)"
+        >
+          <Icon
+            name="mdi:plus"
+            class="w-5 h-5"
+          />
         </button>
       </div>
 
       <!-- Associations List -->
       <UtilsLoading :status="status">
         <div class="space-y-4">
-          <div v-for="association in data?.items" :key="association.id" class="association-card">
+          <div
+            v-for="association in data?.items"
+            :key="association.id"
+            class="association-card"
+          >
             <div class="association-card-content">
-              <div v-if="association.logoPathUrl" class="avatar-container">
-                <img :src="association.logoPathUrl" class="association-logo">
+              <div
+                v-if="association.logoPathUrl"
+                class="avatar-container"
+              >
+                <img
+                  :src="association.logoPathUrl"
+                  class="association-logo"
+                >
               </div>
               <div class="flex-1">
                 <h3 class="association-name">
@@ -42,20 +75,33 @@
                   {{ association.description }}
                 </p>
                 <div class="tags-container">
-                  <AssociationTag v-for="tag in association.tags" :key="tag.id" :type="tag.type">
+                  <AssociationTag
+                    v-for="tag in association.tags"
+                    :key="tag.id"
+                    :type="tag.type"
+                  >
                     {{ tag.name }}
                   </AssociationTag>
                 </div>
               </div>
               <div class="association-card-buttons">
-                <NuxtLink :to="`/associations/${association.id}`" class="btn btn-primary">
-                  <Icon name="mdi:eye" class="w-5 h-5" />
+                <NuxtLink
+                  :to="`/associations/${association.id}`"
+                  class="btn btn-primary"
+                >
+                  <Icon
+                    name="mdi:eye"
+                    class="w-5 h-5"
+                  />
                   {{ $t("association.list.view") }}
                 </NuxtLink>
               </div>
             </div>
           </div>
-          <div v-if="data?.items.length === 0" class="text-center">
+          <div
+            v-if="data?.items.length === 0"
+            class="text-center"
+          >
             <p class="text-lg text-base-content/70">
               {{ $t("association.list.empty") }}
             </p>
@@ -63,15 +109,19 @@
         </div>
 
         <!-- Pagination -->
-        <InputPagination v-if="data?.totalPages" v-model="currentPage" :total-pages="data.totalPages" />
+        <InputPagination
+          v-if="data?.totalPages"
+          v-model="currentPage"
+          :total-pages="data.totalPages"
+        />
       </UtilsLoading>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { AssociationTag } from "#components"
 import { ref, computed, onUnmounted } from "vue"
+import { AssociationTag } from "#components"
 
 const searchOrderAsc = ref(true)
 const searchOrder = computed(() => (searchOrderAsc.value ? "asc" : "desc"))

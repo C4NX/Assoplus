@@ -1,8 +1,8 @@
 <template>
   <button
     class="btn"
-    @click="openModal"
     :disabled="props.disabled"
+    @click="openModal"
   >
     <Icon
       name="mdi:file-export"

@@ -1,6 +1,6 @@
+import { z } from "zod"
 import { validateBodySchema } from "~/server/util/request/request.service"
 import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
-import { z } from "zod"
 import prisma from "~/lib/prisma"
 
 const RejectInviteSchema = z.object({
@@ -9,7 +9,7 @@ const RejectInviteSchema = z.object({
 
 export default defineEventHandler(async (event) => {
   const user = await requireUserAuthenticated(event)
-  const { inviteId } = await validateBodySchema(event, RejectInviteSchema);
+  const { inviteId } = await validateBodySchema(event, RejectInviteSchema)
 
   const invite = await prisma.invite.findFirst({
     where: {
@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
       id: invite.id,
     },
   })
-  
+
   return {
     message: "Invite rejected successfully",
   }

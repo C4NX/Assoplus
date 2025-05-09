@@ -4,11 +4,11 @@
     icon="mdi:lock"
   >
     <ModalConfirm
+      v-model="confirmDialogOpen"
       :cancelable="true"
       :dangerous="true"
       @confirm="async () => await accountStore.deleteAccount()"
-      v-model="confirmDialogOpen"
-      >
+    >
       <template #description>
         Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.
       </template>

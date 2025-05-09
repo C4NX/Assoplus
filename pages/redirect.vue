@@ -4,7 +4,12 @@
       <span class="text-xl font-bold">
         Attention! Vous avez été redirigé vers une page externe. Veuillez vérifier l'URL ci-dessous avant de continuer.
       </span>
-      <a :href="to.toString()" rel="noopener noreferrer" class="link link-error break-words" v-if="to">
+      <a
+        v-if="to"
+        :href="to.toString()"
+        rel="noopener noreferrer"
+        class="link link-error break-words"
+      >
         {{ to }}
       </a>
     </div>
@@ -16,8 +21,9 @@ const { query } = useRoute()
 
 const to = computed(() => {
   try {
-    return 'to' in query ? new URL(decodeURIComponent(String(query.to))) : null
-  } catch {
+    return "to" in query ? new URL(decodeURIComponent(String(query.to))) : null
+  }
+  catch {
     return null
   }
 })

@@ -97,7 +97,7 @@ const deleteModal = ref<HTMLDialogElement | null>(null)
 const editMode = ref(false)
 
 const handleDelete = async () => {
-  if(!dashboard.activeAssociationId) {
+  if (!dashboard.activeAssociationId) {
     deleteModal.value?.close()
     return
   }

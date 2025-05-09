@@ -1,47 +1,56 @@
 <template>
   <Teleport to="body">
-      <dialog
-        class="modal"
-        :open="$props.modelValue"
-      >
-        <div class="modal-box">
-          <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="$emit('update:modelValue', false)">
-              ✕
-            </button>
-          </form>
-          <h3 class="text-lg font-bold">
-            <slot name="title">
-              {{ $t("common.confirm_title") }}
-            </slot>
-          </h3>
-          <p class="py-4">
-            <slot name="description" />
-          </p>
-          <div class="flex gap-5 justify-end">
-            <form method="dialog" v-if="cancelable">
-              <button class="btn" @click="$emit('update:modelValue', false); $emit('cancel')">
-                <slot name="cancel">
-                  {{ $t("common.cancel") }}
-                </slot>
-              </button>
-            </form>
+    <dialog
+      class="modal"
+      :open="$props.modelValue"
+    >
+      <div class="modal-box">
+        <form method="dialog">
+          <button
+            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            @click="$emit('update:modelValue', false)"
+          >
+            ✕
+          </button>
+        </form>
+        <h3 class="text-lg font-bold">
+          <slot name="title">
+            {{ $t("common.confirm_title") }}
+          </slot>
+        </h3>
+        <p class="py-4">
+          <slot name="description" />
+        </p>
+        <div class="flex gap-5 justify-end">
+          <form
+            v-if="cancelable"
+            method="dialog"
+          >
             <button
-              :class="{'btn': true, 'btn-primary': !dangerous, 'btn-error text-neutral-content': dangerous }"
-              @click="$emit('confirm'); $emit('update:modelValue', false)"
+              class="btn"
+              @click="$emit('update:modelValue', false); $emit('cancel')"
             >
-              <slot name="confirm">
-                {{ $t("common.confirm") }}
+              <slot name="cancel">
+                {{ $t("common.cancel") }}
               </slot>
             </button>
-          </div>
+          </form>
+          <button
+            :class="{ 'btn': true, 'btn-primary': !dangerous, 'btn-error text-neutral-content': dangerous }"
+            @click="$emit('confirm'); $emit('update:modelValue', false)"
+          >
+            <slot name="confirm">
+              {{ $t("common.confirm") }}
+            </slot>
+          </button>
         </div>
-        <form
-          method="dialog"
-          class="modal-backdrop"
-          @submit.prevent="$emit('update:modelValue', false)"
-        >
-          <button>close</button>
+      </div>
+      <form
+        method="dialog"
+        class="modal-backdrop"
+        @submit.prevent="$emit('update:modelValue', false)"
+      >
+        <button>close</button>
       </form>
     </dialog>
   </Teleport>
@@ -51,7 +60,7 @@
 defineProps({
   modelValue: {
     type: Boolean,
-    default: false
+    default: false,
   },
   cancelable: {
     type: Boolean,
@@ -61,11 +70,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
-});
+})
 
 defineEmits<{
   (e: "update:modelValue", value: boolean): void
-  (e: "cancel"): void
-  (e: "confirm"): void
-}>();
+  (e: "cancel" | "confirm"): void
+}>()
 </script>

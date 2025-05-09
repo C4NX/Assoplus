@@ -1,6 +1,6 @@
+import { z } from "zod"
 import { requireAssociationOwner } from "~/server/util/user/auth.guard"
 import prisma from "~/lib/prisma"
-import { z } from "zod"
 import { validateParam } from "~/server/util/request/request.service"
 
 export default defineEventHandler(async (event) => {
@@ -13,9 +13,9 @@ export default defineEventHandler(async (event) => {
     select: {
       associationId: true,
     },
-  });
+  })
 
-  if(!volunteer) {
+  if (!volunteer) {
     throw createError({ statusCode: 404, statusMessage: "Volunteer not found" })
   }
 

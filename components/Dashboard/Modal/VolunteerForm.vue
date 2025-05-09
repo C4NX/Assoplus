@@ -1,20 +1,44 @@
 <template>
-  <input v-model="isFormModalOpen" type="checkbox" class="modal-toggle">
-  <form class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" @submit.prevent="handleSubmit">
+  <input
+    v-model="isFormModalOpen"
+    type="checkbox"
+    class="modal-toggle"
+  >
+  <form
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    @submit.prevent="handleSubmit"
+  >
     <div class="modal-box">
-      <h3 class="font-bold text-lg" id="modal-title">
+      <h3
+        id="modal-title"
+        class="font-bold text-lg"
+      >
         Modifier le bénévole {{ formModalData?.user?.firstName }} {{ formModalData?.user?.lastName }}
       </h3>
 
       <div class="py-4">
-        <InputMultiSelect v-model="selectedRoles" :options="options" size="md" />
+        <InputMultiSelect
+          v-model="selectedRoles"
+          :options="options"
+          size="md"
+        />
       </div>
 
       <div class="modal-action">
-        <button type="submit" class="btn btn-primary">
+        <button
+          type="submit"
+          class="btn btn-primary"
+        >
           Sauvegarder
         </button>
-        <button type="button" class="btn" @click="dashboardVolunteerStore.closeFormModal()">
+        <button
+          type="button"
+          class="btn"
+          @click="dashboardVolunteerStore.closeFormModal()"
+        >
           Close
         </button>
       </div>
@@ -25,7 +49,7 @@
 <script lang="ts" setup>
 import { toast } from "vue3-toastify"
 
-const selectedRoles = ref<{ label: string, value: string}[]>([])
+const selectedRoles = ref<{ label: string, value: string }[]>([])
 const dashboardVolunteerStore = useDashboardVolunteersStore()
 
 const {
@@ -37,8 +61,8 @@ const {
 watch(formModalData, (newValue) => {
   if (newValue) {
     selectedRoles.value = newValue.roles
-      .map((role) => options.find((option) => option.value === role))
-      .filter((option) => option !== undefined)
+      .map(role => options.find(option => option.value === role))
+      .filter(option => option !== undefined)
   }
 })
 
@@ -62,16 +86,16 @@ const handleSubmit = async () => {
     return
   }
 
-  if(!selectedRoles.value.length) {
+  if (!selectedRoles.value.length) {
     toast.error("Veuillez sélectionner au moins un rôle")
     return
   }
 
   await dashboardVolunteerStore.updateVolunteer({
     id: formModalData.value?.id,
-    roles: selectedRoles.value.map((role) => role.value),
+    roles: selectedRoles.value.map(role => role.value),
   })
-  
+
   await dashboardVolunteerStore.closeFormModal()
   emit("success")
 }
@@ -82,5 +106,4 @@ const options = [
   { label: "Rédacteur", value: "WRITER" },
   { label: "Président", value: "PRESIDENT" },
 ]
-
 </script>

@@ -4,7 +4,7 @@ import prisma from "~/lib/prisma"
 
 import { paginate } from "~/server/util/request/pagination.service"
 import { exportCsv, isRequestingCsv } from "~/server/util/request/exporter.service"
-import { requireAssociationOwner, requireAssociationVolunteer } from "~/server/util/user/auth.guard"
+import { requireAssociationVolunteer } from "~/server/util/user/auth.guard"
 
 /**
  * Récupère la liste de toutes les actualités d'une association, avec pagination et export CSV

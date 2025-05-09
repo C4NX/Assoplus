@@ -1,6 +1,15 @@
 <template>
-  <input v-model="isInviteModalOpen" type="checkbox" class="modal-toggle">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <input
+    v-model="isInviteModalOpen"
+    type="checkbox"
+    class="modal-toggle"
+  >
+  <div
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+  >
     <div class="invite-modal-content">
       <h3 class="invite-modal-title">
         <Icon name="mdi:plus" />
@@ -13,13 +22,24 @@
           </span>
           <span class="label-text-alt text-error">*</span>
         </label>
-        <input type="email" class="input input-bordered w-full" v-model="inviteModalEmail" placeholder="Email" />
+        <input
+          v-model="inviteModalEmail"
+          type="email"
+          class="input input-bordered w-full"
+          placeholder="Email"
+        >
       </div>
       <div class="modal-action">
-        <button class="btn btn-primary" @click="handleInvite">
+        <button
+          class="btn btn-primary"
+          @click="handleInvite"
+        >
           Inviter
         </button>
-        <button class="btn" @click="dashboardVolunteersStore.closeInviteModal()">
+        <button
+          class="btn"
+          @click="dashboardVolunteersStore.closeInviteModal()"
+        >
           Close
         </button>
       </div>
@@ -43,8 +63,6 @@ const props = defineProps({
     required: false,
   },
 })
-
-const emit = defineEmits(["update:modelValue"])
 
 const handleInvite = async () => {
   if (!props.associationId) {
