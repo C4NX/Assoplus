@@ -85,7 +85,7 @@ const { data, status } = useFetch(`/api/association/${props.associationId}/news/
     page: currentPage,
     search: searchInput,
     order: searchOrder,
-  }
+  },
 })
 </script>
 

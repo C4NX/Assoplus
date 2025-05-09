@@ -21,8 +21,8 @@
 
       <div class="py-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <!-- Amount -->
-            <div class="form-control">
+          <!-- Amount -->
+          <div class="form-control">
             <label
               for="amount"
               class="label"
@@ -35,15 +35,15 @@
               </span>
             </label>
             <input
-              type="number"
               id="amount"
+              v-model="modalDonation.amount"
+              type="number"
               placeholder="0.00"
               step="0.01"
               min="0"
               class="input input-bordered input-sm w-full"
-              v-model="modalDonation.amount"
-            />
-            </div>
+            >
+          </div>
 
           <!-- Currency -->
           <div class="form-control">
@@ -60,10 +60,16 @@
             </label>
             <select
               id="currency"
-              class="select select-bordered select-sm w-full"
               v-model="modalDonation.currency"
+              class="select select-bordered select-sm w-full"
             >
-              <option :value="currency" v-for="currency of Intl.supportedValuesOf('currency')">{{ currency }}</option>
+              <option
+                v-for="currency of Intl.supportedValuesOf('currency')"
+                :key="currency"
+                :value="currency"
+              >
+                {{ currency }}
+              </option>
             </select>
           </div>
 
@@ -81,12 +87,12 @@
               </span>
             </label>
             <input
-              type="text"
               id="donorName"
               v-model="modalDonation.donorName"
+              type="text"
               placeholder="John Doe"
               class="input input-bordered input-sm w-full"
-            />
+            >
           </div>
 
           <!-- Donor Email -->
@@ -100,12 +106,12 @@
               </span>
             </label>
             <input
-              type="email"
               id="donorEmail"
               v-model="modalDonation.donorEmail"
+              type="email"
               placeholder="exemple@exemple.com"
               class="input input-bordered input-sm w-full"
-            />
+            >
           </div>
 
           <!-- Payment Method -->
@@ -126,7 +132,13 @@
               v-model="modalDonation.paymentMethod"
               class="select select-bordered select-sm w-full"
             >
-              <option :value="option.value" v-for="option of PaymentMethodOptions">{{ option.label }}</option>
+              <option
+                v-for="option of PaymentMethodOptions"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </option>
             </select>
           </div>
 
@@ -145,10 +157,16 @@
             </label>
             <select
               id="type"
-              class="select select-bordered select-sm w-full"
               v-model="modalDonation.type"
+              class="select select-bordered select-sm w-full"
             >
-              <option :value="option.value" v-for="option of DonationTypeOptions">{{ option.label }}</option>
+              <option
+                v-for="option of DonationTypeOptions"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </option>
             </select>
           </div>
 
@@ -163,14 +181,14 @@
               </span>
             </label>
             <input
-              type="text"
               id="campaign"
+              v-model="modalDonation.campaign"
+              type="text"
               placeholder="Campaign Name"
               class="input input-bordered input-sm w-full"
-              v-model="modalDonation.campaign"
-            />
+            >
           </div>
-           
+
           <!-- Receipt Number -->
           <div class="form-control">
             <label
@@ -182,13 +200,13 @@
               </span>
             </label>
             <input
-              type="text"
               id="receiptNumber"
+              v-model="modalDonation.receiptNumber"
+              type="text"
               placeholder="123456789"
               class="input input-bordered input-sm w-full"
-              v-model="modalDonation.receiptNumber"
-            />
-            </div>
+            >
+          </div>
         </div>
       </div>
 
@@ -213,7 +231,7 @@
 
 <script lang="ts" setup>
 const dashboardDonationsStore = useDashboardDonationsStore()
-const { isModalOpen, modalDonation, isModalEdit } = storeToRefs(dashboardDonationsStore) 
+const { isModalOpen, modalDonation, isModalEdit } = storeToRefs(dashboardDonationsStore)
 
 const props = defineProps({
   associationId: {
@@ -223,27 +241,27 @@ const props = defineProps({
 })
 
 const emit = defineEmits<{
-  (e: 'onSave'): void
+  (e: "onSave"): void
 }>()
 
 const handleSubmit = async () => {
   const currentDonation = modalDonation.value
 
-  if(!currentDonation) {
+  if (!currentDonation) {
     return
   }
 
-  if(isModalEdit.value) {
+  if (isModalEdit.value) {
     await dashboardDonationsStore.updateDonation(currentDonation)
-  } else {
+  }
+  else {
     await dashboardDonationsStore.createDonation({
       ...currentDonation,
       associationId: props.associationId,
-    })  
+    })
   }
 
-  emit('onSave')
+  emit("onSave")
   dashboardDonationsStore.closeModal()
 }
-
 </script>

@@ -1,8 +1,8 @@
-import { DonationType, PaymentMethod } from '@prisma/client'
-import { z } from 'zod'
-import prisma from '~/lib/prisma'
-import { validateBodySchema, validateParam } from '~/server/util/request/request.service'
-import { requireAssociationVolunteer } from '~/server/util/user/auth.guard'
+import { DonationType, PaymentMethod } from "@prisma/client"
+import { z } from "zod"
+import prisma from "~/lib/prisma"
+import { validateBodySchema, validateParam } from "~/server/util/request/request.service"
+import { requireAssociationVolunteer } from "~/server/util/user/auth.guard"
 
 const DonationUpdateSchema = z.object({
   amount: z.coerce.number().positive().optional(),
@@ -16,8 +16,8 @@ const DonationUpdateSchema = z.object({
 }).partial()
 
 export default defineEventHandler(async (event) => {
-  const donationId = await validateParam(event, 'donationId', z.coerce.number().positive())
-  
+  const donationId = await validateParam(event, "donationId", z.coerce.number().positive())
+
   const donation = await prisma.donation.findUnique({
     where: {
       id: donationId,
@@ -27,10 +27,10 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  if(!donation) {
+  if (!donation) {
     throw createError({
       statusCode: 404,
-      statusMessage: 'Donation not found',
+      statusMessage: "Donation not found",
     })
   }
 
@@ -49,6 +49,6 @@ export default defineEventHandler(async (event) => {
   })
 
   return {
-    message: 'Donation updated successfully',
+    message: "Donation updated successfully",
   }
 })

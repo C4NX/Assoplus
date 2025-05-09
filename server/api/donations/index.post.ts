@@ -1,8 +1,8 @@
-import { DonationType, PaymentMethod } from '@prisma/client'
-import { z } from 'zod'
-import prisma from '~/lib/prisma'
-import { validateBodySchema } from '~/server/util/request/request.service'
-import { requireAssociationVolunteer } from '~/server/util/user/auth.guard'
+import { DonationType, PaymentMethod } from "@prisma/client"
+import { z } from "zod"
+import prisma from "~/lib/prisma"
+import { validateBodySchema } from "~/server/util/request/request.service"
+import { requireAssociationVolunteer } from "~/server/util/user/auth.guard"
 
 const DonationCreateSchema = z.object({
   associationId: z.string().uuid(),
@@ -28,6 +28,6 @@ export default defineEventHandler(async (event) => {
   })
 
   return {
-    message: 'Donation created successfully',
+    message: "Donation created successfully",
   }
 })

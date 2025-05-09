@@ -1,95 +1,95 @@
 <template>
-   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
-      <!-- Association Name -->
-      <label class="form-control w-full">
-        <div class="label">
-          <span class="label-text">Nom de l'association</span>
-        </div>
-        <input
-          v-model="associationForm.name"
-          type="text"
-          placeholder="Nom de l'association"
-          class="input input-bordered w-full"
-          :readonly="$props.readonly"
-          :disabled="isLoading"
-        >
-      </label>
-
-      <!-- Association Logo -->
-      <label
-        v-if="!$props.readonly"
-        class="form-control w-full"
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
+    <!-- Association Name -->
+    <label class="form-control w-full">
+      <div class="label">
+        <span class="label-text">Nom de l'association</span>
+      </div>
+      <input
+        v-model="associationForm.name"
+        type="text"
+        placeholder="Nom de l'association"
+        class="input input-bordered w-full"
+        :readonly="$props.readonly"
+        :disabled="isLoading"
       >
-        <div class="label">
-          <span class="label-text">Logo</span>
-        </div>
-        <input
-          type="file"
-          class="file-input file-input-primary file-input-bordered w-full"
-          :readonly="$props.readonly"
-          :disabled="isLoading"
-          @change="(e) => {
-            const target = e.target as HTMLInputElement | null;
-            const file = target && target.files ? target.files[0] : null;
-            if (file) {
-              associationForm.logo = file
-            }
-          }"
-        >
-      </label>
+    </label>
 
-      <label
+    <!-- Association Logo -->
+    <label
+      v-if="!$props.readonly"
+      class="form-control w-full"
+    >
+      <div class="label">
+        <span class="label-text">Logo</span>
+      </div>
+      <input
+        type="file"
+        class="file-input file-input-primary file-input-bordered w-full"
+        :readonly="$props.readonly"
+        :disabled="isLoading"
+        @change="(e) => {
+          const target = e.target as HTMLInputElement | null;
+          const file = target && target.files ? target.files[0] : null;
+          if (file) {
+            associationForm.logo = file
+          }
+        }"
+      >
+    </label>
+
+    <label
+      v-else
+      class="form-control w-full"
+    >
+      <div class="label">
+        <span class="label-text">Logo</span>
+      </div>
+      <img
+        v-if="data?.logoPathUrl"
+        :src="data.logoPathUrl"
+        class="w-full max-w-xs object-cover rounded"
+      >
+      <span
         v-else
-        class="form-control w-full"
-      >
-        <div class="label">
-          <span class="label-text">Logo</span>
-        </div>
-        <img
-          v-if="data?.logoPathUrl"
-          :src="data.logoPathUrl"
-          class="w-full max-w-xs object-cover rounded"
-        >
-        <span
-          v-else
-          class="text-sm text-gray-500 text-center"
-        >Aucune image</span>
-      </label>
+        class="text-sm text-gray-500 text-center"
+      >Aucune image</span>
+    </label>
 
-      <!-- Association Description -->
-      <label class="form-control w-full sm:col-span-2">
-        <div class="label">
-          <span class="label-text">Description de votre association</span>
-        </div>
-        <textarea
-          v-model="associationForm.description"
-          class="textarea textarea-primary w-full"
-          placeholder="Description"
-          rows="4"
-          :readonly="$props.readonly"
-          :disabled="isLoading"
-        />
-      </label>
-
-      <!-- Association Tags -->
-      <InputTagSelect
-        v-model="associationForm.tags"
-        :max-selected="8"
-        class="sm:col-span-2"
+    <!-- Association Description -->
+    <label class="form-control w-full sm:col-span-2">
+      <div class="label">
+        <span class="label-text">Description de votre association</span>
+      </div>
+      <textarea
+        v-model="associationForm.description"
+        class="textarea textarea-primary w-full"
+        placeholder="Description"
+        rows="4"
         :readonly="$props.readonly"
         :disabled="isLoading"
       />
-    </div>
+    </label>
 
-    <button
-      v-if="!$props.readonly"
-      class="btn btn-primary w-full mt-4"
+    <!-- Association Tags -->
+    <InputTagSelect
+      v-model="associationForm.tags"
+      :max-selected="8"
+      class="sm:col-span-2"
+      :readonly="$props.readonly"
       :disabled="isLoading"
-      @click="associationId ? handleEdit() : handleCreate()"
-    >
-      <Icon name="mdi:star-four-points" />
-      {{ associationId ? "Editer" : "Créer" }} une association
-    </button>
+    />
+  </div>
+
+  <button
+    v-if="!$props.readonly"
+    class="btn btn-primary w-full mt-4"
+    :disabled="isLoading"
+    @click="associationId ? handleEdit() : handleCreate()"
+  >
+    <Icon name="mdi:star-four-points" />
+    {{ associationId ? "Editer" : "Créer" }} une association
+  </button>
 </template>
 
 <script lang="ts" setup>
@@ -117,7 +117,7 @@ const emit = defineEmits<{
   (e: "association-created" | "association-edited", associationId: string): void
 }>()
 
-const { status, data, refresh } = await useFetch(() => `/api/association/${props.associationId}`, {
+const { data, refresh } = await useFetch(() => `/api/association/${props.associationId}`, {
   immediate: !!props.associationId,
   lazy: !!props.associationId,
   transform: (data) => {

@@ -9,7 +9,7 @@
       class="w-5 h-5"
     />
     <slot name="title">
-      {{ $t("export") }}  
+      {{ $t("export") }}
     </slot>
   </button>
   <dialog

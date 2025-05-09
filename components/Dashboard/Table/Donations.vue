@@ -4,7 +4,10 @@
   </div>
 
   <!-- Modal for adding/editing donations -->
-  <DashboardModalDonationsForm :association-id="associationId" @on-save="refresh()" />
+  <DashboardModalDonationsForm
+    :association-id="associationId"
+    @on-save="refresh()"
+  />
 
   <div class="flex gap-2 flex-col sm:flex-row flex-wrap">
     <InputSearch
@@ -27,7 +30,7 @@
 
     <DashboardModalExportCsv
       :csv-url="`/api/association/${associationId}/donations`"
-      :file-name="`donations-${associationId}.csv`"  
+      :file-name="`donations-${associationId}.csv`"
     />
   </div>
   <UtilsLoading :status="status">

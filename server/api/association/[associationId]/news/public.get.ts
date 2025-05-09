@@ -1,10 +1,10 @@
 import { NewsPublicationStatus, Prisma } from "@prisma/client"
+import { z } from "zod"
+import { getValidatedQuery } from "h3"
 import { parseAssociationIdFromRouteGuid } from "../index.get"
 import prisma from "~/lib/prisma"
-import { z } from "zod"
 
 import { paginate } from "~/server/util/request/pagination.service"
-import { getValidatedQuery } from "h3"
 
 /**
  * Récupère la liste des actualités d'une association, avec pagination.
@@ -33,22 +33,26 @@ export default defineEventHandler(async (event) => {
       },
     },
     orderBy: {
-      createdAt: order === "asc" ? Prisma.SortOrder.asc : Prisma.SortOrder.desc,
+      createdAt: order === "asc"
+        ? Prisma.SortOrder.asc
+        : Prisma.SortOrder.desc,
     },
     where: {
       associationId,
       status: NewsPublicationStatus.PUBLISHED,
-      ...(search ? {
-        OR: [
-          { title: { contains: String(search), mode: Prisma.QueryMode.insensitive } },
-          // { content: { contains: String(search), mode: Prisma.QueryMode.insensitive } },
-        ],
-      } : {}),
+      ...(search
+        ? {
+            OR: [
+              { title: { contains: String(search), mode: Prisma.QueryMode.insensitive } },
+            // { content: { contains: String(search), mode: Prisma.QueryMode.insensitive } },
+            ],
+          }
+        : {}),
     },
   }
 
   return paginate(event, {
-    data: async ({take, skip}) => await prisma.news.findMany({
+    data: async ({ take, skip }) => await prisma.news.findMany({
       ...prismaOptions,
       take,
       skip,
