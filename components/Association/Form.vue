@@ -1,6 +1,5 @@
 <template>
-  <UtilsLoading :status="status">
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
+   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
       <!-- Association Name -->
       <label class="form-control w-full">
         <div class="label">
@@ -91,7 +90,6 @@
       <Icon name="mdi:star-four-points" />
       {{ associationId ? "Editer" : "Créer" }} une association
     </button>
-  </UtilsLoading>
 </template>
 
 <script lang="ts" setup>
@@ -107,7 +105,7 @@ interface AssociationForm {
 const props = defineProps({
   associationId: {
     type: String,
-    required: false,
+    required: true,
   },
   readonly: {
     type: Boolean,

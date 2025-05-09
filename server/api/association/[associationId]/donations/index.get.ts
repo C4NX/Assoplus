@@ -22,6 +22,7 @@ export default defineEventHandler(async (event) => {
       amount: true,
       currency: true,
       donorName: true,
+      donorEmail: true,
       paymentMethod: true,
       type: true,
       campaign: true,
@@ -46,7 +47,15 @@ export default defineEventHandler(async (event) => {
   }
 
   if (await isRequestingCsv(event)) {
-    return await exportCsv(event, await prisma.donation.findMany(prismaOptions))
+    return await exportCsv(event, await prisma.donation.findMany(prismaOptions), {
+      transform: (data) => {
+        for (const item of data) {
+          item.createdAt = item.createdAt.toISOString()
+          item.updatedAt = item.updatedAt.toISOString()
+        }
+        return data
+      },
+    })
   }
 
   return await paginate(event, {

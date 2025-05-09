@@ -70,6 +70,8 @@ const sizeClasses = computed(() => {
       return "input-sm"
     case "lg":
       return "input-lg"
+    case "md":
+      return "input-md"
     default:
       return ""
   }

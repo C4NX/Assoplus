@@ -107,7 +107,6 @@ model Tag {
   associations Association[]
 }
 
-// Enums
 enum PaymentMethod {
   CREDIT_CARD
   BANK_TRANSFER
@@ -126,10 +125,11 @@ model Donation {
   amount        Decimal
   currency      String        @default("EUR")
   donorName     String
+  donorEmail    String?
   paymentMethod PaymentMethod
   type          DonationType
-  campaign      String
-  receiptNumber String
+  campaign      String?
+  receiptNumber String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -22,7 +22,7 @@
       @success="handleVolunteerSaved"
     />
 
-    <div class="flex justify-between items-center gap-4">
+    <div class="flex gap-4 flex-col sm:flex-row flex-wrap">
       <InputSearch
         v-model="searchInput"
         placeholder="Rechercher un membre"
@@ -50,7 +50,7 @@
       </DashboardModalExportCsv>
     </div>
     <UtilsLoading :status="status">
-      <table class="table">
+      <table class="table table-xs">
         <!-- head -->
         <thead>
           <tr>
@@ -71,17 +71,7 @@
             <td>
               <div class="flex items-center gap-3">
                 <div>
-                  <div
-                    v-if="volunteer.user?.id === user?.id"
-                    class="font-bold indicator"
-                  >
-                    <span class="indicator-item badge badge-secondary badge-xs p-2">Vous</span>
-                    <span class="py-1">
-                      {{ volunteer.user?.firstName }} {{ volunteer.user?.lastName }}
-                    </span>
-                  </div>
                   <span
-                    v-else
                     class="font-bold"
                   >
                     {{ volunteer.user?.firstName }} {{ volunteer.user?.lastName }}

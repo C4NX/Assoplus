@@ -2,16 +2,21 @@
   <div>
     {{ associationId }}
   </div>
-  <div class="flex gap-2">
+
+  <!-- Modal for adding/editing donations -->
+  <DashboardModalDonationsForm :association-id="associationId" @on-save="refresh()" />
+
+  <div class="flex gap-2 flex-col sm:flex-row flex-wrap">
     <InputSearch
       v-model="searchInput"
       :placeholder="$t('association.donations.search')"
       debounce
+      size="md"
     />
     <InputButtonSort v-model="searchOrder" />
     <button
       class="btn btn-primary"
-      disabled
+      @click="dashboardDonationsStore.openCreateModal()"
     >
       <Icon
         name="mdi:plus"
@@ -19,18 +24,23 @@
       />
       {{ $t('association.donations.add') }}
     </button>
+
+    <DashboardModalExportCsv
+      :csv-url="`/api/association/${associationId}/donations`"
+      :file-name="`donations-${associationId}.csv`"  
+    />
   </div>
   <UtilsLoading :status="status">
     <table
       v-if="data"
-      class="table"
+      class="table table-xs"
     >
       <thead>
         <tr>
-          <th>Donation ID</th>
-          <th>Amount</th>
+          <th>ID de la donation</th>
+          <th>Montant</th>
           <th>Date</th>
-          <th>Author</th>
+          <th>Auteur</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -56,7 +66,7 @@
               </button>
               <button
                 class="btn btn-secondary btn-xs"
-                disabled
+                @click="dashboardDonationsStore.openEditModal(donation)"
               >
                 <Icon
                   name="mdi:pencil"
@@ -135,7 +145,7 @@ const { data, status, refresh } = useFetch(
 )
 
 const handleDelete = async (donationId: number) => {
-  await dashboardDonationsStore.delete(donationId)
+  await dashboardDonationsStore.deleteDonation(donationId)
   await refresh()
 }
 </script>

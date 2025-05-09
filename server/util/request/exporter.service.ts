@@ -37,7 +37,7 @@ interface ExportCsvOptions {
   transform?: (data: Record<string, any>[]) => Record<string, any>[]
 }
 
-export async function exportCsv(
+export async function exportCsv<T>(
   event: H3Event,
   data: Record<string, any>[],
   options?: ExportCsvOptions,
