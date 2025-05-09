@@ -3,7 +3,7 @@
     <UtilsLoading :status="userAssociationsStatus">
       <aside
         v-if="userAssociationsStatus === 'success'"
-        class="container mx-auto m-0 max-w-full p-0 lg:p-4 lg:max-w-10xl lg:my-10"
+        class="container mx-auto m-0 max-w-full p-0 lg:p-4 lg:max-w-10xl"
       >
         <div class="dashboard-content">
           <!-- Sidebar Navigation -->
@@ -190,6 +190,6 @@ watch(() => dashboardStore.needAssociationListRefresh, async (newValue, oldValue
 }
 
 .dashboard-content {
-  @apply flex gap-6 flex-col-reverse lg:flex-row flex-nowrap;
+  @apply flex gap-6 flex-col-reverse lg:flex-row flex-nowrap px-5 pt-5 md:py-8;
 }
 </style>
