@@ -142,6 +142,11 @@ export default defineI18nConfig(() => ({
         privacy: "Politique de confidentialité",
         social: "Réseaux sociaux",
       },
+      common: {
+        confirm: "Valider",
+        confirm_title: "Êtes-vous sûr de vouloir effectuer cette action ?",
+        cancel: "Annuler",
+      },
       dashboard: {
         tabs: {
           home: "Tableau de bord",

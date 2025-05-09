@@ -10,7 +10,6 @@ export default defineNuxtConfig({
     "nuxt-seo-utils",
     "nuxt-auth-utils",
     "@nuxt/image",
-    "@nuxtjs/mdc",
   ],
   ssr: true,
   devtools: { enabled: false },
@@ -39,6 +38,7 @@ export default defineNuxtConfig({
     baseUrl: "",
     public: {
       version: "1.0.0",
+      contactEmail: "contact@assoplus.com",
     },
   },
   routeRules: {

@@ -81,7 +81,7 @@
       v-else
       class="skeleton h-32 w-full m-2 p-2"
     />
-    <ProfileContainer />
+    <ProfileMenu />
   </div>
 </template>
 

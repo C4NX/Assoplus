@@ -25,10 +25,10 @@ model User {
   birthday    DateTime?
   phoneNumber String?
 
-  association Association[]
   volunteer   Volunteer[]
-
-  writes News[]
+  newsCreates News[] @relation(name: "NewsCreate")
+  newsUpdates News[] @relation(name: "NewsUpdate")
+  invites Invite[]
 }
 
 model Association {
@@ -37,12 +37,10 @@ model Association {
   description String
   logoPath    String?
 
-  ownerId String
-  owner   User   @relation(fields: [ownerId], references: [id])
-
   tags    Tag[]
   members Volunteer[]
   news    News[]
+  invites Invite[] // Invites that the user has sent
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -51,20 +49,30 @@ model Association {
 model Volunteer {
   id Int @id @default(autoincrement())
 
-  userId        String?
-  user          User?       @relation(fields: [userId], references: [id])
+  userId        String
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   associationId String
   association   Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
 
-  email      String
-  role       AssociationRole
-  firstName  String
-  lastName   String
-  isVerified Boolean
-  isPending  Boolean
+  roles      AssociationRole[] @default([VOLUNTEER])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, associationId]) // A user can only be a volnteer of an association once
+}
+
+model Invite {
+  id            String   @id @default(uuid())
+  email         String @unique
+  associationId String
+  association   Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
+  token         String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  createdBy User? @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String?
 }
 
 model News {
@@ -73,11 +81,15 @@ model News {
   content       String
   status        NewsPublicationStatus @default(DRAFT)
   association   Association @relation(fields: [associationId], references: [id])
-  authorId      String
-  author        User        @relation(fields: [authorId], references: [id])
   associationId String
-  createdAt     DateTime    @default(now())
+
+  createdAt     DateTime    @default(now())  
+  createdBy     User?       @relation(name: "NewsCreate", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById   String?
+
   updatedAt     DateTime    @updatedAt
+  updatedBy User? @relation(name: "NewsUpdate", fields: [updatedById], references: [id], onDelete: SetNull)
+  updatedById String?
 }
 
 enum NewsPublicationStatus {
@@ -110,9 +122,7 @@ enum TagType {
 
 enum AssociationRole {
   VOLUNTEER
+  WRITER
   TREASURER
   PRESIDENT
-  SECRETARY
-  MEMBER
-  COORDINATOR
 }

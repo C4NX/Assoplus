@@ -22,7 +22,6 @@ export default defineEventHandler(async (event) => {
     data: {
       name: associationCreateData.name,
       description: associationCreateData.description,
-      ownerId: user.id,
       tags: {
         connect: associationCreateData.tags?.map(tag => ({
           id: tag,
@@ -31,12 +30,7 @@ export default defineEventHandler(async (event) => {
       members: {
         create: {
           userId: user.id,
-          role: AssociationRole.PRESIDENT,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          isVerified: true,
-          isPending: false,
+          roles: [AssociationRole.PRESIDENT],
         },
       },
     },

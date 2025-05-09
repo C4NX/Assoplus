@@ -1,7 +1,7 @@
 import type { H3Event } from "h3"
-import { v4 as uuid } from "uuid"
 import type { User } from "@prisma/client"
 import { sendMail } from "../mailer/mailer.service"
+import { emailTemplateBase } from "../mailer/templates"
 import prisma from "~/lib/prisma"
 
 /**
@@ -54,7 +54,7 @@ export async function verifyUserAccount(event: H3Event, token: string) {
 
 export async function sendVerificationEmail(event: H3Event, user: User, newEmail?: string) {
   const { baseUrl } = useRuntimeConfig(event)
-  const uniqueToken = uuid()
+  const uniqueToken = crypto.randomUUID()
 
   // Check if the new email is already in use
   if (newEmail && await prisma.user.findUnique({
@@ -77,7 +77,9 @@ export async function sendVerificationEmail(event: H3Event, user: User, newEmail
   await sendMail({
     to: newEmail ?? user.email,
     subject: "Verify your email",
-    text: "Please verify your email by clicking on the link below",
-    html: `<a href='${baseUrl}/api/auth/verify?token=${uniqueToken}'>Verify email</a>`,
+    html: emailTemplateBase(event, {
+      title: "Please verify your email by clicking on the link below",
+      content: `<a href='${baseUrl}/api/auth/verify?token=${uniqueToken}'>Verify email</a>`,
+    }),
   })
 }

@@ -1,4 +1,4 @@
-import { AssociationRole, PrismaClient } from "@prisma/client"
+import { AssociationRole, NewsPublicationStatus, PrismaClient, TagType } from "@prisma/client"
 import { faker } from "@faker-js/faker"
 import { Scrypt } from "@adonisjs/hash/drivers/scrypt"
 
@@ -8,6 +8,7 @@ const prisma = new PrismaClient()
 
 const userIds: string[] = []
 const associationIds: string[] = []
+let tagIds: number[] = []
 
 async function cleanup() {
   await prisma.volunteer.deleteMany()
@@ -54,37 +55,61 @@ async function createUser(n: number) {
   }
 }
 
-function fakerRandomMarkdown(paragraphs: number) {
+function fakerRandomHtml(paragraphs: number) {
   const title = faker.lorem.sentence()
   const paragraphsArray = Array.from({ length: paragraphs }, () => faker.lorem.paragraphs(5))
   const linksArray = Array.from({ length: paragraphs }, () => faker.lorem.words(5))
   const effectsArray = Array.from({ length: paragraphs }, () => faker.lorem.words(5))
-  const markdown = [
-    `# ${title}`,
+  const html = [
+    `<h1>${title}</h1>`,
     ...paragraphsArray.map((paragraph, index) => {
-      return `${paragraph}\n\n[${linksArray[index]}](https://example.com)\n\n*${effectsArray[index]}*`
+      return `<p>${paragraph}</p>\n\n<a href="https://example.com">${linksArray[index]}</a>\n\n<em>${effectsArray[index]}</em>`
     }),
   ].join("\n\n")
 
-  return markdown
+  return html
 }
 
 async function createAssociation(n: number) {
   for (let i = 0; i < n; i++) {
+    const membersId = new Set<string>()
+
+    for (let j = 0; j < 5; j++) {
+      const userId = userIds[Math.floor(Math.random() * userIds.length)]
+      membersId.add(userId)
+    }
+
+    const tags = new Set<number>()
+
+    for (let j = 0; j < 3; j++) {
+      const tagId = tagIds[Math.floor(Math.random() * tagIds.length)]
+      tags.add(tagId)
+    }
+
     const result = await prisma.association.create({
       data: {
         name: faker.company.name(),
         description: faker.company.catchPhrase(),
-        ownerId: userIds[Math.floor(Math.random() * userIds.length)],
         tags: {
-          connect: await createTag(3),
+          connect: Array.from(tags).map(tagId => ({
+            id: tagId,
+          })),
+        },
+        members: {
+          createMany: {
+            data: Array.from(membersId).map((userId, index) => ({
+              userId,
+              roles: index === 0 ? [AssociationRole.PRESIDENT] : [faker.helpers.arrayElement(Object.values(AssociationRole).filter(role => role !== AssociationRole.PRESIDENT))],
+            })),
+          },
         },
         news: {
           createMany: {
             data: Array.from({ length: 30 }, () => ({
               title: faker.lorem.sentence(),
-              content: fakerRandomMarkdown(3),
-              authorId: userIds[Math.floor(Math.random() * userIds.length)],
+              content: fakerRandomHtml(3),
+              createdById: userIds[Math.floor(Math.random() * userIds.length)],
+              status: faker.helpers.arrayElement(Object.values(NewsPublicationStatus)),
             })),
           },
         },
@@ -94,30 +119,32 @@ async function createAssociation(n: number) {
   }
 }
 
-async function createTag(n: number) {
-  return await prisma.tag.createManyAndReturn({
-    data: Array.from({ length: n }, () => ({
-      name: faker.lorem.word(),
-    })),
+async function createTags() {
+  await prisma.tag.createMany({
+    data: [
+      {
+        name: "Sport",
+        type: TagType.TYPE_SPORT,
+      },
+      {
+        name: "Culture",
+        type: TagType.TYPE_CULTURE,
+      },
+      {
+        name: "Environnement",
+        type: TagType.TYPE_ENVIRONMENT,
+      },
+      {
+        name: "Social",
+        type: TagType.TYPE_SOCIAL,
+      },
+      {
+        name: "LGBTQIA+",
+        type: TagType.TYPE_LGBT,
+      },
+    ],
   })
-}
-
-async function createAssociationMember(nMinPerAssociation: number, nMaxPerAssociation: number) {
-  const hasRegistered = faker.datatype.boolean({ probability: 0.5 })
-  for (let i = 0; i < associationIds.length; i++) {
-    await prisma.volunteer.createMany({
-      data: Array.from({ length: faker.number.int({ min: nMinPerAssociation, max: nMaxPerAssociation }) }, () => ({
-        userId: hasRegistered ? userIds[Math.floor(Math.random() * userIds.length)] : null,
-        email: faker.internet.email(),
-        firstName: faker.person.firstName(),
-        lastName: faker.person.lastName(),
-        role: faker.helpers.arrayElement(Object.values(AssociationRole)),
-        isVerified: faker.datatype.boolean(),
-        isPending: faker.datatype.boolean(),
-        associationId: associationIds[i],
-      })),
-    })
-  }
+  tagIds = (await prisma.tag.findMany({ select: { id: true } })).map(tag => tag.id)
 }
 
 async function main() {
@@ -127,8 +154,8 @@ async function main() {
   await createUser(10)
   await createUserAdmin()
   console.log("Seeding associations...")
+  await createTags()
   await createAssociation(100)
-  await createAssociationMember(5, 10)
   console.log("Seed complete")
 }
 

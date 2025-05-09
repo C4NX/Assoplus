@@ -10,6 +10,7 @@ import prisma from "@/lib/prisma"
 import { sendMail } from "~/server/util/mailer/mailer.service"
 import { createLogger } from "~/server/util/logger/logger.service"
 import type { PublicUserInterface } from "~/shared/auth"
+import { emailTemplateBase } from "~/server/util/mailer/templates"
 
 const logger = createLogger("user")
 
@@ -65,8 +66,10 @@ export async function sendPasswordResetEmail(user: User, event: H3Event) {
   await sendMail({
     to: user.email,
     subject: "Reset your password",
-    text: "Please reset your password by clicking on the link below",
-    html: `<a href='${baseUrl}/login/forgot-password?token=${uniqueToken}'>Reset password</a>`,
+    html: emailTemplateBase(event, {
+      title: "Please reset your password by clicking on the link below",
+      content: `<a href='${baseUrl}/login/forgot-password?token=${uniqueToken}'>Reset password</a>`,
+    }),
   })
 }
 

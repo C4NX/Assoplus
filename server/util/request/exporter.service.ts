@@ -29,6 +29,11 @@ interface ExportCsvOptions {
      * @default 'export.csv'
      */
   filename?: string
+  /**
+   * Transform function to modify the data before exporting
+   * @param data - The data to be transformed
+   * @returns The transformed data
+   */
   transform?: (data: Record<string, any>[]) => Record<string, any>[]
 }
 
