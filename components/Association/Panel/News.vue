@@ -1,21 +1,18 @@
 <template>
+  <!-- Header -->
+  <div class="flex flex-row gap-2 items-center">
+    <span class="text-gray-500 text-h2xl font-bold">
+      News
+    </span>
+    <InputSearch
+      v-model="searchInput"
+      :placeholder="$t('association.news.search')"
+      size="sm"
+      debounce
+    />
+  </div>
   <UtilsLoading :status="status">
     <div class="flex flex-col gap-2">
-      <!-- Header -->
-      <div class="flex flex-row gap-2 items-center">
-        <span class="text-gray-500 text-h2xl font-bold">
-          News
-          <span class="text-gray-500">({{ data?.total }})</span>
-        </span>
-        <InputSearch
-          v-model="searchInput"
-          :placeholder="$t('association.news.search')"
-          size="sm"
-          debounce
-        />
-      </div>
-
-      <!-- News List -->
       <div
         v-for="news in data?.items"
         :key="news.id"
