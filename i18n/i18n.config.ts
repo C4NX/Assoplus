@@ -1,5 +1,31 @@
 export default defineI18nConfig(() => ({
   locales: ["fr", "en"],
+  numberFormats: {
+    fr: {
+      currency: {
+        style: "currency", currency: "EUR", notation: "standard",
+        currencyDisplay: "symbol", minimumFractionDigits: 2, maximumFractionDigits: 2,
+      },
+      decimal: {
+        style: "decimal", minimumFractionDigits: 2, maximumFractionDigits: 2,
+      },
+      percent: {
+        style: "percent", useGrouping: false,
+      },
+    },
+    en: {
+      currency: {
+        style: "currency", currency: "USD", notation: "standard",
+        currencyDisplay: "symbol", minimumFractionDigits: 2, maximumFractionDigits: 2,
+      },
+      decimal: {
+        style: "decimal", minimumFractionDigits: 2, maximumFractionDigits: 2,
+      },
+      percent: {
+        style: "percent", useGrouping: false,
+      },
+    },
+  },
   datetimeFormats: {
     en: {
       short: {

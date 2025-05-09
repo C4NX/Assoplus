@@ -23,19 +23,11 @@
     />
 
     <div class="flex justify-between items-center gap-4">
-      <label class="input input-bordered input-md flex-1 flex items-center gap-2">
-        <Icon
-          name="mdi:magnify"
-          class="w-5 h-5"
-        />
-        <input
-          v-model="searchInput"
-          type=" text"
-          class="grow"
-          placeholder="Rechercher un membre"
-          :disabled="status === 'pending'"
-        >
-      </label>
+      <InputSearch
+        v-model="searchInput"
+        placeholder="Rechercher un membre"
+        debounce
+      />
       <button
         class="btn btn-primary btn-md"
         :disabled="status === 'pending'"
@@ -162,31 +154,15 @@ const dashboardVolunteersStore = useDashboardVolunteersStore()
 
 const currentPage = ref(1)
 const searchInput = ref<string | undefined>("")
-const debouncedSearchInput = ref<string | undefined>("")
 const deleteConfirmModalOpen = ref(false)
 const deleteVolunteerId = ref<number | undefined>(undefined)
 
 const { user } = useUserSession()
 
-// Handle search input
-
-let searchTimeout: ReturnType<typeof setTimeout>
-
-watch(searchInput, () => {
-  if (searchTimeout) {
-    clearTimeout(searchTimeout)
-  }
-  searchTimeout = setTimeout(async () => {
-    currentPage.value = 1
-    const inputTextLength = searchInput.value?.length ?? 0
-    debouncedSearchInput.value = inputTextLength > 0 ? searchInput.value : undefined
-  }, 500)
-})
-
 const { data, status, refresh } = useFetch(() => `/api/association/${activeAssociationId}/volunteers`, {
   params: {
     page: currentPage,
-    search: debouncedSearchInput,
+    search: searchInput,
   },
 })
 

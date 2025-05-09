@@ -10,33 +10,13 @@
 
       <div class="flex items-center gap-2 mb-4">
         <!-- Search Bar -->
-        <label class="input input-bordered flex items-center gap-2 flex-1">
-          <Icon
-            name="mdi:magnify"
-            class="w-5 h-5"
-          />
-          <input
-            type="text"
-            class="grow"
-            :placeholder="$t('association.list.search')"
-            @input="handleSearch($event)"
-          >
-        </label>
-        <!-- Refresh Button -->
-        <label class="swap swap-rotate btn">
-          <input
-            v-model="searchOrderAsc"
-            type="checkbox"
-          >
-          <Icon
-            name="mdi-sort-alphabetical-ascending"
-            class="swap-on fill-current w-5 h-5"
-          />
-          <Icon
-            name="mdi-sort-alphabetical-descending"
-            class="swap-off fill-current w-5 h-5"
-          />
-        </label>
+        <InputSearch
+          v-model="searchInput"
+          :placeholder="$t('association.list.search')"
+          debounce
+        />
+        <!-- Sort Order -->
+        <InputButtonSort v-model="searchOrder" />
         <!-- Add Association Button -->
         <button
           class="btn btn-primary"
@@ -120,40 +100,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onUnmounted } from "vue"
-import { AssociationTag } from "#components"
-
-const searchOrderAsc = ref(true)
-const searchOrder = computed(() => (searchOrderAsc.value ? "asc" : "desc"))
-
-const searchTerm = ref<string | undefined>("")
+const searchOrder = ref<"asc" | "desc">("asc")
+const searchInput = ref<string | undefined>(undefined)
 const currentPage = ref(1)
-
 const localPath = useLocalePath()
 
 const { data, status } = useFetch("/api/association", {
   params: {
     page: currentPage,
-    search: searchTerm,
+    search: searchInput,
     order: searchOrder,
   },
   watch: [currentPage],
-})
-
-// Handle search input
-let searchTimeout: ReturnType<typeof setTimeout>
-
-const handleSearch = (e: Event) => {
-  clearTimeout(searchTimeout)
-  searchTimeout = setTimeout(async () => {
-    currentPage.value = 1
-    const inputValue = (e.target as HTMLInputElement).value
-    searchTerm.value = inputValue.length > 0 ? inputValue : undefined
-  }, 300)
-}
-
-onUnmounted(() => {
-  clearTimeout(searchTimeout)
 })
 
 const goToDashboard = async (tab: DashboardTabType, associationId: string | undefined = undefined) => {

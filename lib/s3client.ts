@@ -26,7 +26,7 @@ const createS3ClientSingleton = () => {
         secretAccessKey,
         accessKeyId,
       },
-      // b2 does not support checksums requests/responses
+      // B2 does not support checksums requests/responses
       requestChecksumCalculation: "WHEN_REQUIRED",
       responseChecksumValidation: "WHEN_REQUIRED",
     })
