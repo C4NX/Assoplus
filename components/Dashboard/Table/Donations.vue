@@ -1,8 +1,4 @@
 <template>
-  <div>
-    {{ associationId }}
-  </div>
-
   <!-- Modal for adding/editing donations -->
   <DashboardModalDonationsForm
     :association-id="associationId"
