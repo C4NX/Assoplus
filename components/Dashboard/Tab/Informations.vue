@@ -74,7 +74,7 @@
       <div class="flex justify-end">
         <!-- Delete button -->
         <button
-          class="btn btn-error rounded-full text-base-100"
+          class="btn btn-error text-base-100"
           @click="deleteModal?.show()"
         >
           <div class="flex items-center gap-2">
