@@ -9,6 +9,9 @@
 
 Asso+ is a tool for easy association management.
 
+> [!IMPORTANT]  
+> This is a school project for CNAM Grand-Est 2024-2025. It is not finished, and can have bugs and issues.
+
 ## ✨ Getting Started
 
 To start using Asso+, run the following command:
@@ -37,7 +40,9 @@ This will start the application, and you can access it in your web browser at `h
 | NUXT_OAUTH_GOOGLE_CLIENT_ID **(needed)**  | Client ID for Google OAuth |
 | NUXT_OAUTH_GOOGLE_CLIENT_SECRET **(needed)** | Client secret for Google OAuth |
 | NUXT_OAUTH_GOOGLE_REDIRECT_URL **(needed)** | Redirect URL for Google OAuth (e.g. http://host/api/auth/google) |
+| NUXT_BASE_URL **(needed)** | Base URL of the application (e.g. http://localhost:3000) |
 | NUXT_PUBLIC_VERSION | Public version of the application |
+| NUXT_PUBLIC_CONTACT_EMAIL | Contact email (e.g. assoplus@exemple.com) |
 
 ### 🐋 Docker
 
