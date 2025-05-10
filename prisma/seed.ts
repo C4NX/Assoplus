@@ -1,5 +1,5 @@
-import { AssociationRole, NewsPublicationStatus, PrismaClient, TagType } from "@prisma/client"
-import { faker } from "@faker-js/faker"
+import { AssociationRole, DonationType, NewsPublicationStatus, PaymentMethod, PrismaClient, Role, TagType } from "@prisma/client"
+import { faker } from "@faker-js/faker/locale/fr"
 import { Scrypt } from "@adonisjs/hash/drivers/scrypt"
 
 const ADMIN_EMAIL = "admin@admin.admin"
@@ -11,9 +11,11 @@ const associationIds: string[] = []
 let tagIds: number[] = []
 
 async function cleanup() {
+  await prisma.invite.deleteMany()
   await prisma.volunteer.deleteMany()
   await prisma.tag.deleteMany()
   await prisma.news.deleteMany()
+  await prisma.donation.deleteMany()
   await prisma.association.deleteMany()
   await prisma.user.deleteMany()
 }
@@ -32,7 +34,7 @@ async function createUserAdmin() {
       lastName: "Admin",
       passwordHash: await hashPassword(ADMIN_EMAIL),
       isVerified: true,
-      roles: ["ROLE_USER", "ROLE_ADMIN"],
+      roles: [Role.ROLE_USER, Role.ROLE_ADMIN],
     },
   })
   userIds.push(result.id)
@@ -105,11 +107,27 @@ async function createAssociation(n: number) {
         },
         news: {
           createMany: {
+            data: Array.from({ length: 30 }, () => {
+              const createdById = userIds[Math.floor(Math.random() * userIds.length)]
+              return {
+                title: faker.lorem.sentence(),
+                content: fakerRandomHtml(3),
+                createdById,
+                updatedById: createdById,
+                status: faker.helpers.arrayElement(Object.values(NewsPublicationStatus)),
+              }
+            }),
+          },
+        },
+        donations: {
+          createMany: {
             data: Array.from({ length: 30 }, () => ({
-              title: faker.lorem.sentence(),
-              content: fakerRandomHtml(3),
-              createdById: userIds[Math.floor(Math.random() * userIds.length)],
-              status: faker.helpers.arrayElement(Object.values(NewsPublicationStatus)),
+              amount: parseFloat(faker.number.float({ min: 1, max: 1000 }).toFixed(2)),
+              donorName: faker.person.fullName(),
+              paymentMethod: faker.helpers.arrayElement(Object.values(PaymentMethod)),
+              type: faker.helpers.arrayElement(Object.values(DonationType)),
+              campaign: faker.lorem.sentence(),
+              receiptNumber: `RCPT-${faker.string.numeric(5)}`,
             })),
           },
         },
@@ -155,7 +173,7 @@ async function main() {
   await createUserAdmin()
   console.log("Seeding associations...")
   await createTags()
-  await createAssociation(100)
+  await createAssociation(30)
   console.log("Seed complete")
 }
 

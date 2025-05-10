@@ -2,7 +2,7 @@
   <DashboardTabBase>
     <template #title>
       <Icon name="mdi:information-outline" />
-      Informations
+      {{ $t("dashboard.association.title") }}
     </template>
     <!-- Delete Modal -->
     <dialog
@@ -11,23 +11,23 @@
     >
       <div class="modal-box">
         <h3 class="text-lg font-bold">
-          Etes-vous sûr de vouloir supprimer cette association ?
+          {{ $t("dashboard.association.delete.title") }}
         </h3>
         <p class="py-4">
-          Cette action est irréversible et supprimera toutes les données associées à cette association.
+          {{ $t("dashboard.association.delete.description") }}
         </p>
         <div class="modal-action">
           <button
             class="btn btn-error"
             @click="handleDelete"
           >
-            Supprimer
+            {{ $t("common.confirm") }}
           </button>
           <button
             class="btn"
             @click="deleteModal?.close()"
           >
-            Annuler
+            {{ $t("common.cancel") }}
           </button>
         </div>
       </div>
@@ -41,26 +41,25 @@
     <div class="flex flex-col gap-4">
       <div class="flex justify-end gap-2">
         <button
-          class="btn btn-primary text-base-100 tooltip tooltip-left"
-          data-tip="Retour au tableau de bord"
+          class="btn"
           @click="dashboard.setTab(DashboardTabType.HOME)"
         >
           <Icon name="mdi:arrow-left" />
         </button>
         <NuxtLinkLocale
-          class="btn btn-secondary"
+          class="btn btn-primary"
           :to="`/associations/${dashboard.activeAssociationId}`"
           data-tip="Retour à la liste des associations"
         >
           <Icon name="mdi:eye" />
-          Voir la page de l'association
+          {{ $t("dashboard.association.view") }}
         </NuxtLinkLocale>
         <button
-          :class="['btn', editMode ? 'btn-secondary' : 'btn-primary']"
+          :class="['btn', editMode ? '' : 'btn-primary']"
           @click="editMode = !editMode"
         >
           <Icon :name="editMode ? 'mdi:close' : 'mdi:pencil'" />
-          {{ editMode ? "Arreter d'éditer" : "Editer" }}
+          {{ $t(editMode ? "common.cancel" : "common.edit") }}
         </button>
       </div>
 
@@ -75,14 +74,16 @@
       <div class="flex justify-end">
         <!-- Delete button -->
         <button
-          class="btn btn-error rounded-full text-base-100 tooltip tooltip-left before:text-nowrap before:max-w-96"
-          :data-tip="$t('association.delete.tooltip')"
+          class="btn btn-error text-base-100"
           @click="deleteModal?.show()"
         >
-          <Icon
-            name="mdi:delete"
-            size="20"
-          />
+          <div class="flex items-center gap-2">
+            <Icon
+              name="mdi:delete"
+              size="20"
+            />
+            {{ $t("dashboard.association.delete.button") }}
+          </div>
         </button>
       </div>
     </div>

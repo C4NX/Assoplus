@@ -5,6 +5,7 @@ export enum DashboardTabType {
   VOLUNTEER = "volunteer",
   CREATE = "create",
   INFORMATIONS = "informations",
+  DONATIONS = "donations",
   NEWS = "news",
   EVENTS = "events",
   SETTINGS = "settings",

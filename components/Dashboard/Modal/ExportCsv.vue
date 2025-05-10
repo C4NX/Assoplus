@@ -8,7 +8,9 @@
       name="mdi:file-export"
       class="w-5 h-5"
     />
-    <slot name="title" />
+    <slot name="title">
+      {{ $t("export") }}
+    </slot>
   </button>
   <dialog
     ref="modal"

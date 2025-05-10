@@ -81,6 +81,11 @@ export async function requireUserGranted(event: H3Event, permissions: Role | Rol
 export async function requireAssociationOwner(event: H3Event, associationId: string) {
   const user = await requireUserAuthenticated(event)
 
+  // Admin users are always granted access
+  if (user.roles.includes(Role.ADMIN)) {
+    return user
+  }
+
   const association = await prisma.volunteer.findFirst({
     where: { associationId: associationId, userId: user.id },
     select: {

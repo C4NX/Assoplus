@@ -17,16 +17,12 @@
     </button>
     <DashboardModalExportCsv
       :csv-url="`/api/association/${associationId}/news`"
-      :file-name="`news-${new Date().toISOString()}.csv`"
-    >
-      <template #title>
-        Exporter en CSV
-      </template>
-    </DashboardModalExportCsv>
+      :file-name="`news-${associationId}.csv`"
+    />
   </div>
   <UtilsLoading :status="status">
     <div class="overflow-x-auto">
-      <table class="table">
+      <table class="table table-xs">
         <!-- head -->
         <thead>
           <tr>

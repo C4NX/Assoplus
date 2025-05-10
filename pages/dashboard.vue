@@ -3,7 +3,7 @@
     <UtilsLoading :status="userAssociationsStatus">
       <aside
         v-if="userAssociationsStatus === 'success'"
-        class="container mx-auto m-0 max-w-full p-0 lg:p-4 lg:max-w-10xl lg:my-10"
+        class="container mx-auto m-0 max-w-full p-0 lg:p-4 lg:max-w-10xl"
       >
         <div class="dashboard-content">
           <!-- Sidebar Navigation -->
@@ -20,17 +20,48 @@
                 {{ $t("dashboard.tabs.home") }}
               </a>
             </li>
+            <!-- Admin Section -->
+            <li
+              v-if="user?.roles?.includes('ROLE_ADMIN')"
+              class="text-error"
+            >
+              <details>
+                <summary>
+                  <Icon name="mdi:shield-account" />
+                  {{ $t("dashboard.tabs.admin.title") }}
+                </summary>
+                <ul class="menu menu-sub">
+                  <li class="disabled">
+                    <a>
+                      <Icon name="mdi:account" />
+                      {{ $t("dashboard.tabs.admin.users") }}
+                    </a>
+                  </li>
+                  <li class="disabled">
+                    <a>
+                      <Icon name="mdi:account-group" />
+                      {{ $t("dashboard.tabs.admin.associations") }}
+                    </a>
+                  </li><li class="disabled">
+                    <a>
+                      <Icon name="mdi:tag" />
+                      {{ $t("dashboard.tabs.admin.tags") }}
+                    </a>
+                  </li>
+                </ul>
+              </details>
+            </li>
             <!-- Associations List -->
             <li
               v-for="association in userAssociations"
               :key="association.id"
             >
-              <details open>
+              <details>
                 <summary>
-                  <Icon name="mdi:home" />
                   {{ association.name }}
                 </summary>
                 <ul class="menu menu-sub">
+                  <!-- Information Tab -->
                   <li>
                     <a
                       :class="{ active: activeTab === DashboardTabType.INFORMATIONS && dashboardStore.activeAssociationId === association.id }"
@@ -40,6 +71,7 @@
                       {{ $t("dashboard.tabs.informations") }}
                     </a>
                   </li>
+                  <!-- Volunteer Tab -->
                   <li>
                     <a
                       :class="{ active: activeTab === DashboardTabType.VOLUNTEER && dashboardStore.activeAssociationId === association.id }"
@@ -49,6 +81,17 @@
                       {{ $t("dashboard.tabs.volunteers") }}
                     </a>
                   </li>
+                  <!-- Donations Tab -->
+                  <li>
+                    <a
+                      :class="{ active: activeTab === DashboardTabType.DONATIONS && dashboardStore.activeAssociationId === association.id }"
+                      @click="dashboardStore.setTab(DashboardTabType.DONATIONS, association.id)"
+                    >
+                      <Icon name="mdi:hand-heart" />
+                      {{ $t("dashboard.tabs.donations") }}
+                    </a>
+                  </li>
+                  <!-- News Tab -->
                   <li>
                     <a
                       :class="{ active: activeTab === DashboardTabType.NEWS && dashboardStore.activeAssociationId === association.id }"
@@ -58,12 +101,14 @@
                       {{ $t("dashboard.tabs.news") }}
                     </a>
                   </li>
+                  <!-- Events Tab -->
                   <li class="disabled">
                     <a @click="dashboardStore.setTab(DashboardTabType.EVENTS, association.id)">
                       <Icon name="mdi:calendar" />
                       {{ $t("dashboard.tabs.events") }}
                     </a>
                   </li>
+                  <!-- Settings Tab -->
                   <li class="disabled">
                     <a @click="dashboardStore.setTab(DashboardTabType.SETTINGS, association.id)">
                       <Icon name="mdi:cog" />
@@ -102,6 +147,7 @@
             <DashboardTabVolunteers v-if="activeTab === DashboardTabType.VOLUNTEER" />
             <DashboardTabCreate v-if="activeTab === DashboardTabType.CREATE" />
             <DashboardTabNews v-if="activeTab === DashboardTabType.NEWS" />
+            <DashboardTabDonations v-if="activeTab === DashboardTabType.DONATIONS" />
           </article>
         </div>
       </aside>
@@ -116,6 +162,8 @@ definePageMeta({
   title: "Dashboard",
   middleware: ["authenticated"],
 })
+
+const { user } = useUserSession()
 
 const dashboardStore = useDashboardStore()
 const { activeTab } = storeToRefs(dashboardStore)
@@ -142,6 +190,6 @@ watch(() => dashboardStore.needAssociationListRefresh, async (newValue, oldValue
 }
 
 .dashboard-content {
-  @apply flex gap-6 flex-col-reverse lg:flex-row flex-nowrap;
+  @apply flex gap-6 flex-col-reverse lg:flex-row flex-nowrap px-5 pt-5 md:py-8;
 }
 </style>

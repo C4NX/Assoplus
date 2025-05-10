@@ -1,10 +1,15 @@
 import { Prisma } from "@prisma/client"
 import { defineEventHandler } from "h3"
+import { z } from "zod"
 import prisma from "~/lib/prisma"
 import { paginate } from "~/server/util/request/pagination.service"
 
 export default defineEventHandler(async (event) => {
-  const { search, order } = getQuery(event)
+  const { search, order } = await getValidatedQuery(event, z.object({
+    search: z.string().optional(),
+    order: z.enum(["asc", "desc"]).default("asc"),
+  }).parse)
+
   const prismaSelectOptions = {
     where: search
       ? {

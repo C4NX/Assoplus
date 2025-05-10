@@ -1,13 +1,19 @@
 <template>
   <footer class="footer bg-base-200 text-base-content p-10">
     <aside>
-      <div class="flex items-center justify-center gap-2">
-        <img
-          src="/logo.svg"
-          alt="logo"
-          class="w-10"
-        >
-        Asso+
+      <div class="indicator">
+        <span
+          v-if="version !== ''"
+          class="indicator-item badge badge-sm badge-outline"
+        >{{ version }}</span>
+        <div class="flex items-center justify-center gap-2 p-2">
+          <img
+            src="/logo.svg"
+            alt="logo"
+            class="w-10"
+          >
+          Asso+
+        </div>
       </div>
       <p>
         {{ copyrightYear }} &copy; All rights reserved
@@ -64,6 +70,8 @@ const currentYear = new Date().getFullYear()
 const copyrightYear = computed(() => {
   return currentYear === 2025 ? "2025" : `2025 - ${currentYear}`
 })
+
+const { public: { version } } = useRuntimeConfig()
 </script>
 
 <style>

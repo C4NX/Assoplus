@@ -27,16 +27,22 @@ export function toastifyResponse(ctx: FetchContext) {
     // handle ZodError with formErrors
     if (ctx.response?.status === 422 && typeof responseData?.data?.fieldErrors === "object") {
       const fieldErrors = responseData.data.fieldErrors as Record<string, string[]>
+      const errorEntries = Object.entries(fieldErrors)
+      const hasMoreErrors = errorEntries.length > 3
+      const errorMessages = errorEntries
+        .slice(0, 2)
+        .map(([key, value]) => {
+          if (Array.isArray(value) && value.length > 0) {
+            return `${key}: ${value.join(", ")}`
+          }
+          return `${key}: ${value[0] ?? "An error occurred"}`
+        })
+        .join("\n")
 
-      Object.entries(fieldErrors).forEach(([key, value]) => {
-        if (Array.isArray(value) && value.length > 0) {
-          toast.error(`${key}: ${value.join(", ")}`)
-        }
-        else {
-          toast.error(value[0] ?? "An error occurred")
-        }
-      })
-
+      const finalErrorMessage = hasMoreErrors
+        ? `${errorMessages}\n...`
+        : errorMessages
+      toast.error(finalErrorMessage)
       return
     }
 

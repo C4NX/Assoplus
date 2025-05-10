@@ -22,20 +22,12 @@
       @success="handleVolunteerSaved"
     />
 
-    <div class="flex justify-between items-center gap-4">
-      <label class="input input-bordered input-md flex-1 flex items-center gap-2">
-        <Icon
-          name="mdi:magnify"
-          class="w-5 h-5"
-        />
-        <input
-          v-model="searchInput"
-          type=" text"
-          class="grow"
-          placeholder="Rechercher un membre"
-          :disabled="status === 'pending'"
-        >
-      </label>
+    <div class="flex gap-4 flex-col sm:flex-row flex-wrap">
+      <InputSearch
+        v-model="searchInput"
+        placeholder="Rechercher un membre"
+        debounce
+      />
       <button
         class="btn btn-primary btn-md"
         :disabled="status === 'pending'"
@@ -58,7 +50,7 @@
       </DashboardModalExportCsv>
     </div>
     <UtilsLoading :status="status">
-      <table class="table">
+      <table class="table table-xs">
         <!-- head -->
         <thead>
           <tr>
@@ -79,17 +71,7 @@
             <td>
               <div class="flex items-center gap-3">
                 <div>
-                  <div
-                    v-if="volunteer.user?.id === user?.id"
-                    class="font-bold indicator"
-                  >
-                    <span class="indicator-item badge badge-secondary badge-xs p-2">Vous</span>
-                    <span class="py-1">
-                      {{ volunteer.user?.firstName }} {{ volunteer.user?.lastName }}
-                    </span>
-                  </div>
                   <span
-                    v-else
                     class="font-bold"
                   >
                     {{ volunteer.user?.firstName }} {{ volunteer.user?.lastName }}
@@ -162,31 +144,15 @@ const dashboardVolunteersStore = useDashboardVolunteersStore()
 
 const currentPage = ref(1)
 const searchInput = ref<string | undefined>("")
-const debouncedSearchInput = ref<string | undefined>("")
 const deleteConfirmModalOpen = ref(false)
 const deleteVolunteerId = ref<number | undefined>(undefined)
 
 const { user } = useUserSession()
 
-// Handle search input
-
-let searchTimeout: ReturnType<typeof setTimeout>
-
-watch(searchInput, () => {
-  if (searchTimeout) {
-    clearTimeout(searchTimeout)
-  }
-  searchTimeout = setTimeout(async () => {
-    currentPage.value = 1
-    const inputTextLength = searchInput.value?.length ?? 0
-    debouncedSearchInput.value = inputTextLength > 0 ? searchInput.value : undefined
-  }, 500)
-})
-
 const { data, status, refresh } = useFetch(() => `/api/association/${activeAssociationId}/volunteers`, {
   params: {
     page: currentPage,
-    search: debouncedSearchInput,
+    search: searchInput,
   },
 })
 
