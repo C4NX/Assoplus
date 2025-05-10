@@ -138,7 +138,7 @@ export default defineI18nConfig(() => ({
             new_password: "Nouveau mot de passe",
             confirm_new_password: "Confirmer le nouveau mot de passe",
             submit: "Mettre à jour le mot de passe",
-          }
+          },
         },
         error: {
           wrong_password: "Mot de passe incorrect",
@@ -224,7 +224,7 @@ export default defineI18nConfig(() => ({
           no_donations: "Aucune donation trouvée pour cette association",
           add: "Ajouter une donation",
           search: "Rechercher une donation",
-        }
+        },
       },
       back: "Retour",
     },

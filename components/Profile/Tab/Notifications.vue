@@ -12,7 +12,7 @@
         >
           <div class="card-body">
             <h2 class="card-title">
-              {{ $t("profile.notifications.invite_title", {name: item.association.name}) }}
+              {{ $t("profile.notifications.invite_title", { name: item.association.name }) }}
             </h2>
             <p>
               {{ item.association.description }}

@@ -5,7 +5,10 @@
   >
     <!-- Current password -->
 
-    <label class="form-control w-full" for="current-password">
+    <label
+      class="form-control w-full"
+      for="current-password"
+    >
       <div class="label">
         <span class="label-text">
           {{ $t("profile.security.password_form.current_password") }}
@@ -24,7 +27,10 @@
     </label>
 
     <!-- New password -->
-    <label class="form-control w-full" for="new-password">
+    <label
+      class="form-control w-full"
+      for="new-password"
+    >
       <div class="label">
         <span class="label-text">
           {{ $t("profile.security.password_form.new_password") }}
@@ -43,7 +49,10 @@
     </label>
 
     <!-- Confirm new password -->
-    <label class="form-control w-full" for="confirm-password">
+    <label
+      class="form-control w-full"
+      for="confirm-password"
+    >
       <div class="label">
         <span class="label-text">
           {{ $t("profile.security.password_form.confirm_new_password") }}

@@ -20,9 +20,9 @@
     </details>
   </li>
   <div
+    v-else
     :title="$t('header.language_select')"
     class="dropdown dropdown-end"
-    v-else
   >
     <div
       tabindex="0"
@@ -30,8 +30,14 @@
       class="btn btn-ghost"
       aria-label="Language"
     >
-      <Icon name="mdi:translate" class="h-4 w-4" />
-      <Icon name="mdi:chevron-down" class="hidden h-2 w-2 opacity-60 sm:inline-block" />
+      <Icon
+        name="mdi:translate"
+        class="h-4 w-4"
+      />
+      <Icon
+        name="mdi:chevron-down"
+        class="hidden h-2 w-2 opacity-60 sm:inline-block"
+      />
     </div>
     <div
       tabindex="0"

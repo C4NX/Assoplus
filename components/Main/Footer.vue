@@ -2,7 +2,10 @@
   <footer class="footer bg-base-200 text-base-content p-10">
     <aside>
       <div class="indicator">
-        <span class="indicator-item badge badge-sm badge-outline" v-if="version !== ''">{{ version }}</span>
+        <span
+          v-if="version !== ''"
+          class="indicator-item badge badge-sm badge-outline"
+        >{{ version }}</span>
         <div class="flex items-center justify-center gap-2 p-2">
           <img
             src="/logo.svg"
@@ -69,7 +72,6 @@ const copyrightYear = computed(() => {
 })
 
 const { public: { version } } = useRuntimeConfig()
-
 </script>
 
 <style>
