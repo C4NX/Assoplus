@@ -107,12 +107,16 @@ async function createAssociation(n: number) {
         },
         news: {
           createMany: {
-            data: Array.from({ length: 30 }, () => ({
-              title: faker.lorem.sentence(),
-              content: fakerRandomHtml(3),
-              createdById: userIds[Math.floor(Math.random() * userIds.length)],
-              status: faker.helpers.arrayElement(Object.values(NewsPublicationStatus)),
-            })),
+            data: Array.from({ length: 30 }, () => {
+              const createdById = userIds[Math.floor(Math.random() * userIds.length)]
+              return {
+                title: faker.lorem.sentence(),
+                content: fakerRandomHtml(3),
+                createdById,
+                updatedById: createdById,
+                status: faker.helpers.arrayElement(Object.values(NewsPublicationStatus)),
+              }
+            }),
           },
         },
         donations: {
