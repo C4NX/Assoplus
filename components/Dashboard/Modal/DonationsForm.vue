@@ -16,7 +16,7 @@
         id="modal-title"
         class="font-bold text-lg"
       >
-        {{ isModalEdit ? $t('association.donations.edit') : $t('association.donations.create') }}
+        {{ isModalEdit ? $t('dashboard.donations.edit') : $t('dashboard.donations.create') }}
       </h3>
 
       <div class="py-4">
@@ -28,7 +28,7 @@
               class="label"
             >
               <span class="label-text">
-                {{ $t('association.donations.amount') }}
+                {{ $t('dashboard.donations.amount') }}
               </span>
               <span class="label-text-alt text-error">
                 *
@@ -52,7 +52,7 @@
               class="label"
             >
               <span class="label-text">
-                {{ $t('association.donations.currency') }}
+                {{ $t('dashboard.donations.currency') }}
               </span>
               <span class="label-text-alt text-error">
                 *
@@ -80,7 +80,7 @@
               class="label"
             >
               <span class="label-text">
-                {{ $t('association.donations.donor_name') }}
+                {{ $t('dashboard.donations.donor_name') }}
               </span>
               <span class="label-text-alt text-error">
                 *
@@ -102,7 +102,7 @@
               class="label"
             >
               <span class="label-text">
-                {{ $t('association.donations.donor_email') }}
+                {{ $t('dashboard.donations.donor_email') }}
               </span>
             </label>
             <input
@@ -121,7 +121,7 @@
               class="label"
             >
               <span class="label-text">
-                {{ $t('association.donations.payment_method') }}
+                {{ $t('dashboard.donations.payment_method') }}
               </span>
               <span class="label-text-alt text-error">
                 *
@@ -149,7 +149,7 @@
               class="label"
             >
               <span class="label-text">
-                {{ $t('association.donations.type') }}
+                {{ $t('dashboard.donations.type') }}
               </span>
               <span class="label-text-alt text-error">
                 *
@@ -177,7 +177,7 @@
               class="label"
             >
               <span class="label-text">
-                {{ $t('association.donations.campaign') }}
+                {{ $t('dashboard.donations.campaign') }}
               </span>
             </label>
             <input
@@ -196,7 +196,7 @@
               class="label"
             >
               <span class="label-text">
-                {{ $t('association.donations.receipt_number') }}
+                {{ $t('dashboard.donations.receipt_number') }}
               </span>
             </label>
             <input
@@ -215,14 +215,14 @@
           type="submit"
           class="btn btn-primary"
         >
-          Sauvegarder
+          {{ $t('common.save') }}
         </button>
         <button
           type="button"
           class="btn"
           @click="dashboardDonationsStore.closeModal()"
         >
-          Close
+          {{ $t('common.cancel') }}
         </button>
       </div>
     </div>
