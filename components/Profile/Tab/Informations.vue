@@ -1,6 +1,6 @@
 <template>
   <ProfileTabBase
-    title="profile.informations"
+    title="profile.informations.title"
     icon="mdi:account"
   >
     <dialog
@@ -14,7 +14,7 @@
           </button>
         </form>
         <h3 class="text-lg font-bold">
-          Changement d'adresse email
+          {{ $t("profile.informations.update_email") }}
         </h3>
         <p class="py-4">
           Voulez vous vraiment changer votre adresse email pour <strong>{{ informationsFormData.email }}</strong> ?
@@ -41,11 +41,11 @@
     >
       <div class="flex flex-col gap-2">
         <label for="email">
-          Adresse email
+          {{ $t("profile.informations.email") }}
         </label>
-        <small class="text-xs italic text-warning">Changer d'adresse email est une opération sensible, vous devez vous
-          reconnecter
-          après.</small>
+        <small class="text-xs italic text-warning">
+          {{ $t("profile.informations.update_email_warning") }}
+        </small>
         <input
           id="email"
           v-model="informationsFormData.email"
@@ -56,7 +56,7 @@
       </div>
       <div class="flex flex-col gap-2">
         <label for="firstname">
-          Prénom
+          {{ $t("profile.informations.firstname") }}
         </label>
         <input
           id="firstname"
@@ -68,7 +68,7 @@
       </div>
       <div class="flex flex-col gap-2">
         <label for="lastname">
-          Nom
+          {{ $t("profile.informations.lastname") }}
         </label>
         <input
           id="lastname"
@@ -100,7 +100,7 @@
             name="mdi:content-save"
             size="24"
           />
-          Enregistrer
+          {{ $t("common.save") }}
         </button>
       </div>
     </form>

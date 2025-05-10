@@ -2,7 +2,7 @@
   <!-- Header -->
   <div class="flex flex-row gap-2 items-center">
     <span class="text-gray-500 text-h2xl font-bold">
-      News
+      {{ $t("association.news.title") }}
     </span>
     <InputSearch
       v-model="searchInput"

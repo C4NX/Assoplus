@@ -8,6 +8,7 @@
       <input
         v-model="loginForm.email"
         type="email"
+        autocomplete="email"
         class="grow"
         :placeholder="$t('login.placeholder.email')"
         required

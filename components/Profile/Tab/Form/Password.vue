@@ -3,8 +3,17 @@
     class="grid grid-cols-1 gap-2"
     @submit.prevent="handleSubmitUpdatePassword"
   >
-    <div class="flex flex-col gap-2">
-      <label for="current-password">Mot de passe actuel</label>
+    <!-- Current password -->
+
+    <label class="form-control w-full" for="current-password">
+      <div class="label">
+        <span class="label-text">
+          {{ $t("profile.security.password_form.current_password") }}
+        </span>
+        <span class="label-text-alt text-error">
+          *
+        </span>
+      </div>
       <input
         id="current-password"
         v-model="passwordChangeForm.currentPassword"
@@ -12,9 +21,18 @@
         class="input input-bordered"
         :disabled="isLoading"
       >
-    </div>
-    <div class="flex flex-col gap-2">
-      <label for="new-password">Nouveau mot de passe</label>
+    </label>
+
+    <!-- New password -->
+    <label class="form-control w-full" for="new-password">
+      <div class="label">
+        <span class="label-text">
+          {{ $t("profile.security.password_form.new_password") }}
+        </span>
+        <span class="label-text-alt text-error">
+          *
+        </span>
+      </div>
       <input
         id="new-password"
         v-model="passwordChangeForm.newPassword"
@@ -22,9 +40,18 @@
         class="input input-bordered"
         :disabled="isLoading"
       >
-    </div>
-    <div class="flex flex-col gap-2">
-      <label for="confirm-password">Confirmer le nouveau mot de passe</label>
+    </label>
+
+    <!-- Confirm new password -->
+    <label class="form-control w-full" for="confirm-password">
+      <div class="label">
+        <span class="label-text">
+          {{ $t("profile.security.password_form.confirm_new_password") }}
+        </span>
+        <span class="label-text-alt text-error">
+          *
+        </span>
+      </div>
       <input
         id="confirm-password"
         v-model="passwordChangeForm.confirmNewPassword"
@@ -32,7 +59,8 @@
         class="input input-bordered"
         :disabled="isLoading"
       >
-    </div>
+    </label>
+
     <div class="flex justify-end">
       <button
         class="btn btn-primary text-neutral-content"
@@ -43,7 +71,7 @@
           name="mdi:content-save"
           size="24"
         />
-        Enregistrer le mot de passe
+        {{ $t("profile.security.password_form.submit") }}
       </button>
     </div>
   </form>

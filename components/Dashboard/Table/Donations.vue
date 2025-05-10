@@ -12,7 +12,7 @@
   <div class="flex gap-2 flex-col sm:flex-row flex-wrap">
     <InputSearch
       v-model="searchInput"
-      :placeholder="$t('association.donations.search')"
+      :placeholder="$t('dashboard.donations.search')"
       debounce
       size="md"
     />
@@ -25,7 +25,7 @@
         name="mdi:plus"
         class="w-5 h-5"
       />
-      {{ $t('association.donations.add') }}
+      {{ $t('dashboard.donations.add') }}
     </button>
 
     <DashboardModalExportCsv
@@ -109,7 +109,7 @@
                 name="mdi:information-outline"
                 class="w-5 h-5"
               />
-              {{ $t('association.donations.no-donations') }}
+              {{ $t('dashboard.donations.no_donations') }}
             </div>
           </td>
         </tr>

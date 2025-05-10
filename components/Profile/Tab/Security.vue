@@ -1,6 +1,6 @@
 <template>
   <ProfileTabBase
-    title="profile.security"
+    title="profile.security.title"
     icon="mdi:lock"
   >
     <ModalConfirm
@@ -10,10 +10,10 @@
       @confirm="async () => await accountStore.deleteAccount()"
     >
       <template #description>
-        Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.
+        {{ $t("profile.security.delete_account_warning") }}
       </template>
       <template #confirm>
-        Supprimer
+        {{ $t("common.delete") }}
       </template>
     </ModalConfirm>
 
@@ -23,7 +23,7 @@
       v-if="user?.googleId"
       class="text-bold text-secondary flex items-center justify-center gap-2"
     >
-      Ce compte <b>Asso+</b> est lié à un compte
+      {{ $t("profile.security.linked_to") }}
       <Icon name="logos:google-icon" /><b>Google</b>.
     </p>
 
@@ -38,7 +38,7 @@
           name="mdi:alert"
           size="24"
         />
-        Supprimer mon compte
+        {{ $t("profile.security.delete_account") }}
       </button>
     </div>
   </ProfileTabBase>

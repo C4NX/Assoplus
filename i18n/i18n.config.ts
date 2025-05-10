@@ -112,10 +112,34 @@ export default defineI18nConfig(() => ({
         error: "Erreur d'inscription, veuillez réessayer plus tard",
       },
       profile: {
-        security: "Sécurité",
-        informations: "Informations",
         update_success: "Informations mises à jour",
         email_update_success: "Un e-mail de vérification a été envoyé à votre nouvelle adresse e-mail",
+        notifications: {
+          title: "Notifications",
+          empty: "Aucune notification",
+          empty_description: "Vous n'avez pas encore de notifications.",
+          invite_title: "Invitation à rejoindre une association : {name}",
+        },
+        informations: {
+          title: "Informations personnelles",
+          update_email: "Mettre à jour l'adresse e-mail",
+          update_email_warning: "Changer d'adresse email est une opération sensible, vous devez vous reconnecter après.",
+          email: "Adresse e-mail",
+          firstname: "Prénom",
+          lastname: "Nom",
+        },
+        security: {
+          title: "Sécurité",
+          delete_account_warning: "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.",
+          delete_account: "Supprimer mon compte",
+          linked_to: "Ce compte est lié à un compte",
+          password_form: {
+            current_password: "Mot de passe actuel",
+            new_password: "Nouveau mot de passe",
+            confirm_new_password: "Confirmer le nouveau mot de passe",
+            submit: "Mettre à jour le mot de passe",
+          }
+        },
         error: {
           wrong_password: "Mot de passe incorrect",
           oauth_account: "Vous ne pouvez pas changer le mot de passe d'un compte lié à un compte tiers",
@@ -142,6 +166,10 @@ export default defineI18nConfig(() => ({
           empty: "Aucune association trouvée",
           view: "Voir l'association",
         },
+        news: {
+          title: "Actualités",
+          search: "Rechercher une actualité",
+        },
         create: "Ajouter votre association",
       },
       privacy: {
@@ -156,22 +184,29 @@ export default defineI18nConfig(() => ({
       cancel: "Annuler",
       export: "Exporter",
       last_updated: "Dernière mise à jour",
+      common: {
+        accept: "Accepter",
+        reject: "Rejeter",
+        confirm: "Valider",
+        confirm_title: "Êtes-vous sûr de vouloir effectuer cette action ?",
+        cancel: "Annuler",
+        delete: "Supprimer",
+        save: "Enregistrer",
+      },
       header: {
         login: "Se connecter / S'inscrire",
         home: "Accueil",
         associations: "Associations",
         dashboard: "Tableau de bord",
+        notifications: "Notifications",
+        logout: "Se déconnecter",
+        language_select: "Sélectionner la langue",
       },
       footer: {
         legal: "Mentions légales",
         terms: "CGU",
         privacy: "Politique de confidentialité",
         social: "Réseaux sociaux",
-      },
-      common: {
-        confirm: "Valider",
-        confirm_title: "Êtes-vous sûr de vouloir effectuer cette action ?",
-        cancel: "Annuler",
       },
       dashboard: {
         tabs: {
@@ -183,7 +218,13 @@ export default defineI18nConfig(() => ({
           documents: "Documents",
           settings: "Paramètres",
           create: "Créer une association",
+          donations: "Dons",
         },
+        donations: {
+          no_donations: "Aucune donation trouvée pour cette association",
+          add: "Ajouter une donation",
+          search: "Rechercher une donation",
+        }
       },
       back: "Retour",
     },
