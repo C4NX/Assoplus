@@ -65,7 +65,7 @@
                 </div>
               </div>
               <div class="association-card-buttons">
-                <NuxtLink
+                <NuxtLinkLocale
                   :to="`/associations/${association.id}`"
                   class="btn btn-primary"
                 >
@@ -74,7 +74,7 @@
                     class="w-5 h-5"
                   />
                   {{ $t("association.list.view") }}
-                </NuxtLink>
+                </NuxtLinkLocale>
               </div>
             </div>
           </div>
