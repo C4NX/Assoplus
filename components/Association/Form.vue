@@ -31,7 +31,7 @@
           *
         </span>
       </div>
-      
+
       <input
         type="file"
         class="file-input file-input-primary file-input-bordered w-full"
@@ -64,9 +64,12 @@
         v-else
         class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg text-gray-400"
       >
-        <Icon name="mdi:image-off" class="w-12 h-12 mx-auto text-gray-400" />
+        <Icon
+          name="mdi:image-off"
+          class="w-12 h-12 mx-auto text-gray-400"
+        />
         {{ $t("dashboard.association.no_logo") }}
-    </span>
+      </span>
     </label>
 
     <!-- Association Description -->

@@ -79,10 +79,10 @@
         >
           <div class="flex items-center gap-2">
             <Icon
-            name="mdi:delete"
-            size="20"
-          />
-          {{ $t("dashboard.association.delete.button") }}
+              name="mdi:delete"
+              size="20"
+            />
+            {{ $t("dashboard.association.delete.button") }}
           </div>
         </button>
       </div>

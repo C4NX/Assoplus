@@ -67,5 +67,5 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  return association 
+  return association
 })

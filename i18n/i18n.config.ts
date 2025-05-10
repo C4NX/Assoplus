@@ -257,8 +257,8 @@ export default defineI18nConfig(() => ({
             button: "Supprimer l'association",
             title: "Êtes-vous sûr de vouloir supprimer cette association ?",
             description: "Cette action est irréversible et supprimera toutes les données associées à cette association.",
-          }
-        }
+          },
+        },
       },
       back: "Retour",
     },
