@@ -1,7 +1,8 @@
 import { AssociationRole } from "@prisma/client"
 import { z } from "zod"
 import prisma from "~/lib/prisma"
-import { validateBodySchema } from "~/server/util/request/request.service"
+import { uploadAssociationLogoFromRequest } from "~/server/util/association/logo.service"
+import { hasMultipartFileOfMimeType, validateBodyFromMultipartFormData } from "~/server/util/request/files.service"
 import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
 
 const AssociationCreateSchema = z.object({
@@ -11,11 +12,32 @@ const AssociationCreateSchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  const associationCreateData = await validateBodySchema(event, AssociationCreateSchema)
+  const multipartFormData = await readMultipartFormData(event)
+  const associationCreateData = await validateBodyFromMultipartFormData(multipartFormData, "data", AssociationCreateSchema)
+  const hasLogo = hasMultipartFileOfMimeType(multipartFormData, "logo", ["image/png", "image/jpeg", "image/jpg"])
 
   const user = await requireUserAuthenticated(event)
+  const userAssociationsCount = await prisma.association.count({
+    where: {
+      members: {
+        some: {
+          userId: user.id,
+          // roles: {
+          //   has: AssociationRole.PRESIDENT,
+          // },
+        },
+      },
+    },
+  })
 
-  return await prisma.association.create({
+  if (userAssociationsCount >= 5) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: "You have reached the maximum number of associations you can create or join.",
+    })
+  }
+
+  const association = await prisma.association.create({
     select: {
       id: true,
     },
@@ -35,4 +57,15 @@ export default defineEventHandler(async (event) => {
       },
     },
   })
+
+  if (hasLogo) {
+    await prisma.association.update({
+      where: { id: association.id },
+      data: {
+        logoPath: await uploadAssociationLogoFromRequest(event, multipartFormData, association.id, "logo"),
+      },
+    })
+  }
+
+  return association 
 })

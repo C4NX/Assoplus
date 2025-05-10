@@ -1,3 +1,5 @@
+import { title } from "node:process";
+
 export default defineI18nConfig(() => ({
   locales: ["fr", "en"],
   numberFormats: {
@@ -192,6 +194,9 @@ export default defineI18nConfig(() => ({
         cancel: "Annuler",
         delete: "Supprimer",
         save: "Enregistrer",
+        edit: "Modifier",
+        add: "Ajouter",
+        create: "Créer",
       },
       header: {
         login: "Se connecter / S'inscrire",
@@ -219,12 +224,33 @@ export default defineI18nConfig(() => ({
           settings: "Paramètres",
           create: "Créer une association",
           donations: "Dons",
+          admin: {
+            title: "Administration",
+            users: "Utilisateurs",
+            associations: "Associations",
+            tags: "Tags",
+          },
         },
         donations: {
           no_donations: "Aucune donation trouvée pour cette association",
           add: "Ajouter une donation",
           search: "Rechercher une donation",
         },
+        association: {
+          title: "Informations de l'association",
+          description: "Description de l'association",
+          description_placeholder: "Décrivez votre association, ses activités, ses objectifs, etc.",
+          an_association: "une association",
+          name: "Nom de l'association",
+          name_placeholder: "Nom de votre association",
+          no_logo: "Aucun logo",
+          view: "Page de l'association",
+          delete: {
+            button: "Supprimer l'association",
+            title: "Êtes-vous sûr de vouloir supprimer cette association ?",
+            description: "Cette action est irréversible et supprimera toutes les données associées à cette association.",
+          }
+        }
       },
       back: "Retour",
     },

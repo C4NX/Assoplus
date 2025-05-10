@@ -28,24 +28,24 @@
               <details>
                 <summary>
                   <Icon name="mdi:shield-account" />
-                  {{ $t("dashboard.tabs.admin") }}
+                  {{ $t("dashboard.tabs.admin.title") }}
                 </summary>
                 <ul class="menu menu-sub">
                   <li class="disabled">
                     <a>
                       <Icon name="mdi:account" />
-                      {{ $t("dashboard.tabs.admin-users") }}
+                      {{ $t("dashboard.tabs.admin.users") }}
                     </a>
                   </li>
                   <li class="disabled">
                     <a>
                       <Icon name="mdi:account-group" />
-                      {{ $t("dashboard.tabs.admin-associations") }}
+                      {{ $t("dashboard.tabs.admin.associations") }}
                     </a>
                   </li><li class="disabled">
                     <a>
                       <Icon name="mdi:tag" />
-                      {{ $t("dashboard.tabs.admin-tags") }}
+                      {{ $t("dashboard.tabs.admin.tags") }}
                     </a>
                   </li>
                 </ul>

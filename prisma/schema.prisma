@@ -81,7 +81,7 @@ model News {
   title         String
   content       String
   status        NewsPublicationStatus @default(DRAFT)
-  association   Association           @relation(fields: [associationId], references: [id])
+  association   Association           @relation(fields: [associationId], references: [id], onDelete: Cascade)
   associationId String
 
   createdAt   DateTime @default(now())

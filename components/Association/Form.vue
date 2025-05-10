@@ -3,12 +3,17 @@
     <!-- Association Name -->
     <label class="form-control w-full">
       <div class="label">
-        <span class="label-text">Nom de l'association</span>
+        <span class="label-text">
+          {{ $t("dashboard.association.name") }}
+        </span>
+        <span class="label-text-alt text-error">
+          *
+        </span>
       </div>
       <input
         v-model="associationForm.name"
         type="text"
-        placeholder="Nom de l'association"
+        :placeholder="$t('dashboard.association.name_placeholder')"
         class="input input-bordered w-full"
         :readonly="$props.readonly"
         :disabled="isLoading"
@@ -22,7 +27,11 @@
     >
       <div class="label">
         <span class="label-text">Logo</span>
+        <span class="label-text-alt text-error">
+          *
+        </span>
       </div>
+      
       <input
         type="file"
         class="file-input file-input-primary file-input-bordered w-full"
@@ -38,6 +47,7 @@
       >
     </label>
 
+    <!-- Association Logo Preview -->
     <label
       v-else
       class="form-control w-full"
@@ -52,19 +62,24 @@
       >
       <span
         v-else
-        class="text-sm text-gray-500 text-center"
-      >Aucune image</span>
+        class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg text-gray-400"
+      >
+        <Icon name="mdi:image-off" class="w-12 h-12 mx-auto text-gray-400" />
+        {{ $t("dashboard.association.no_logo") }}
+    </span>
     </label>
 
     <!-- Association Description -->
     <label class="form-control w-full sm:col-span-2">
       <div class="label">
-        <span class="label-text">Description de votre association</span>
+        <span class="label-text">
+          {{ $t("dashboard.association.description") }}
+        </span>
       </div>
       <textarea
         v-model="associationForm.description"
         class="textarea textarea-primary w-full"
-        placeholder="Description"
+        :placeholder="$t('dashboard.association.description_placeholder')"
         rows="4"
         :readonly="$props.readonly"
         :disabled="isLoading"
@@ -88,7 +103,7 @@
     @click="associationId ? handleEdit() : handleCreate()"
   >
     <Icon name="mdi:star-four-points" />
-    {{ associationId ? "Editer" : "Créer" }} une association
+    {{ $t(associationId ? 'common.edit' : 'common.create') }} {{ $t('dashboard.association.an_association') }}
   </button>
 </template>
 
@@ -143,26 +158,23 @@ const isLoading = ref(false)
 const handleCreate = async () => {
   try {
     isLoading.value = true
+
+    const formData = new FormData()
+    if (associationForm.value.logo) {
+      formData.append("logo", associationForm.value.logo)
+    }
+
+    formData.append("data", new Blob([JSON.stringify({
+      name: associationForm.value.name,
+      description: associationForm.value.description,
+      tags: associationForm.value.tags.map(tag => tag.id),
+    })], { type: "application/json" }))
+
     const result = await $fetch("/api/association", {
       method: "POST",
-      body: {
-        name: associationForm.value.name,
-        description: associationForm.value.description,
-        tags: associationForm.value.tags.map(tag => tag.id),
-        logo: associationForm.value.logo,
-      },
+      body: formData,
       onResponse: toastifyResponse,
     })
-
-    if (associationForm.value.logo) {
-      const formData = new FormData()
-      formData.append("file", associationForm.value.logo)
-      await $fetch(`/api/association/${result.id}/logo`, {
-        method: "POST",
-        body: formData,
-        onResponse: toastifyResponse,
-      })
-    }
 
     emit("association-created", result.id)
   }

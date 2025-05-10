@@ -5,12 +5,11 @@ import { requireAssociationOwner } from "~/server/util/user/auth.guard"
 
 export default defineEventHandler(async (event) => {
   const associationGuid = parseAssociationIdFromRouteGuid(event)
-  const user = await requireAssociationOwner(event, associationGuid)
+  await requireAssociationOwner(event, associationGuid)
 
   await prisma.association.delete({
     where: {
       id: associationGuid,
-      ownerId: user.id,
     },
   })
 
