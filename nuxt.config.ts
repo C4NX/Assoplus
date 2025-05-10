@@ -37,7 +37,7 @@ export default defineNuxtConfig({
     },
     baseUrl: "",
     public: {
-      version: "1.0.0",
+      version: "0.2.0",
       contactEmail: "contact@assoplus.com",
     },
   },
