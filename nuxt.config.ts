@@ -106,7 +106,6 @@ export default defineNuxtConfig({
   seo: {
     meta: {
       title: "Asso+",
-      description: "Rendez votre association visible et gérez mieux votre association avec Asso+.",
       applicationName: "Asso+",
       google: "nositelinkssearchbox",
       googlebot: "notranslate",
