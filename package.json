@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^9.5.1",
+    "@iconify-json/emojione": "^1.2.1",
     "@iconify-json/logos": "^1.2.4",
     "@iconify-json/mdi": "^1.2.3",
     "@nuxtjs/tailwindcss": "^6.13.1",
