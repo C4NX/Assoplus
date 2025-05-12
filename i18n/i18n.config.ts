@@ -169,6 +169,7 @@ export default defineI18nConfig(() => ({
         news: {
           title: "Actualités",
           search: "Rechercher une actualité",
+          empty: "Aucune actualité trouvée",
         },
         create: "Ajouter votre association",
       },
@@ -384,6 +385,7 @@ export default defineI18nConfig(() => ({
         news: {
           title: "News",
           search: "Search news",
+          empty: "No news found",
         },
         create: "Add your association",
       },

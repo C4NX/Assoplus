@@ -6,7 +6,7 @@ export default defineEventHandler(async () => {
   const usersCount = await prisma.user.count()
 
   return {
-    associations: Math.round(associationsCount / 10) * 10,
-    users: Math.round(usersCount / 10) * 10,
+    associations: associationsCount < 10 ? associationsCount : Math.round(associationsCount / 10) * 10,
+    users: usersCount < 10 ? usersCount : Math.round(usersCount / 10) * 10,
   }
 })
