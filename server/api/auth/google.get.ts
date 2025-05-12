@@ -47,6 +47,7 @@ export default defineOAuthGoogleEventHandler({
           createdAt: new Date(),
           avatarUuid: null,
           googleId: user.sub,
+          isVerified: true,
         },
       })
 

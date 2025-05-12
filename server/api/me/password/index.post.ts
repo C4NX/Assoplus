@@ -1,7 +1,7 @@
 import { z } from "zod"
 import prisma from "~/lib/prisma"
 import { validateBodySchema } from "~/server/util/request/request.service"
-import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
+import { requireUserAuthenticatedAndVerified } from "~/server/util/user/auth.guard"
 import { validateAndHashPassword } from "~/server/util/user/auth.service"
 
 const PasswordChangeSchema = z.object({
@@ -11,7 +11,7 @@ const PasswordChangeSchema = z.object({
 
 export default defineEventHandler(async (event) => {
   // handle password change
-  const user = await requireUserAuthenticated(event)
+  const user = await requireUserAuthenticatedAndVerified(event)
   const passwordChangeData = await validateBodySchema(event, PasswordChangeSchema)
   const t = await useTranslation(event)
 

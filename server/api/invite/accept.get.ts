@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { AssociationRole } from "@prisma/client"
 import prisma from "~/lib/prisma"
-import { tryGetAuthenticatedUser } from "~/server/util/user/auth.guard"
+import { tryGetAuthenticatedUserAndVerified } from "~/server/util/user/auth.guard"
 
 function isTokenInviteExpired(invite: { createdAt: Date }) {
   const now = new Date()
@@ -77,7 +77,7 @@ async function acceptByInviteId(inviteId: string, user: { email: string, id: str
 }
 
 export default defineEventHandler(async (event) => {
-  const user = await tryGetAuthenticatedUser(event) // Try to get the authenticated user or null if not authenticated
+  const user = await tryGetAuthenticatedUserAndVerified(event) // Try to get the authenticated user or null if not authenticated
 
   const { associationId, inviteId, token } = await getValidatedQuery(event, z.object({
     associationId: z.string().uuid().optional(),

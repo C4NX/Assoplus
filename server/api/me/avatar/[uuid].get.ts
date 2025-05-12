@@ -1,9 +1,9 @@
 import { defineEventHandler, sendStream, setHeader } from "h3"
-import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
+import { requireUserAuthenticatedAndVerified } from "~/server/util/user/auth.guard"
 import { getAvatarStream } from "~/server/util/avatar/avatar.service"
 
 export default defineEventHandler(async (event) => {
-  const user = await requireUserAuthenticated(event)
+  const user = await requireUserAuthenticatedAndVerified(event)
 
   const stream = await getAvatarStream(user)
   if (!stream) {

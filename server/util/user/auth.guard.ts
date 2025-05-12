@@ -17,7 +17,16 @@ export function createInvalidSession() {
   return createError({ statusCode: 401, statusMessage: "Invalid session" })
 }
 
-export async function tryGetAuthenticatedUser(event: H3Event): Promise<User | null> {
+export function createUserNotVerified() {
+  return createError({ statusCode: 403, statusMessage: "User is not verified" })
+}
+
+/**
+ * Try to get the authenticated user from the session, this will also check if the user is verified.
+ * @param event H3Event
+ * @returns User object if the user is authenticated and verified, null if not authenticated or not verified
+ */
+export async function tryGetAuthenticatedUserAndVerified(event: H3Event): Promise<User | null> {
   let user = null
 
   try {
@@ -41,10 +50,19 @@ export async function tryGetAuthenticatedUser(event: H3Event): Promise<User | nu
     return null
   }
 
+  if (!user.isVerified) {
+    throw createUserNotVerified();
+  }
+
   return databaseUser
 }
 
-export async function requireUserAuthenticated(event: H3Event): Promise<User> {
+/**
+ * Require the user to be authenticated and verified
+ * @param event H3Event
+ * @returns User object if the user is authenticated and verified
+ */
+export async function requireUserAuthenticatedAndVerified(event: H3Event): Promise<User> {
   const { user } = await requireUserSession(event) as { user?: PublicUserInterface }
 
   if (!user || !user.id || typeof user.id !== "string") {
@@ -60,11 +78,21 @@ export async function requireUserAuthenticated(event: H3Event): Promise<User> {
     throw createInvalidSession()
   }
 
+  if (!user.isVerified) {
+    throw createUserNotVerified();
+  }
+
   return databaseUser
 }
 
-export async function requireUserGranted(event: H3Event, permissions: Role | Role[]) {
-  const user = await requireUserAuthenticated(event)
+/**
+ * Require the user to be authenticated and verified
+ * @param event H3Event
+ * @param permissions Role or array of roles to check
+ * @returns User object if the user is authenticated and has the required permissions
+ */
+export async function requireUserGrantedAndVerified(event: H3Event, permissions: Role | Role[]) {
+  const user = await requireUserAuthenticatedAndVerified(event)
   const userRoles = user?.roles || []
 
   const hasPermission = Array.isArray(permissions)
@@ -78,8 +106,14 @@ export async function requireUserGranted(event: H3Event, permissions: Role | Rol
   return user
 }
 
+/**
+ * Checks if the user is the owner of the association
+ * @param event H3Event
+ * @param associationId Association ID 
+ * @returns User object if the user is the owner of the association
+ */
 export async function requireAssociationOwner(event: H3Event, associationId: string) {
-  const user = await requireUserAuthenticated(event)
+  const user = await requireUserAuthenticatedAndVerified(event)
 
   // Admin users are always granted access
   if (user.roles.includes(Role.ADMIN)) {
@@ -112,7 +146,7 @@ export async function requireAssociationOwner(event: H3Event, associationId: str
  * @returns User object if the user is a volunteer in the association
  */
 export async function requireAssociationVolunteer(event: H3Event, associationId: string, role?: AssociationRole | AssociationRole[]) {
-  const user = await requireUserAuthenticated(event)
+  const user = await requireUserAuthenticatedAndVerified(event)
 
   // Admin users are always granted access
   if (user.roles.includes(Role.ADMIN)) {
