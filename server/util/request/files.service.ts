@@ -42,7 +42,7 @@ export async function validateBodyFromMultipartFormData<T>(multipartFormData: Mu
   return await schema.parseAsync(body)
 }
 
-export function hasMultipartFileOfMimeType(multipartFormData: MultiPartData[] | undefined, formName: string, mimeTypes: string[]) {
+export function hasMultipartFileOfMimeType(multipartFormData: MultiPartData[] | undefined, formName: string, allowedMimeTypes: string[]) {
   if (multipartFormData === undefined) {
     return false
   }
@@ -54,5 +54,10 @@ export function hasMultipartFileOfMimeType(multipartFormData: MultiPartData[] | 
   if (multipartFormData[fileIndex].type === undefined) {
     return false
   }
-  return mimeTypes.includes(multipartFormData[fileIndex].type)
+
+  if (!allowedMimeTypes.includes(multipartFormData[fileIndex].type)) {
+    throw createError({ statusCode: 400, statusMessage: "Invalid file type" })
+  }
+
+  return true 
 }
