@@ -52,7 +52,7 @@
       v-if="data?.items.length === 0"
       class="text-gray-500 text-sm text-center"
     >
-      {{ $t("association.news.no_news") }}
+      {{ $t("association.news.empty") }}
     </p>
   </UtilsLoading>
 </template>
