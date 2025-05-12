@@ -1,6 +1,8 @@
-import prisma from "@/lib/prisma"
 import { z } from "zod"
 import type { H3Event } from "h3"
+import { sendVerificationEmail } from "./verify.service"
+import { sanitizeUser } from "./user.service"
+import prisma from "@/lib/prisma"
 
 export const PasswordSchema = z.string().min(8).max(100)
 
@@ -32,8 +34,14 @@ export async function authenticateUserByEmail(event: H3Event, email: string, pas
 
   // The user need to be verified to login
   if (!user.isVerified) {
+    await sendVerificationEmail(event, user)
     throw createError({ statusCode: 401, statusMessage: "User not verified", message: t("login.account_not_verified") })
   }
+
+  await setUserSession(event, {
+    user: sanitizeUser(user),
+    loggedInAt: Date.now(),
+  })
 
   return user
 }

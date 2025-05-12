@@ -11,9 +11,18 @@ useHead({
     return titleChunk ? `${titleChunk} - Asso+` : "Asso+"
   },
   htmlAttrs: {
-    "data-theme": "emerald",
+    "data-theme": "assoplus",
   },
 })
+
+useSeoMeta({
+  description: "Gérez plus facilement votre association et rendez-la visible avec Asso+.",
+  keywords: "asso, association, asso+, asso plus, gestion d'association, gestion asso",
+  twitterTitle: 'Asso+',
+  twitterDescription: "Gérez plus facilement votre association et rendez-la visible avec Asso+.",
+  twitterImage: "/og-image.png",
+})
+
 </script>
 
 <style>

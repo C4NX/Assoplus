@@ -3,13 +3,14 @@ import type { H3Event } from "h3"
 import { createError } from "h3"
 import { useTranslation } from "@intlify/h3"
 import type { User } from "@prisma/client"
-import { signVerifyTokenForUser } from "./verify.service"
+import { v4 as uuid } from "uuid"
+import { sendVerificationEmail } from "./verify.service"
+import { validateAndHashPassword } from "./auth.service"
 import prisma from "@/lib/prisma"
 import { sendMail } from "~/server/util/mailer/mailer.service"
 import { createLogger } from "~/server/util/logger/logger.service"
 import type { PublicUserInterface } from "~/shared/auth"
-import { v4 as uuid } from "uuid"
-import { validateAndHashPassword } from "./auth.service"
+import { emailTemplateBase } from "~/server/util/mailer/templates"
 
 const logger = createLogger("user")
 
@@ -17,7 +18,7 @@ interface CreateUserInterface {
   email: string
   unsafePassword: string
   firstName: string
-  lastName: string,
+  lastName: string
 }
 
 export async function createUserWithVerification(event: H3Event, { email, unsafePassword, firstName, lastName }: CreateUserInterface) {
@@ -34,8 +35,7 @@ export async function createUserWithVerification(event: H3Event, { email, unsafe
 
     logger.trace(`User created: ${user.email} (${user.id})`)
 
-    // Send verification email
-    await sendVerificationEmail(user, event)
+    await sendVerificationEmail(event, user)
   }
   catch (e) {
     if (e instanceof PrismaClientKnownRequestError) {
@@ -44,45 +44,40 @@ export async function createUserWithVerification(event: H3Event, { email, unsafe
         throw createError({ statusCode: 409, message: t("login.email_already_in_use") })
       }
     }
-    
+
     throw e
   }
-}
-
-async function sendVerificationEmail(user: User, event: H3Event) {
-  const { baseUrl } = useRuntimeConfig(event)
-  const token = await signVerifyTokenForUser(user, event)
-
-  await sendMail({
-    to: user.email,
-    subject: "Verify your email",
-    text: "Please verify your email by clicking on the link below",
-    html: `<a href='${baseUrl}/api/auth/verify?token=${token}'>Verify email</a>`,
-  })
 }
 
 export async function sendPasswordResetEmail(user: User, event: H3Event) {
   const { baseUrl } = useRuntimeConfig(event)
   const uniqueToken = uuid()
 
-  await setUserSession(event, {
+  await replaceUserSession(event, {
     secure: {
       passwordReset: {
         userId: user.id,
         token: uniqueToken,
-        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 3), // 3 hours
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 3), // 3 hours (in the session scope)
       },
-    }
-  }) 
+    },
+  })
 
   await sendMail({
     to: user.email,
     subject: "Reset your password",
-    text: "Please reset your password by clicking on the link below",
-    html: `<a href='${baseUrl}/login/forgot-password?t=${uniqueToken}'>Reset password</a>`,
+    html: emailTemplateBase(event, {
+      title: "Please reset your password by clicking on the link below",
+      content: `<a href='${baseUrl}/login/forgot-password?token=${uniqueToken}'>Reset password</a>`,
+    }),
   })
 }
 
+/**
+ * Transform a user object to a sanitized object that can be sent to the client.
+ * @param user The user object to sanitize
+ * @returns The sanitized user object
+ */
 export function sanitizeUser(user: User): PublicUserInterface {
   return {
     id: user.id,
@@ -96,6 +91,11 @@ export function sanitizeUser(user: User): PublicUserInterface {
   }
 }
 
+/**
+ * Update the password of a user.
+ * @param user The user object to update
+ * @param newPassword The new password to set
+ */
 export async function updatePassword(user: User, newPassword: string) {
   if (!user.passwordHash) {
     throw createError({ statusCode: 401, message: "Cannot update password for oauth users" })

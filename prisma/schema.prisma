@@ -8,56 +8,153 @@ datasource db {
 }
 
 model User {
-  id                  String    @id @default(uuid())
-  email               String    @unique
-  firstName           String
-  lastName            String
+  id        String @id @default(uuid())
+  email     String @unique
+  firstName String
+  lastName  String
+
   passwordHash        String?
   passwordLastUpdated DateTime?
-  roles               String[]  @default(["ROLE_USER"])
+  googleId            String?   @unique
+  roles               Role[]    @default([ROLE_USER])
   isVerified          Boolean   @default(false)
-  createdAt           DateTime  @default(now())
-  avatarUuid          String?
 
-  googleId  String? @unique
+  createdAt DateTime @default(now())
 
-  association       Association[]
-  AssociationMember AssociationMember[]
+  avatarUuid  String?
+  birthday    DateTime?
+  phoneNumber String?
+
+  volunteer   Volunteer[]
+  newsCreates News[]      @relation(name: "NewsCreate")
+  newsUpdates News[]      @relation(name: "NewsUpdate")
+  invites     Invite[]
 }
 
 model Association {
-  id          Int    @id @default(autoincrement())
+  id          String  @id @default(uuid())
   name        String
   description String
-  logoUuid   String?
+  logoPath    String?
 
-  ownerId String
-  owner   User   @relation(fields: [ownerId], references: [id])
+  tags    Tag[]
+  members Volunteer[]
+  news    News[]
+  invites Invite[] // Invites that the user has sent
+  donations Donation[]
 
-  tags    AssociationTag[]
-  members AssociationMember[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model AssociationMember {
+model Volunteer {
   id Int @id @default(autoincrement())
 
-  email String
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  associationId String
+  association   Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
 
-  userId        String?
-  user          User?       @relation(fields: [userId], references: [id])
-  associationId Int
-  association   Association @relation(fields: [associationId], references: [id])
-  role          String
-  firstName     String
-  lastName      String
-  isVerified    Boolean
-  isPending     Boolean
-  createdAt     DateTime    @default(now())
+  roles AssociationRole[] @default([VOLUNTEER])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, associationId]) // A user can only be a volnteer of an association once
 }
 
-model AssociationTag {
-  id   Int    @id @default(autoincrement())
+model Invite {
+  id            String      @id @default(uuid())
+  email         String      @unique
+  associationId String
+  association   Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
+  token         String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  createdBy   User?   @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String?
+}
+
+model News {
+  id            Int                   @id @default(autoincrement())
+  title         String
+  content       String
+  status        NewsPublicationStatus @default(DRAFT)
+  association   Association           @relation(fields: [associationId], references: [id], onDelete: Cascade)
+  associationId String
+
+  createdAt   DateTime @default(now())
+  createdBy   User?    @relation(name: "NewsCreate", fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String?
+
+  updatedAt   DateTime @updatedAt
+  updatedBy   User?    @relation(name: "NewsUpdate", fields: [updatedById], references: [id], onDelete: SetNull)
+  updatedById String?
+}
+
+enum NewsPublicationStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Tag {
+  id   Int      @id @default(autoincrement())
   name String
+  type TagType? @default(TYPE_CLASSIC)
 
   associations Association[]
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  BANK_TRANSFER
+  CASH
+  CHECK
+}
+
+enum DonationType {
+  ONE_TIME
+  MONTHLY
+  YEARLY
+}
+
+model Donation {
+  id            Int           @id @default(autoincrement())
+  amount        Decimal
+  currency      String        @default("EUR")
+  donorName     String
+  donorEmail    String?
+  paymentMethod PaymentMethod
+  type          DonationType
+  campaign      String?
+  receiptNumber String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  associationId String
+  association   Association @relation(fields: [associationId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  ROLE_USER
+  ROLE_ADMIN
+}
+
+enum TagType {
+  TYPE_CLASSIC
+  TYPE_SPORT
+  TYPE_CULTURE
+  TYPE_ENVIRONMENT
+  TYPE_SOCIAL
+  TYPE_LGBT
+}
+
+enum AssociationRole {
+  VOLUNTEER
+  WRITER
+  TREASURER
+  PRESIDENT
 }

@@ -8,4 +8,10 @@ export default withNuxt(
       "no-unsafe-optional-chaining": "off",
     },
   },
+  {
+    files: ["**/Association/Panel/News.vue"],
+    rules: {
+      "vue/no-v-html": "off",
+    },
+  },
 )

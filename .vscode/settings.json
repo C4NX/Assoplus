@@ -3,5 +3,25 @@
         "backend",
         "frontend",
         "database",
-    ]
+    ],
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#acf5bd",
+        "activityBar.background": "#acf5bd",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#a58df1",
+        "activityBarBadge.foreground": "#15202b",
+        "commandCenter.border": "#15202b99",
+        "sash.hoverBorder": "#acf5bd",
+        "statusBar.background": "#7fef99",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#52e975",
+        "statusBarItem.remoteBackground": "#7fef99",
+        "statusBarItem.remoteForeground": "#15202b",
+        "titleBar.activeBackground": "#7fef99",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveBackground": "#7fef9999",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.remoteColor": "#7fef99"
 }

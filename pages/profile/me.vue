@@ -46,8 +46,8 @@
             </button>
             <button
               class="btn btn-primary"
-              @click="changeAvatarWithCroppedImage"
               :disabled="isUpdatingAvatar"
+              @click="changeAvatarWithCroppedImage"
             >
               {{ $t('save') }}
             </button>
@@ -71,8 +71,9 @@
             class="hidden"
           >
           <img
-            :src="user?.avatarUuid ? `/api/me/avatar/${user?.avatarUuid}` : '/image/avatar/default.jpg'" alt="Avatar de l'utilisateur"
-          />
+            :src="user?.avatarUuid ? `/api/me/avatar/${user?.avatarUuid}` : '/image/avatar/default.jpg'"
+            alt="Avatar de l'utilisateur"
+          >
         </div>
       </div>
     </div>
@@ -80,13 +81,18 @@
       v-else
       class="skeleton h-32 w-full m-2 p-2"
     />
-    <ProfileContainer />
+    <ProfileMenu />
   </div>
 </template>
 
 <script lang="ts" setup>
 import VuePictureCropper, { cropper } from "vue-picture-cropper"
 import { toast } from "vue3-toastify"
+
+definePageMeta({
+  name: "Profile",
+  middleware: ["authenticated"],
+})
 
 const accountStore = useAccountStore()
 const { loggedIn, user } = useUserSession()
@@ -153,14 +159,16 @@ const changeAvatarWithCroppedImage = async () => {
   try {
     isUpdatingAvatar.value = true
     await accountStore.updateAvatar(file)
-  } catch {
-    toast.error(t('profile.picture.error'))
-  } finally {
+  }
+  catch {
+    toast.error(t("profile.picture.error"))
+  }
+  finally {
     isUpdatingAvatar.value = false
   }
 
   modalDialog?.value?.close()
-  toast.success(t('profile.picture.success'))
+  toast.success(t("profile.picture.success"))
 }
 </script>
 

@@ -8,6 +8,7 @@
       <input
         v-model="loginForm.email"
         type="email"
+        autocomplete="email"
         class="grow"
         :placeholder="$t('login.placeholder.email')"
         required
@@ -51,11 +52,15 @@
 </template>
 
 <script lang="ts" setup>
+import { toast } from "vue3-toastify"
+
 const { t } = useI18n()
 const loginForm = reactive({
   email: "",
   password: "",
 })
+
+const route = useRoute()
 
 useHead({
   title: t("login.title"),
@@ -65,6 +70,12 @@ const accountStore = useAccountStore()
 const handleLogin = async () => {
   await accountStore.login(loginForm.email, loginForm.password)
 }
+
+onMounted(() => {
+  if ("verified" in route.query && route.query.verified === "true") {
+    toast.success(t("login.verification_success"))
+  }
+})
 </script>
 
 <style></style>

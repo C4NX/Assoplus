@@ -1,0 +1,5 @@
+[git]
+ignore_tags = ".*-rc.*"
+
+[changelog]
+output = "CHANGELOG.md"

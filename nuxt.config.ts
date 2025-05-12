@@ -11,17 +11,14 @@ export default defineNuxtConfig({
     "nuxt-auth-utils",
     "@nuxt/image",
   ],
-  ssr: false,
-  devtools: { enabled: true },
+  ssr: true,
+  devtools: { enabled: false },
   runtimeConfig: {
     oauth: {
       google: {
         clientId: "",
         clientSecret: "",
       },
-    },
-    auth: {
-      registerVerifySecret: "",
     },
     s3: {
       endpoint: "",
@@ -40,8 +37,13 @@ export default defineNuxtConfig({
     },
     baseUrl: "",
     public: {
-      version: "1.0.0",
+      version: "0.2.0",
+      contactEmail: "contact@assoplus.com",
     },
+  },
+  routeRules: {
+    "/terms": { prerender: true },
+    "/privacy": { prerender: true },
   },
   compatibilityDate: "2024-11-01",
   nitro: {
@@ -73,6 +75,10 @@ export default defineNuxtConfig({
       cookieKey: "i18n_redirected",
       redirectOn: "root",
     },
+    /* https://github.com/nuxt-modules/i18n/issues/3238#issuecomment-2672492536 */
+    bundle: {
+      optimizeTranslationDirective: false,
+    },
     locales: [
       {
         code: "en",
@@ -100,7 +106,6 @@ export default defineNuxtConfig({
   seo: {
     meta: {
       title: "Asso+",
-      description: "Make your association visible and manage your members better with Asso+.",
       applicationName: "Asso+",
       google: "nositelinkssearchbox",
       googlebot: "notranslate",

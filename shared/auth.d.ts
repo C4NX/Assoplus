@@ -12,14 +12,28 @@ export interface PublicUserInterface {
   googleId: string | null
 }
 
+export interface UserPersonalInformation {
+  firstName?: string
+  lastName?: string
+  email?: string
+  birthdate?: string
+  phone?: string
+}
+
 declare module "#auth-utils" {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface User extends PublicUserInterface {}
 
   interface SecureSessionData {
-    passwordReset?: {
+    passwordReset?: { // Handle password reset
       userId: string
       token: string
+      expiresAt: Date
+    }
+    verify?: { // Handle email verification
+      userId: string
+      token: string
+      pendingEmailUpdate?: string // If the user verifies the new email, this will be the new email.
       expiresAt: Date
     }
   }

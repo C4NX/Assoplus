@@ -1,4 +1,4 @@
-import { defineEventHandler, sendStream, setHeader, type H3Event } from "h3"
+import { defineEventHandler, sendStream, setHeader } from "h3"
 import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
 import { getAvatarStream } from "~/server/util/avatar/avatar.service"
 

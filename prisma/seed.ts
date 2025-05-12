@@ -1,17 +1,21 @@
-import { PrismaClient } from "@prisma/client"
-import { faker } from "@faker-js/faker"
+import { AssociationRole, DonationType, NewsPublicationStatus, PaymentMethod, PrismaClient, Role, TagType } from "@prisma/client"
+import { faker } from "@faker-js/faker/locale/fr"
 import { Scrypt } from "@adonisjs/hash/drivers/scrypt"
 
 const ADMIN_EMAIL = "admin@admin.admin"
 
 const prisma = new PrismaClient()
 
-let userIds: string[] = []
-let associationIds: number[] = []
+const userIds: string[] = []
+const associationIds: string[] = []
+let tagIds: number[] = []
 
 async function cleanup() {
-  await prisma.associationMember.deleteMany()
-  await prisma.associationTag.deleteMany()
+  await prisma.invite.deleteMany()
+  await prisma.volunteer.deleteMany()
+  await prisma.tag.deleteMany()
+  await prisma.news.deleteMany()
+  await prisma.donation.deleteMany()
   await prisma.association.deleteMany()
   await prisma.user.deleteMany()
 }
@@ -30,7 +34,7 @@ async function createUserAdmin() {
       lastName: "Admin",
       passwordHash: await hashPassword(ADMIN_EMAIL),
       isVerified: true,
-      roles: ["ROLE_USER", "ROLE_ADMIN"],
+      roles: [Role.ROLE_USER, Role.ROLE_ADMIN],
     },
   })
   userIds.push(result.id)
@@ -53,15 +57,79 @@ async function createUser(n: number) {
   }
 }
 
+function fakerRandomHtml(paragraphs: number) {
+  const title = faker.lorem.sentence()
+  const paragraphsArray = Array.from({ length: paragraphs }, () => faker.lorem.paragraphs(5))
+  const linksArray = Array.from({ length: paragraphs }, () => faker.lorem.words(5))
+  const effectsArray = Array.from({ length: paragraphs }, () => faker.lorem.words(5))
+  const html = [
+    `<h1>${title}</h1>`,
+    ...paragraphsArray.map((paragraph, index) => {
+      return `<p>${paragraph}</p>\n\n<a href="https://example.com">${linksArray[index]}</a>\n\n<em>${effectsArray[index]}</em>`
+    }),
+  ].join("\n\n")
+
+  return html
+}
+
 async function createAssociation(n: number) {
   for (let i = 0; i < n; i++) {
+    const membersId = new Set<string>()
+
+    for (let j = 0; j < 5; j++) {
+      const userId = userIds[Math.floor(Math.random() * userIds.length)]
+      membersId.add(userId)
+    }
+
+    const tags = new Set<number>()
+
+    for (let j = 0; j < 3; j++) {
+      const tagId = tagIds[Math.floor(Math.random() * tagIds.length)]
+      tags.add(tagId)
+    }
+
     const result = await prisma.association.create({
       data: {
         name: faker.company.name(),
         description: faker.company.catchPhrase(),
-        ownerId: userIds[Math.floor(Math.random() * userIds.length)],
         tags: {
-          connect: await createAssociationTag(3),
+          connect: Array.from(tags).map(tagId => ({
+            id: tagId,
+          })),
+        },
+        members: {
+          createMany: {
+            data: Array.from(membersId).map((userId, index) => ({
+              userId,
+              roles: index === 0 ? [AssociationRole.PRESIDENT] : [faker.helpers.arrayElement(Object.values(AssociationRole).filter(role => role !== AssociationRole.PRESIDENT))],
+            })),
+          },
+        },
+        news: {
+          createMany: {
+            data: Array.from({ length: 30 }, () => {
+              const createdById = userIds[Math.floor(Math.random() * userIds.length)]
+              return {
+                title: faker.lorem.sentence(),
+                content: fakerRandomHtml(3),
+                createdById,
+                updatedById: createdById,
+                status: faker.helpers.arrayElement(Object.values(NewsPublicationStatus)),
+              }
+            }),
+          },
+        },
+        donations: {
+          createMany: {
+            data: Array.from({ length: 30 }, () => ({
+              amount: parseFloat(faker.number.float({ min: 1, max: 1000 }).toFixed(2)),
+              donorName: faker.person.fullName(),
+              paymentMethod: faker.helpers.arrayElement(Object.values(PaymentMethod)),
+              type: faker.helpers.arrayElement(Object.values(DonationType)),
+              campaign: faker.lorem.sentence(),
+              receiptNumber: `RCPT-${faker.string.numeric(5)}`,
+            })),
+          },
         },
       },
     })
@@ -69,38 +137,43 @@ async function createAssociation(n: number) {
   }
 }
 
-async function createAssociationTag(n: number) {
-  return await prisma.associationTag.createManyAndReturn({
-    data: Array.from({ length: n }, () => ({
-      name: faker.lorem.word(),
-    })),
+async function createTags() {
+  await prisma.tag.createMany({
+    data: [
+      {
+        name: "Sport",
+        type: TagType.TYPE_SPORT,
+      },
+      {
+        name: "Culture",
+        type: TagType.TYPE_CULTURE,
+      },
+      {
+        name: "Environnement",
+        type: TagType.TYPE_ENVIRONMENT,
+      },
+      {
+        name: "Social",
+        type: TagType.TYPE_SOCIAL,
+      },
+      {
+        name: "LGBTQIA+",
+        type: TagType.TYPE_LGBT,
+      },
+    ],
   })
-}
-
-async function createAssociationMember(nMinPerAssociation: number, nMaxPerAssociation: number) {
-  const hasRegistered = faker.datatype.boolean({probability: 0.5})
-  for (let i = 0; i < associationIds.length; i++) {
-    await prisma.associationMember.createMany({
-      data: Array.from({ length: faker.number.int({ min: nMinPerAssociation, max: nMaxPerAssociation }) }, () => ({
-        userId: hasRegistered ? userIds[Math.floor(Math.random() * userIds.length)] : null,
-        email: faker.internet.email(),
-        firstName: faker.person.firstName(),
-        lastName: faker.person.lastName(),
-        role: "Développeur",
-        isVerified: faker.datatype.boolean(),
-        isPending: faker.datatype.boolean(),
-        associationId: associationIds[i],
-      })),
-    })
-  }
+  tagIds = (await prisma.tag.findMany({ select: { id: true } })).map(tag => tag.id)
 }
 
 async function main() {
+  console.log("Seeding database...")
   await cleanup()
+  console.log("Seeding users...")
   await createUser(10)
   await createUserAdmin()
-  await createAssociation(10)
-  await createAssociationMember(5, 10)
+  console.log("Seeding associations...")
+  await createTags()
+  await createAssociation(30)
   console.log("Seed complete")
 }
 

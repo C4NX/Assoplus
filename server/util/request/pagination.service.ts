@@ -1,4 +1,3 @@
-import type { PrismaClient } from "@prisma/client"
 import type { H3Event } from "h3"
 import { getQuery } from "h3"
 
@@ -19,17 +18,16 @@ export interface PaginatedResponse<T> {
 export interface PaginateOptions<T> {
   /**
      * Async function to count the number of items
-     * @param prisma Prisma client
      * @returns The number of items
      */
-  count: (prisma: PrismaClient) => Promise<number>
+  count: () => Promise<number>
   /**
      * Async function to get the data
      * @param prisma Prisma client
      * @param prismaSelectOptions Prisma select options (take, skip)
      * @returns An array of T
      */
-  data: (prisma: PrismaClient, prismaSelectOptions: { take: number, skip: number }) => Promise<T[]>
+  data: (prismaSelectOptions: { take: number, skip: number }) => Promise<T[]>
   /**
      * Default page number
      */
@@ -53,14 +51,13 @@ export interface PaginateOptions<T> {
  */
 export async function paginate<T>(
   event: H3Event,
-  prisma: PrismaClient,
   options: PaginateOptions<T>,
 ): Promise<PaginatedResponse<T>> {
   const { page, itemPerPage } = getQuery(event)
 
   const pageValue = options.page || parseInt(page as string) || 1
   let itemPerPageValue = options.itemPerPage || parseInt(itemPerPage as string) || 10
-  const total = await options.count(prisma)
+  const total = await options.count()
 
   if (options.maxItemPerPage) {
     itemPerPageValue = Math.min(itemPerPageValue, options.maxItemPerPage)
@@ -69,7 +66,7 @@ export async function paginate<T>(
   const skip = (pageValue - 1) * itemPerPageValue
 
   return {
-    items: await options.data(prisma, { take: itemPerPageValue, skip }),
+    items: await options.data({ take: itemPerPageValue, skip }),
     total,
     page: pageValue,
     itemPerPage: itemPerPageValue,

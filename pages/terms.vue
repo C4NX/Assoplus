@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen mt-20 mx-10 border-2 rounded-md p-4 space-y-2">
-    <h1 class="text-center font-bold text-xl">
-      Terms and conditions
-    </h1>
+  <ArticleContainer>
+    <template #title>
+      {{ $t('terms.title') }}
+    </template>
     <div class="text-justify">
       <p>
         Adipisicing velit pariatur deserunt aliqua Lorem culpa qui eiusmod adipisicing incididunt in nulla. Consequat
@@ -25,13 +25,10 @@
         veniam. Officia ut veniam minim consequat mollit qui veniam non eiusmod ex.
       </p>
     </div>
-  </div>
+  </ArticleContainer>
 </template>
 
 <script lang="ts" setup>
-
 </script>
 
-<style>
-
-</style>
+<style></style>
