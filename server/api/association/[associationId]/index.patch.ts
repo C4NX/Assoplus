@@ -1,10 +1,10 @@
 import { z } from "zod"
 import { parseAssociationIdFromRouteGuid } from "./index.get"
+import { ALLOWED_IMAGE_MIME_TYPES } from "./logo/index.post"
 import { requireAssociationOwner } from "~/server/util/user/auth.guard"
 import prisma from "~/lib/prisma"
 import { uploadAssociationLogoFromRequest } from "~/server/util/association/logo.service"
 import { hasMultipartFileOfMimeType, validateBodyFromMultipartFormData } from "~/server/util/request/files.service"
-import { ALLOWED_IMAGE_MIME_TYPES } from "./logo/index.post"
 
 const AssociationPatchSchema = z.object({
   name: z.string().min(1).max(50).optional(),

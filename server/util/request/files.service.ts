@@ -59,5 +59,5 @@ export function hasMultipartFileOfMimeType(multipartFormData: MultiPartData[] | 
     throw createError({ statusCode: 400, statusMessage: "Invalid file type" })
   }
 
-  return true 
+  return true
 }
