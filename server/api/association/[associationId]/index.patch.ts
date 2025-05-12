@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { parseAssociationIdFromRouteGuid } from "./index.get"
+import { ALLOWED_IMAGE_MIME_TYPES } from "./logo/index.post"
 import { requireAssociationOwner } from "~/server/util/user/auth.guard"
 import prisma from "~/lib/prisma"
 import { uploadAssociationLogoFromRequest } from "~/server/util/association/logo.service"
@@ -21,7 +22,7 @@ export default defineEventHandler(async (event) => {
   const associationPatchData = await validateBodyFromMultipartFormData(multipartFormData, "data", AssociationPatchSchema)
 
   // Check if the logo is present and valid
-  const hasLogo = hasMultipartFileOfMimeType(multipartFormData, "logo", ["image/png", "image/jpeg", "image/jpg"])
+  const hasLogo = hasMultipartFileOfMimeType(multipartFormData, "logo", ALLOWED_IMAGE_MIME_TYPES)
 
   await prisma.association.update({
     where: { id: associationId },
