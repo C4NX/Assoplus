@@ -1,3 +1,15 @@
+## [0.2.1] - 2025-05-12
+
+### Fix
+
+- :bug: error when wrong mime type for images on associations
+- :bug: count when < 10
+- :speech_balloon: fixed i18n for when news are empty
+
+### Style
+
+- :art: lint:fix
+
 ## [0.2.0] - 2025-05-12
 
 ### Chore
@@ -16,6 +28,7 @@
 
 - :memo: CHANGELOG
 - :memo: added missing env and added warning in description
+- :memo: CHANGELOG 0.2.0
 
 ### Feat
 
