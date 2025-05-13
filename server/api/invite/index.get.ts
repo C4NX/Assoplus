@@ -1,9 +1,9 @@
 import prisma from "~/lib/prisma"
 import { paginate } from "~/server/util/request/pagination.service"
-import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
+import { requireUserAuthenticatedAndVerified } from "~/server/util/user/auth.guard"
 
 export default defineEventHandler(async (event) => {
-  const user = await requireUserAuthenticated(event)
+  const user = await requireUserAuthenticatedAndVerified(event)
 
   const where = {
     email: user.email,

@@ -1,7 +1,7 @@
 import z from "zod"
 import prisma from "~/lib/prisma"
 import { validateBodySchema } from "~/server/util/request/request.service"
-import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
+import { requireUserAuthenticatedAndVerified } from "~/server/util/user/auth.guard"
 import { sanitizeUser } from "~/server/util/user/user.service"
 import { sendVerificationEmail } from "~/server/util/user/verify.service"
 
@@ -16,7 +16,7 @@ const MePatchSchema = z.object({
 
 export default defineEventHandler(async (event) => {
   const data = await validateBodySchema(event, MePatchSchema)
-  const user = await requireUserAuthenticated(event)
+  const user = await requireUserAuthenticatedAndVerified(event)
   const t = await useTranslation(event)
 
   // Update user's information and update the session

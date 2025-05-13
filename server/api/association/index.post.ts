@@ -3,7 +3,7 @@ import { z } from "zod"
 import prisma from "~/lib/prisma"
 import { uploadAssociationLogoFromRequest } from "~/server/util/association/logo.service"
 import { hasMultipartFileOfMimeType, validateBodyFromMultipartFormData } from "~/server/util/request/files.service"
-import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
+import { requireUserAuthenticatedAndVerified } from "~/server/util/user/auth.guard"
 
 const AssociationCreateSchema = z.object({
   name: z.string().min(1).max(50),
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   const associationCreateData = await validateBodyFromMultipartFormData(multipartFormData, "data", AssociationCreateSchema)
   const hasLogo = hasMultipartFileOfMimeType(multipartFormData, "logo", ["image/png", "image/jpeg", "image/jpg"])
 
-  const user = await requireUserAuthenticated(event)
+  const user = await requireUserAuthenticatedAndVerified(event)
   const userAssociationsCount = await prisma.association.count({
     where: {
       members: {

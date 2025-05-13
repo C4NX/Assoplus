@@ -1,8 +1,8 @@
 import prisma from "~/lib/prisma"
-import { requireUserAuthenticated } from "~/server/util/user/auth.guard"
+import { requireUserAuthenticatedAndVerified } from "~/server/util/user/auth.guard"
 
 export default defineEventHandler(async (event) => {
-  const user = await requireUserAuthenticated(event)
+  const user = await requireUserAuthenticatedAndVerified(event)
 
   const associations = await prisma.association.findMany({
     select: {

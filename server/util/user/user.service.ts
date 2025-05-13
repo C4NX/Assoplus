@@ -33,11 +33,16 @@ export async function createUserWithVerification(event: H3Event, { email, unsafe
       },
     })
 
-    logger.trace(`User created: ${user.email} (${user.id})`)
-
     await sendVerificationEmail(event, user)
+
+    logger.trace(`User created: ${user.email} (${user.id})`)
   }
   catch (e) {
+    logger.error("Error creating user", e)
+    await prisma.user.deleteMany({
+      where: { email },
+    })
+
     if (e instanceof PrismaClientKnownRequestError) {
       if (e.code === "P2002") {
         const t = await useTranslation(event)
