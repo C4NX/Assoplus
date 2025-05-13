@@ -51,7 +51,7 @@ export async function tryGetAuthenticatedUserAndVerified(event: H3Event): Promis
   }
 
   if (!user.isVerified) {
-    throw createUserNotVerified();
+    throw createUserNotVerified()
   }
 
   return databaseUser
@@ -79,7 +79,7 @@ export async function requireUserAuthenticatedAndVerified(event: H3Event): Promi
   }
 
   if (!user.isVerified) {
-    throw createUserNotVerified();
+    throw createUserNotVerified()
   }
 
   return databaseUser
@@ -109,7 +109,7 @@ export async function requireUserGrantedAndVerified(event: H3Event, permissions:
 /**
  * Checks if the user is the owner of the association
  * @param event H3Event
- * @param associationId Association ID 
+ * @param associationId Association ID
  * @returns User object if the user is the owner of the association
  */
 export async function requireAssociationOwner(event: H3Event, associationId: string) {
